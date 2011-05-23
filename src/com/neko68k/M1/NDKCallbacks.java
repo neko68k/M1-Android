@@ -2,6 +2,7 @@ package com.neko68k.M1;
 
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 // this will implement all the stuff that
@@ -14,6 +15,7 @@ public class NDKCallbacks {
 	static TextView Title;
 	static TextView PlayTime;
 	static TextView TrackNum;
+	static boolean loadError = false;
 	static GameListAdapter nonglobalgla = new GameListAdapter();	
 	static PlayerService playerService = new PlayerService();
 	static public void setTitleView(TextView tv){
@@ -34,6 +36,7 @@ public class NDKCallbacks {
 		}
 	}
 	public static void RomLoadErr(){
+		loadError = true;
 		// pop a notification that says we failed to load the rom
 	}
 

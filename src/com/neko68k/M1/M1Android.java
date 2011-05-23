@@ -23,6 +23,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.neko68k.emu.M1Android.R;
@@ -255,45 +256,59 @@ public class M1Android extends Activity {
     		
     		//playerService.//.startService(new Intent(this, PlayerService.class));
     		
-    		
-    		NDKBridge.playtime = 0;
-    		mHandler.post(mUpdateTimeTask);
-    		board.setText("Board: "+NDKBridge.board);
-			mfg.setText("Maker: "+NDKBridge.mfg);
-			hardware.setText("Hardware: "+NDKBridge.hdw);
-			
-    		playButton.setText("Pause");
-    		numSongs = NDKBridge.getNumSongs(NDKBridge.curGame);
-    		if(numSongs>0){
-    			
-    			listItems.clear();
-    			for(int i = 0; i<numSongs;i++){
-    				String song = NDKBridge.getSong(i);
-    				if(song!=null){
-    					listItems.add((i+1)+". "+song);
-    				}
-    			}     
-    			
-    			
-    			trackList.setOnItemClickListener(mMessageClickedHandler);
-    			adapter.notifyDataSetChanged();
-
-    			
+    		if(NDKCallbacks.loadError==false){
+	    		NDKBridge.playtime = 0;
+	    		mHandler.post(mUpdateTimeTask);
+	    		board.setText("Board: "+NDKBridge.board);
+				mfg.setText("Maker: "+NDKBridge.mfg);
+				hardware.setText("Hardware: "+NDKBridge.hdw);
+				
+	    		playButton.setText("Pause");
+	    		numSongs = NDKBridge.getNumSongs(NDKBridge.curGame);
+	    		if(numSongs>0){
+	    			
+	    			listItems.clear();
+	    			for(int i = 0; i<numSongs;i++){
+	    				String song = NDKBridge.getSong(i);
+	    				if(song!=null){
+	    					listItems.add((i+1)+". "+song);
+	    				}
+	    			}     
+	    			
+	    			
+	    			trackList.setOnItemClickListener(mMessageClickedHandler);
+	    			adapter.notifyDataSetChanged();
+	
+	    			
+	    		}
+	    		else{
+	    			listItems.clear();
+	    			listItems.add("No playlist");
+	    			trackList.setOnItemClickListener(mDoNothing);
+	    			adapter.notifyDataSetChanged();
+	    		}
+	    		if(!mIsBound){
+	    			doBindService();
+	    		}
+	    		else{
+	    			NDKCallbacks.playerService.play();    			
+	    		}
+	    		playing=true;
+	    		paused=false;
     		}
     		else{
     			listItems.clear();
-    			listItems.add("No playlist");
+    			listItems.add("No game loaded");
     			trackList.setOnItemClickListener(mDoNothing);
     			adapter.notifyDataSetChanged();
+    			board.setText("");
+    			mfg.setText("");
+    			hardware.setText("");
+    			song.setText("");
+    			title.setText("No game loaded");
+    			playButton.setText("Play");
+    			Toast.makeText(this, "ROM Load Error!", Toast.LENGTH_SHORT).show();
     		}
-    		if(!mIsBound){
-    			doBindService();
-    		}
-    		else{
-    			NDKCallbacks.playerService.play();    			
-    		}
-    		playing=true;
-    		paused=false;
     	}
     }
     
@@ -334,6 +349,7 @@ public class M1Android extends Activity {
         		doUnbindService();
     			NDKBridge.playtime = 0;
         	}
+        	NDKCallbacks.loadError=false;
         	Intent intent = new Intent(this, GameListActivity.class);
         	startActivityForResult(intent, 1);        	
             return true;
