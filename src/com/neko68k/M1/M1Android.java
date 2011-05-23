@@ -27,8 +27,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 import com.neko68k.emu.M1Android.R;
 
-public class M1Android extends Activity {
-	AudioDevice ad = new AudioDevice("deviceThread");	
+public class M1Android extends Activity {	
 	ListView trackList;
 	Button nextButton;
 	Button prevButton;

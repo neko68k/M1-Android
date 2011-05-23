@@ -39,9 +39,10 @@ public class AudioDevice extends Thread{
 	   }
 	   public void PlayQuit(){	   
 		   track.stop();	
-		   paused = true;
-		   playing = false;		   		   
+		   		   		   
 		   theProducer.PlayQuit();
+		   paused = true;
+		   playing = false;
 	   }
 	   public void PlayStop(){
 		   track.stop();
