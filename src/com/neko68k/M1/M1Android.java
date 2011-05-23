@@ -171,8 +171,10 @@ public class M1Android extends Activity {
     private OnItemClickListener mMessageClickedHandler = new OnItemClickListener() {
         public void onItemClick(AdapterView parent, View v, int position, long id)
         {
-            NDKBridge.jumpSong(position);
-            NDKCallbacks.playerService.setNoteText();
+        	if(mIsBound){
+        		NDKBridge.jumpSong(position);
+        		NDKCallbacks.playerService.setNoteText();
+        	}
         }
     };
     
@@ -295,7 +297,15 @@ public class M1Android extends Activity {
     	}
     }
     
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState){
+    	super.onSaveInstanceState(savedInstanceState);
+    }
     
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState){
+    	super.onRestoreInstanceState(savedInstanceState);
+    }
     
     @Override 
     protected void onDestroy(){
@@ -303,11 +313,10 @@ public class M1Android extends Activity {
     	if(playing==true){
     		NDKCallbacks.playerService.stop();
     		doUnbindService();
+    	}
     		//ad.PlayQuit();          		
-    	}    	
-    	playing = false;
-    	NDKBridge.nativeClose();    	
-		this.finish();
+    		NDKBridge.nativeClose();    	
+    		this.finish();
     }      
     
     @Override

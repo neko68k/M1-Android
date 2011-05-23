@@ -27,15 +27,17 @@ public class InitM1Task extends AsyncTask<Void, Void, Void>{
 		int i =0;		
 		
 		//List<GameList> mItems = new ArrayList<GameList>();
-		for(i = 0; i<numGames;i++){
-			NDKBridge.auditROM(i);			
+		if(NDKCallbacks.nonglobalgla.isEmpty()){
+			for(i = 0; i<numGames;i++){
+				NDKBridge.auditROM(i);			
+			}
 		}
 		return(null);
 	}
 	
 	@Override
 	protected void onPostExecute (Void result){
-		NDKBridge.globalGLA = NDKCallbacks.nonglobalgla;
+		NDKBridge.globalGLA = NDKCallbacks.nonglobalgla;		
 		dialog.dismiss();	
 	}
 }
