@@ -1,0 +1,27 @@
+#
+# Makefile for M1 sound player, CUI version
+#  
+# For MinGW.  Tested with GCC 3.2 / MinGW 2.0,
+# should also work fine with MinGW 1.x
+#
+
+CC   = gcc
+CFLAGS = -c -O3
+EXE  = m1
+LIBS = -lm
+
+OBJS = m1cui.o
+
+SRCS=$(OBJS:.o=.c)
+
+%.o: %.c
+	$(CC) $(CFLAGS) $< -o $@
+	
+all: $(EXE)
+
+# link the exe
+$(EXE): $(OBJS) $(CUIOBJS)
+	$(CC) -o $(EXE) $(OBJS) libm1.a $(LIBS)
+
+clean:
+	rm -f $(OBJS) $(EXE) *.bak cpu/*.bak boards/*.bak sound/*.bak

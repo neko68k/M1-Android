@@ -1,0 +1,2 @@
+#!/bin/bash
+ndk-build TARGET_PLATFORM=android-8 
