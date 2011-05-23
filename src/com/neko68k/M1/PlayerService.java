@@ -72,7 +72,7 @@ public class PlayerService extends Service{
 				new Intent(this, M1Android.class), 0);
 		
 		notification.setLatestEventInfo(getApplicationContext(), "M1 Android", text, contentIntent);
-		
+		notification.flags = notification.FLAG_NO_CLEAR|notification.DEFAULT_SOUND|notification.DEFAULT_VIBRATE|notification.DEFAULT_LIGHTS;
 		mNM.notify(NOTIFICATION, notification);		
 	}
 	
