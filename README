@@ -1,5 +1,5 @@
 M1: multi-platform arcade music and sound emulator 
-v0.7.8a5 "Phil Collins" released January 1, 2008
+v0.7.8a6 "Tommy Tallarico" released January 10, 2008
 
 Core by R. Belmont and Phil Bennett.  
 Mac version by Richard Bannister.
@@ -22,6 +22,8 @@ System requirements
 Minimum: 400 MHz CPU, 32 MB RAM, stereo CD-quality soundcard
 Win32 (Win98, ME, 2000, or XP) or a modern Linux based system
 (Glibc 2.5, like Fedora Core 6, SuSE 10.1, the latest Ubuntu, etc).
+Android device running at least Android 2.2(froyo) and at least 
+800MHz CPU.
 
 NOTE: Some games may have requirements far in excess of the minimum.  
 In particular, DCS games like Killer Instinct need 750 MHz or more
@@ -97,19 +99,22 @@ Not all numbers correspond to useful playable songs - some may just play
 garbage.  Most games in fact have very few mapped working numbers
 (less than 100 in many cases).
 
+How to use (Android)
+--------------------
+Install the emulator from the Android Market. This port expects certain
+locations and files to exist:
+* /sdcard/m1/lists
+* /sdcard/m1/m1.xml
+* /sdcard/m1/m1.ini
 
-Changes since 0.7.8a3
+The example of m1.ini in the above commandline section applies here as
+well.
+
+
+Changes since 0.7.8a5
 ---------------------
-* Taito F3 cutout problems should be fixed.  Really.
-* H8/3002 synced to MAME latest, fixes Fighting Layer and Time Crisis 2
-* Fixed tempo on Namco (Super) System 22
-* Namco NA-1/NA-2 games added
-* Win32 compiled with more efficient GCC 4 again now that FM's fixed
-* Irem GA-20 and M92 driver synced to MAME latest
-* SCSP synced to MAME/AO latest, with greatly improved sound quality
-
-Most of these changes are from Phil "Buggy Boy" Bennett, and the
-SCSP work is of course thanks to kingshriek.
+* Experimental Sega Genesis/MegaDrive GEMS driver.  Some games using the GEMS sound driver can
+  automatically play music and sounds in M1 now.
 
 
 Known problems (do not waste time on the boards asking about there)
