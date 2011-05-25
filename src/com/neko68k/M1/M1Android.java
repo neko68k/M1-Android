@@ -165,7 +165,7 @@ public class M1Android extends Activity {
 	        task.execute();
 	        inited = true;
         }
-        
+        NDKCallbacks.ctx = this;
         
     }
    
@@ -307,7 +307,7 @@ public class M1Android extends Activity {
     			song.setText("");
     			title.setText("No game loaded");
     			playButton.setText("Play");
-    			Toast.makeText(this, "ROM Load Error!", Toast.LENGTH_SHORT).show();
+    			//Toast.makeText(this, NDKCallbacks.m1error, Toast.LENGTH_SHORT).show();
     		}
     	}
     }

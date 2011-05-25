@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.neko68k.emu.M1Android.R;
 
 public class GameListView extends LinearLayout{
 	private TextView mText;
@@ -16,7 +15,7 @@ public class GameListView extends LinearLayout{
 
             /* First Icon and the Text to the right (horizontal),
              * not above and below (vertical) */
-            this.setOrientation(HORIZONTAL);
+            //this.setOrientation(HORIZONTAL);
 
             //mIcon = new ImageView(context);
             //mIcon.setImageBitmap(aIconifiedText.getIcon());
@@ -30,6 +29,7 @@ public class GameListView extends LinearLayout{
            
             mText = new TextView(context);
             mText.setText(aIconifiedText.getText());
+            mText.setTextSize(17);
             /* Now the text (after the icon) */
             addView(mText, new LinearLayout.LayoutParams(
                             LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));

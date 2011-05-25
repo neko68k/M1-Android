@@ -1,5 +1,6 @@
 package com.neko68k.M1;
 
+import android.content.Context;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +19,8 @@ public class NDKCallbacks {
 	static boolean loadError = false;
 	static GameListAdapter nonglobalgla = new GameListAdapter();	
 	static PlayerService playerService = new PlayerService();
+	static String m1error;
+	static Context ctx;
 	static public void setTitleView(TextView tv){
 		Title = tv;
 	}
@@ -36,12 +39,15 @@ public class NDKCallbacks {
 		}
 	}
 	public static void RomLoadErr(){
-		loadError = true;
-		// pop a notification that says we failed to load the rom
+		// this flag prevents it from attempting to start playing
+		// if the rom didn't load
+		loadError = true;		
 	}
 
-	public static void GenericError(){
+	public static void GenericError(String instring){
 		// pop a notification that says something bad happened
+		m1error = instring;
+		Toast.makeText(ctx, NDKCallbacks.m1error, Toast.LENGTH_SHORT).show();
 	}
 	public static void Silence(){
 		NDKBridge.next();
