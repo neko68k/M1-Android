@@ -29,7 +29,9 @@ public class InitM1Task extends AsyncTask<Void, Void, Void>{
 		//List<GameList> mItems = new ArrayList<GameList>();
 		if(NDKCallbacks.nonglobalgla.isEmpty()){
 			for(i = 0; i<numGames;i++){
-				NDKBridge.auditROM(i);			
+				NDKCallbacks.cur = i;
+				NDKBridge.auditROM(i);	
+				
 			}
 		}
 		return(null);

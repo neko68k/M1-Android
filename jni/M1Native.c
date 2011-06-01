@@ -222,10 +222,10 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved){
 	//callbackSetHardwareDesc = (*env)->GetStaticMethodID(env, NDKCallbacks, "SetHardwareDesc", "(Ljava/lang/String;)V");
 	callbackLoadError = (*env)->GetStaticMethodID(env, NDKCallbacks, "RomLoadErr", "()V");
 	//callbackStartingSong = (*env)->GetStaticMethodID(env, NDKCallbacks, "StartingSong", "(I)V");
-	callbackGenericError = (*env)->GetStaticMethodID(env, NDKCallbacks, "GenericError", "()V");
+	callbackGenericError = (*env)->GetStaticMethodID(env, NDKCallbacks, "GenericError", "(Ljava/lang/String;)V");
 	callbackSilence = (*env)->GetStaticMethodID(env, NDKCallbacks, "Silence", "()V");
 	//callbackGetWaveData = (*env)->GetStaticMethodID(env, NDKCallbacks, "GetWaveData", "()V");
-	callbackROM = (*env)->GetStaticMethodID(env, NDKCallbacks, "addROM", "(Ljava/lang/String;)V");
+	callbackROM = (*env)->GetStaticMethodID(env, NDKCallbacks, "addROM", "(Ljava/lang/String;Ljava/lang/Integer;)V");
     return JNI_VERSION_1_4;
 }
 
@@ -267,8 +267,9 @@ static int m1ui_message(void *this, int message, char *txt, int iparm)
 
 		// called when ROM loading fails for a game
 		case M1_MSG_ROMLOADERR:
-			__android_log_print(ANDROID_LOG_INFO, "M1Android", "ROM Load Error!");
-			//i(*env)->CallStaticVoidMethod(env, NDKCallbacks, callbackLoadError, null);
+			//__android_log_print(ANDROID_LOG_INFO, "M1Android", "ROM Load Error!");
+			//__android_log_write(ANDROID_LOG_INFO, "M1Android", txt);
+			(*env)->CallStaticVoidMethod(env, NDKCallbacks, callbackLoadError, NULL);
 			// call static to set load flag error
 			// so we can catch it before we try to start playing
 			break;
@@ -321,7 +322,12 @@ static int m1ui_message(void *this, int message, char *txt, int iparm)
 			break;
 
 		case M1_MSG_ERROR:
-			__android_log_print(ANDROID_LOG_INFO, "M1Android", "Generic error.");
+			//jstring returnString;
+			//returnString = (*env)->NewStringUTF(env, txt);
+			//__android_log_write(ANDROID_LOG_INFO, "M1Android", txt);
+			(*env)->CallStaticVoidMethod(env, NDKCallbacks, callbackGenericError, (*env)->NewStringUTF(env, txt));
+			//__android_log_print(ANDROID_LOG_INFO, "M1Android", "Generic error.");
+
 			break;
 	}
 
@@ -504,21 +510,21 @@ void Java_com_neko68k_M1_NDKBridge_simpleAudit( JNIEnv*  env, jobject thiz, int 
 
 	char *fullZipName = (char*)malloc(strlen(zipName)+5);
 	sprintf(fullZipName, "%s.zip", zipName);
-	__android_log_print(ANDROID_LOG_INFO, "M1Android", "Checking...%s", fullZipName);
-
+	//__android_log_print(ANDROID_LOG_INFO, "M1Android", "Checking...%s", fullZipName);
+	jint test = i;
 	chdir("/sdcard/m1/roms/");
 	FILE *testFile = fopen(fullZipName, "r");
 	if(testFile!=NULL){
 		fclose(testFile);
 
-		__android_log_print(ANDROID_LOG_INFO, "M1Android", "Found...%s", fullZipName);
-		(*env)->CallStaticVoidMethod(env, NDKCallbacks, callbackROM, (*env)->NewStringUTF(env, m1snd_get_info_str(M1_SINF_VISNAME, i)));
+		//__android_log_print(ANDROID_LOG_INFO, "M1Android", "Found...%s", fullZipName);
+		(*env)->CallStaticVoidMethod(env, NDKCallbacks, callbackROM, (*env)->NewStringUTF(env, m1snd_get_info_str(M1_SINF_VISNAME, i)), i);
 		return;
 		//free(fullZipName);
 
 		//return((*env)->NewStringUTF(env, m1snd_get_info_str(M1_SINF_VISNAME, i)));
 	}
-	__android_log_print(ANDROID_LOG_INFO, "M1Android", "ROM not found...%s", fullZipName);
+	//__android_log_print(ANDROID_LOG_INFO, "M1Android", "ROM not found...%s", fullZipName);
 	//return(NULL);
 }
 

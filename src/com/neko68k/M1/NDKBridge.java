@@ -1,5 +1,8 @@
 package com.neko68k.M1;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 
 
@@ -15,7 +18,7 @@ package com.neko68k.M1;
 public class NDKBridge {
 	static boolean inited = false;
 	static int playtime;
-	static int curGame;
+	static Integer curGame;
 	static String board;
 	static String hdw;
 	static String mfg;
@@ -24,6 +27,8 @@ public class NDKBridge {
 	static String romPath;
 	
 	static GameListAdapter globalGLA;
+	static Map<String, Integer> lookup = new HashMap<String, Integer>();
+	//Map<String, Integer> m = new HashMap<String, Integer>();
 	
 	public static int next(){
 		playtime = 0;
@@ -34,7 +39,8 @@ public class NDKBridge {
 	}		
 	public static void loadROM(String name){
 		
-		curGame = getROMID(name);
+		//curGame = getROMID(name);
+		curGame =(Integer)lookup.get(name);
 		board = getBoard(curGame);
 		hdw = getHardware(curGame);
 		mfg = getMaker(curGame);

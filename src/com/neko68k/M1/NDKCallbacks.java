@@ -1,7 +1,6 @@
 package com.neko68k.M1;
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +20,7 @@ public class NDKCallbacks {
 	static PlayerService playerService = new PlayerService();
 	static String m1error;
 	static Context ctx;
+	static int cur;
 	static public void setTitleView(TextView tv){
 		Title = tv;
 	}
@@ -31,10 +31,11 @@ public class NDKCallbacks {
 	
 	 
 
-	public static void addROM(String name){
+	public static void addROM(String name, Integer id){
 		if(name!=null){
 			GameList it = new GameList(name);
-			Log.v("M1Android", "Adding item");
+			NDKBridge.lookup.put(name, new Integer(cur));
+			//Log.v("M1Android", "Adding item");
 			nonglobalgla.addItem(it);
 		}
 	}

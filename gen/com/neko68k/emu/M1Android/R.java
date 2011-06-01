@@ -16,18 +16,41 @@ public final class R {
     public static final class id {
         public static final int board=0x7f060002;
         public static final int hardware=0x7f060003;
+        public static final int lang=0x7f060015;
+        public static final int lang_disp=0x7f060016;
+        public static final int linearLayout1=0x7f06000c;
         public static final int listView1=0x7f060007;
+        public static final int listpath=0x7f060013;
+        public static final int listpath_disp=0x7f060014;
         public static final int mfg=0x7f060001;
         public static final int next=0x7f06000b;
-        public static final int open=0x7f06000d;
-        public static final int options=0x7f06000c;
+        public static final int normal=0x7f06001b;
+        public static final int normal_chk=0x7f06001c;
+        public static final int open=0x7f060023;
+        public static final int options=0x7f060024;
         public static final int play=0x7f060009;
         public static final int playTime=0x7f060005;
         public static final int prev=0x7f060008;
+        public static final int resetnorm=0x7f06001d;
+        public static final int resetnorm_chk=0x7f06001e;
+        public static final int rompath=0x7f06000f;
+        public static final int rompath_disp=0x7f060010;
+        public static final int samplerate=0x7f06000d;
+        public static final int samplerate_disp=0x7f06000e;
+        public static final int skipsilent_chk=0x7f060020;
+        public static final int skipslient=0x7f06001f;
+        public static final int skiptime=0x7f060021;
+        public static final int skiptime_edit=0x7f060022;
         public static final int song=0x7f060006;
         public static final int stop=0x7f06000a;
         public static final int title=0x7f060000;
         public static final int trackNum=0x7f060004;
+        public static final int uselist=0x7f060017;
+        public static final int uselist_chk=0x7f060018;
+        public static final int uselistvol=0x7f060019;
+        public static final int uselistvol_chk=0x7f06001a;
+        public static final int xmlpath=0x7f060011;
+        public static final int xmlpath_disp=0x7f060012;
     }
     public static final class layout {
         public static final int main=0x7f030000;
