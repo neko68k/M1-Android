@@ -46,9 +46,10 @@ public class AudioDevice extends Thread{
 	   }
 	   public void PlayStop(){
 		   track.stop();
+		   theProducer.PlayStop();
 		   paused = true;
 		   playing = false;		   
-		   theProducer.PlayStop();
+		   
 	   }
 	   public void PlayPause(){		   
 		   track.pause();
@@ -70,7 +71,7 @@ public class AudioDevice extends Thread{
 
 	      
 		   while( playing == true ){
-			   while(paused == false){
+			   if(paused == false){
 			     buffer = theProducer.take_product(); 
 		         track.write( buffer, 0,  ((44100/60)*2*2) ); 
 		      } 	      

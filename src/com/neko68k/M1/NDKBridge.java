@@ -3,6 +3,10 @@ package com.neko68k.M1;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.content.Context;
+import android.widget.TextView;
+import android.widget.Toast;
+
 
 
 
@@ -26,9 +30,54 @@ public class NDKBridge {
 	static int mixrate;
 	static String romPath;
 	
-	static GameListAdapter globalGLA;
+	static GameListAdapter globalGLA = new GameListAdapter();
 	static Map<String, Integer> lookup = new HashMap<String, Integer>();
 	//Map<String, Integer> m = new HashMap<String, Integer>();
+	
+	static TextView Title;
+	static TextView PlayTime;
+	static TextView TrackNum;
+	static boolean loadError = false;
+	//static GameListAdapter nonglobalgla = new GameListAdapter();	
+	static PlayerService playerService = new PlayerService();
+	static String m1error;
+	static Context ctx;
+	static int cur;
+	static public void setTitleView(TextView tv){
+		Title = tv;
+	}
+
+	public static void SetGameName(String name){
+		Title.setText(name);
+	}
+	
+	 
+
+	public static void addROM(String name, Integer id){
+		if(name!=null){
+			GameList it = new GameList(name);
+			NDKBridge.lookup.put(name, new Integer(cur));
+			//Log.v("M1Android", "Adding item");
+			globalGLA.addItem(it);
+		}
+	}
+	public static void RomLoadErr(){
+		// this flag prevents it from attempting to start playing
+		// if the rom didn't load
+		loadError = true;		
+	}
+
+	public static void GenericError(String instring){
+		// pop a notification that says something bad happened
+		m1error = instring;
+		Toast.makeText(ctx, NDKBridge.m1error, Toast.LENGTH_SHORT).show();
+	}
+	public static void Silence(){
+		NDKBridge.next();
+		playerService.setNoteText();
+
+		// if we are to skip songs when we here silence, this is where we do it
+	}
 	
 	public static int next(){
 		playtime = 0;

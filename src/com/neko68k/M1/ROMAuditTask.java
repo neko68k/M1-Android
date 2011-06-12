@@ -42,7 +42,7 @@ public class ROMAuditTask extends AsyncTask<Void, Void, Void>{
 	
 	@Override
 	protected void onPostExecute (Void result){
-		NDKBridge.globalGLA = NDKCallbacks.nonglobalgla;
+		//NDKBridge.globalGLA = NDKCallbacks.nonglobalgla;
 		dialog.dismiss();	
 	}
 }

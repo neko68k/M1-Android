@@ -82,7 +82,7 @@ public class M1Android extends Activity {
         mfg = (TextView)findViewById(R.id.mfg);
         song = (TextView)findViewById(R.id.song);
         title = (TextView)findViewById(R.id.title);
-        NDKCallbacks.setTitleView(title);                
+        NDKBridge.setTitleView(title);                
         
         // set up the button handlers
         // NEXT
@@ -92,7 +92,7 @@ public class M1Android extends Activity {
             	if(playing==true){
 	            	if(paused==false){
 	            		trackNum.setText("Command: "+(NDKBridge.next()));	
-	            		NDKCallbacks.playerService.setNoteText();
+	            		NDKBridge.playerService.setNoteText();
 	            		NDKBridge.playtime = 0;
 	            	}
             	}
@@ -105,7 +105,7 @@ public class M1Android extends Activity {
             	if(playing==true){
 	            	if(paused==false){
 	            		trackNum.setText("Command: "+(NDKBridge.prevSong()));
-	            		NDKCallbacks.playerService.setNoteText();
+	            		NDKBridge.playerService.setNoteText();
 	            		NDKBridge.playtime = 0;
 	            	}
             	}
@@ -121,7 +121,7 @@ public class M1Android extends Activity {
             	paused = false;
             	playButton.setText("Play");
             	//ad.PlayStop();
-            	NDKCallbacks.playerService.stop();
+            	NDKBridge.playerService.stop();
             	doUnbindService();
             	//NDKBridge.pause();
             	//NDKBridge.stop();
@@ -139,7 +139,7 @@ public class M1Android extends Activity {
 	                	playButton.setText("Pause");
 	                	NDKBridge.unPause();
 	                	//ad.UnPause();
-	                	NDKCallbacks.playerService.unpause();
+	                	NDKBridge.playerService.unpause();
 	                	paused=false;	                	
 	                }
             		else if(paused==false)
@@ -147,7 +147,7 @@ public class M1Android extends Activity {
 	                	NDKBridge.pause();
 	                	playButton.setText("Play");
 	                	//ad.PlayPause();
-	                	NDKCallbacks.playerService.pause();
+	                	NDKBridge.playerService.pause();
 	                	paused=true;
 	                }
             	}
@@ -165,7 +165,7 @@ public class M1Android extends Activity {
 	        task.execute();
 	        inited = true;
         }
-        NDKCallbacks.ctx = this;
+        NDKBridge.ctx = this;
         
     }
    
@@ -174,7 +174,7 @@ public class M1Android extends Activity {
         {
         	if(mIsBound){
         		NDKBridge.jumpSong(position);
-        		NDKCallbacks.playerService.setNoteText();
+        		NDKBridge.playerService.setNoteText();
         	}
         }
     };
@@ -228,11 +228,11 @@ public class M1Android extends Activity {
     // service connection stuff
     private ServiceConnection mConnection = new ServiceConnection(){
     	public void onServiceConnected(ComponentName className, IBinder service){
-    		NDKCallbacks.playerService = ((PlayerService.LocalBinder)service).getService();
+    		NDKBridge.playerService = ((PlayerService.LocalBinder)service).getService();
     	}
     	
     	public void onServiceDisconnected(ComponentName className){
-    		NDKCallbacks.playerService = null;
+    		NDKBridge.playerService = null;
     	}
     };
     
@@ -256,7 +256,7 @@ public class M1Android extends Activity {
     		
     		//playerService.//.startService(new Intent(this, PlayerService.class));
     		
-    		if(NDKCallbacks.loadError==false){
+    		if(NDKBridge.loadError==false){
 	    		NDKBridge.playtime = 0;
 	    		mHandler.post(mUpdateTimeTask);
 	    		board.setText("Board: "+NDKBridge.board);
@@ -291,7 +291,7 @@ public class M1Android extends Activity {
 	    			doBindService();
 	    		}
 	    		else{
-	    			NDKCallbacks.playerService.play();    			
+	    			NDKBridge.playerService.play();    			
 	    		}
 	    		playing=true;
 	    		paused=false;
@@ -310,7 +310,7 @@ public class M1Android extends Activity {
     			
     			title.setText("No game loaded");
     			playButton.setText("Play");
-    			//Toast.makeText(this, NDKCallbacks.m1error, Toast.LENGTH_SHORT).show();
+    			//Toast.makeText(this, NDKBridge.m1error, Toast.LENGTH_SHORT).show();
     		}
     	}
     }
@@ -329,7 +329,7 @@ public class M1Android extends Activity {
     protected void onDestroy(){
     	super.onDestroy();
     	if(playing==true){
-    		NDKCallbacks.playerService.stop();
+    		NDKBridge.playerService.stop();
     		doUnbindService();
     	}
     		//ad.PlayQuit();          		
@@ -348,11 +348,11 @@ public class M1Android extends Activity {
         		//doUnbindService();
         		playing = false;
         		paused = true;
-        		NDKCallbacks.playerService.stop();
+        		NDKBridge.playerService.stop();
         		doUnbindService();
     			NDKBridge.playtime = 0;
         	}
-        	NDKCallbacks.loadError=false;
+        	NDKBridge.loadError=false;
         	Intent intent = new Intent(this, GameListActivity.class);
         	startActivityForResult(intent, 1);        	
             return true;
