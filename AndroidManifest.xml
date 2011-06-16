@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="com.neko68k.emu.M1Android" android:versionName="1.21" android:versionCode="4">
+      package="com.neko68k.emu.M1Android" android:versionName="1.22" android:versionCode="5">
     <uses-sdk android:minSdkVersion="8"/>    
 
-    <application android:icon="@drawable/icon" android:label="@string/app_name" android:debuggable="true">
+    <application android:icon="@drawable/icon" android:label="@string/app_name" android:debuggable="false">
         <activity android:name="com.neko68k.M1.M1Android"
                   android:label="@string/app_name"
                   android:screenOrientation="portrait"
@@ -15,6 +15,7 @@
             </intent-filter>
         </activity>
         <activity android:name="com.neko68k.M1.GameListActivity" android:screenOrientation="portrait"/>
+        <activity android:name="com.neko68k.M1.OptionsActivity" android:screenOrientation="portrait"/>
 		<service android:name="com.neko68k.M1.PlayerService" />
     </application>
 </manifest>

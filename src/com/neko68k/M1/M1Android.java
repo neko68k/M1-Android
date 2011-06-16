@@ -2,6 +2,7 @@ package com.neko68k.M1;
 
 
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -82,90 +83,116 @@ public class M1Android extends Activity {
         mfg = (TextView)findViewById(R.id.mfg);
         song = (TextView)findViewById(R.id.song);
         title = (TextView)findViewById(R.id.title);
-        NDKBridge.setTitleView(title);                
+        NDKBridge.setTitleView(title);  
         
-        // set up the button handlers
-        // NEXT
-        nextButton.setOnClickListener(new View.OnClickListener() 
-        {
-            public void onClick(View v) {
-            	if(playing==true){
-	            	if(paused==false){
-	            		trackNum.setText("Command: "+(NDKBridge.next()));	
-	            		NDKBridge.playerService.setNoteText();
-	            		NDKBridge.playtime = 0;
-	            	}
-            	}
-            }
-        });
-        // PREV
-        prevButton.setOnClickListener(new View.OnClickListener() 
-        {
-            public void onClick(View v) {
-            	if(playing==true){
-	            	if(paused==false){
-	            		trackNum.setText("Command: "+(NDKBridge.prevSong()));
-	            		NDKBridge.playerService.setNoteText();
-	            		NDKBridge.playtime = 0;
-	            	}
-            	}
-            }
-        });
-        // STOP
-        stopButton.setOnClickListener(new View.OnClickListener() 
-        {
-        	// need to to something with this. it basically kills
-        	// the game now and thats kind of unfriendly
-            public void onClick(View v) {  
-            	playing = false;
-            	paused = false;
-            	playButton.setText("Play");
-            	//ad.PlayStop();
-            	NDKBridge.playerService.stop();
-            	doUnbindService();
-            	//NDKBridge.pause();
-            	//NDKBridge.stop();
-            	NDKBridge.playtime = 0;
-            }
-        });
-        // PLAY
-        playButton.setOnClickListener(new View.OnClickListener() 
-        {        	
-            public void onClick(View v) {
-            	if(playing==true)
-            	{
-            		if(paused==true)
-	                {
-	                	playButton.setText("Pause");
-	                	NDKBridge.unPause();
-	                	//ad.UnPause();
-	                	NDKBridge.playerService.unpause();
-	                	paused=false;	                	
-	                }
-            		else if(paused==false)
-	                {
-	                	NDKBridge.pause();
-	                	playButton.setText("Play");
-	                	//ad.PlayPause();
-	                	NDKBridge.playerService.pause();
-	                	paused=true;
-	                }
-            	}
-            }
-        });
-        
-        if(inited==false){
-	        listItems.add("No game loaded");
-	        adapter=new ArrayAdapter<String>(this,
-				    android.R.layout.simple_list_item_1,
-				    listItems);
-	        trackList.setAdapter(adapter);
-	        trackList.setOnItemClickListener(mMessageClickedHandler);
-	        task = new InitM1Task(this);
-	        task.execute();
-	        inited = true;
-        }
         NDKBridge.ctx = this;
+        if(inited==false){
+        	/* this crap is here to protect the stupid */
+            File ini = new File("/sdcard/m1/m1.ini");
+            File xml = new File("/sdcard/m1/m1.xml");
+            /* end checks for stupidity */
+        	if(xml.exists()==true&&ini.exists()==true){
+		        listItems.add("No game loaded");
+		        adapter=new ArrayAdapter<String>(this,
+					    android.R.layout.simple_list_item_1,
+					    listItems);
+		        trackList.setAdapter(adapter);
+		        trackList.setOnItemClickListener(mMessageClickedHandler);
+		        task = new InitM1Task(this);
+		        task.execute();
+		        inited = true;
+        	}
+        	else{
+        		Toast.makeText(this, "You did not read the instructions.", Toast.LENGTH_SHORT).show();
+        		listItems.add("M1 not initialized");
+        		listItems.add("Make sure m1.xml and m1.ini");
+        		listItems.add("are placed in /sdcard/m1");
+        		listItems.add("Press back to quit.");
+        		adapter=new ArrayAdapter<String>(this,
+					    android.R.layout.simple_list_item_1,
+					    listItems);
+        		trackList.setAdapter(adapter);
+        	}
+        }
+        
+        // dont set up the buttons unless stuff inited
+        if(inited){
+	        // set up the button handlers
+	        // NEXT
+	        nextButton.setOnClickListener(new View.OnClickListener() 
+	        {
+	            public void onClick(View v) {
+	            	if(playing==true){
+		            	if(paused==false){
+		            		trackNum.setText("Command: "+(NDKBridge.next()));	
+		            		NDKBridge.playerService.setNoteText();
+		            		NDKBridge.playtime = 0;
+		            	}
+	            	}
+	            }
+	        });
+	        // PREV
+	        prevButton.setOnClickListener(new View.OnClickListener() 
+	        {
+	            public void onClick(View v) {
+	            	if(playing==true){
+		            	if(paused==false){
+		            		trackNum.setText("Command: "+(NDKBridge.prevSong()));
+		            		NDKBridge.playerService.setNoteText();
+		            		NDKBridge.playtime = 0;
+		            	}
+	            	}
+	            }
+	        });
+	        // STOP
+	        stopButton.setOnClickListener(new View.OnClickListener() 
+	        {
+	        	// need to to something with this. it basically kills
+	        	// the game now and thats kind of unfriendly
+	            public void onClick(View v) {  
+	            	playing = false;
+	            	paused = false;
+	            	playButton.setText("Play");
+	            	//ad.PlayStop();
+	            	NDKBridge.playerService.stop();
+	            	doUnbindService();
+	            	//NDKBridge.pause();
+	            	//NDKBridge.stop();
+	            	NDKBridge.playtime = 0;
+	            }
+	        });
+	        // PLAY
+	        playButton.setOnClickListener(new View.OnClickListener() 
+	        {        	
+	            public void onClick(View v) {
+	            	if(playing==true)
+	            	{
+	            		if(paused==true)
+		                {
+		                	playButton.setText("Pause");
+		                	NDKBridge.unPause();
+		                	//ad.UnPause();
+		                	NDKBridge.playerService.unpause();
+		                	paused=false;	                	
+		                }
+	            		else if(paused==false)
+		                {
+		                	NDKBridge.pause();
+		                	playButton.setText("Play");
+		                	//ad.PlayPause();
+		                	NDKBridge.playerService.pause();
+		                	paused=true;
+		                }
+	            	}
+	            }
+	        });
+        }
+        
+        
+        
+        
+        
+        
         
     }
    
@@ -339,6 +366,7 @@ public class M1Android extends Activity {
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+    	Intent intent;
         // Handle item selection
         switch (item.getItemId()) {
         case R.id.open:
@@ -353,11 +381,12 @@ public class M1Android extends Activity {
     			NDKBridge.playtime = 0;
         	}
         	NDKBridge.loadError=false;
-        	Intent intent = new Intent(this, GameListActivity.class);
+        	intent = new Intent(this, GameListActivity.class);
         	startActivityForResult(intent, 1);        	
             return true;
         case R.id.options:
-
+        	intent = new Intent(this, OptionsActivity.class);
+        	startActivityForResult(intent, 1); 
             return true;
 
         default:

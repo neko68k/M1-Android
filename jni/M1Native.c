@@ -192,7 +192,7 @@ static int find_rompath(char *fn)
 	return 0;
 }
 
-jclass NDKCallbacks;
+jclass NDKBridge;
 jmethodID callbackSilence;
 jmethodID callbackSetGameName;
 jmethodID callbackSetDriverName;
@@ -215,17 +215,17 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved){
 
 
 	cbEnv = env;
-	NDKCallbacks = (*env)->FindClass(env, "com/neko68k/M1/NDKCallbacks");
+	NDKBridge = (*env)->FindClass(env, "com/neko68k/M1/NDKBridge");
 
-	callbackSetGameName = (*env)->GetStaticMethodID(env, NDKCallbacks, "SetGameName", "(Ljava/lang/String;)V");
-	//callbackSetDriverName = (*env)->GetStaticMethodID(env, NDKCallbacks, "SetDriverName", "(Ljava/lang/String;)V");
-	//callbackSetHardwareDesc = (*env)->GetStaticMethodID(env, NDKCallbacks, "SetHardwareDesc", "(Ljava/lang/String;)V");
-	callbackLoadError = (*env)->GetStaticMethodID(env, NDKCallbacks, "RomLoadErr", "()V");
-	//callbackStartingSong = (*env)->GetStaticMethodID(env, NDKCallbacks, "StartingSong", "(I)V");
-	callbackGenericError = (*env)->GetStaticMethodID(env, NDKCallbacks, "GenericError", "(Ljava/lang/String;)V");
-	callbackSilence = (*env)->GetStaticMethodID(env, NDKCallbacks, "Silence", "()V");
-	//callbackGetWaveData = (*env)->GetStaticMethodID(env, NDKCallbacks, "GetWaveData", "()V");
-	callbackROM = (*env)->GetStaticMethodID(env, NDKCallbacks, "addROM", "(Ljava/lang/String;Ljava/lang/Integer;)V");
+	callbackSetGameName = (*env)->GetStaticMethodID(env, NDKBridge, "SetGameName", "(Ljava/lang/String;)V");
+	//callbackSetDriverName = (*env)->GetStaticMethodID(env, NDKBridge, "SetDriverName", "(Ljava/lang/String;)V");
+	//callbackSetHardwareDesc = (*env)->GetStaticMethodID(env, NDKBridge, "SetHardwareDesc", "(Ljava/lang/String;)V");
+	callbackLoadError = (*env)->GetStaticMethodID(env, NDKBridge, "RomLoadErr", "()V");
+	//callbackStartingSong = (*env)->GetStaticMethodID(env, NDKBridge, "StartingSong", "(I)V");
+	callbackGenericError = (*env)->GetStaticMethodID(env, NDKBridge, "GenericError", "(Ljava/lang/String;)V");
+	callbackSilence = (*env)->GetStaticMethodID(env, NDKBridge, "Silence", "()V");
+	//callbackGetWaveData = (*env)->GetStaticMethodID(env, NDKBridge, "GetWaveData", "()V");
+	callbackROM = (*env)->GetStaticMethodID(env, NDKBridge, "addROM", "(Ljava/lang/String;Ljava/lang/Integer;)V");
     return JNI_VERSION_1_4;
 }
 
@@ -252,7 +252,7 @@ static int m1ui_message(void *this, int message, char *txt, int iparm)
 			jstring retstring = (*env)->NewStringUTF(env, m1snd_get_info_str(M1_SINF_VISNAME, curgame));
 			__android_log_print(ANDROID_LOG_INFO, "M1Android", "Game: %i %s", curgame, m1snd_get_info_str(M1_SINF_VISNAME, curgame));
 
-			(*env)->CallStaticVoidMethod(env, NDKCallbacks, callbackSetGameName, retstring);
+			(*env)->CallStaticVoidMethod(env, NDKBridge, callbackSetGameName, retstring);
 			break;
 
 		// called to show the driver's name
@@ -269,7 +269,7 @@ static int m1ui_message(void *this, int message, char *txt, int iparm)
 		case M1_MSG_ROMLOADERR:
 			//__android_log_print(ANDROID_LOG_INFO, "M1Android", "ROM Load Error!");
 			//__android_log_write(ANDROID_LOG_INFO, "M1Android", txt);
-			(*env)->CallStaticVoidMethod(env, NDKCallbacks, callbackLoadError, NULL);
+			(*env)->CallStaticVoidMethod(env, NDKBridge, callbackLoadError, NULL);
 			// call static to set load flag error
 			// so we can catch it before we try to start playing
 			break;
@@ -277,7 +277,7 @@ static int m1ui_message(void *this, int message, char *txt, int iparm)
 		// called when a song is (re)triggered
 		case M1_MSG_STARTINGSONG:
 			__android_log_print(ANDROID_LOG_INFO, "M1Android", "Starting song...");
-			//(*env)->CallStaticVoidMethod(env, NDKCallbacks, callbackStartingSong, m1snd_get_info_int(M1_IINF_CURSONG, 0));
+			//(*env)->CallStaticVoidMethod(env, NDKBridge, callbackStartingSong, m1snd_get_info_int(M1_IINF_CURSONG, 0));
 			break;
 
 		// called if a hardware error occurs
@@ -299,7 +299,7 @@ static int m1ui_message(void *this, int message, char *txt, int iparm)
 
 		// called when there's been at least 2 seconds of silence
 		case M1_MSG_SILENCE:
-			(*env)->CallStaticVoidMethod(env, NDKCallbacks, callbackSilence);
+			(*env)->CallStaticVoidMethod(env, NDKBridge, callbackSilence);
 			break;
 
 		// called to let the UI do vu meters/spectrum analyzers/etc
@@ -325,7 +325,7 @@ static int m1ui_message(void *this, int message, char *txt, int iparm)
 			//jstring returnString;
 			//returnString = (*env)->NewStringUTF(env, txt);
 			//__android_log_write(ANDROID_LOG_INFO, "M1Android", txt);
-			(*env)->CallStaticVoidMethod(env, NDKCallbacks, callbackGenericError, (*env)->NewStringUTF(env, txt));
+			(*env)->CallStaticVoidMethod(env, NDKBridge, callbackGenericError, (*env)->NewStringUTF(env, txt));
 			//__android_log_print(ANDROID_LOG_INFO, "M1Android", "Generic error.");
 
 			break;
@@ -512,13 +512,14 @@ void Java_com_neko68k_M1_NDKBridge_simpleAudit( JNIEnv*  env, jobject thiz, int 
 	sprintf(fullZipName, "%s.zip", zipName);
 	//__android_log_print(ANDROID_LOG_INFO, "M1Android", "Checking...%s", fullZipName);
 	jint test = i;
-	chdir("/sdcard/m1/roms/");
+	//chdir("/sdcard/m1/roms/");
+	chdir(rompath);
 	FILE *testFile = fopen(fullZipName, "r");
 	if(testFile!=NULL){
 		fclose(testFile);
 
 		//__android_log_print(ANDROID_LOG_INFO, "M1Android", "Found...%s", fullZipName);
-		(*env)->CallStaticVoidMethod(env, NDKCallbacks, callbackROM, (*env)->NewStringUTF(env, m1snd_get_info_str(M1_SINF_VISNAME, i)), i);
+		(*env)->CallStaticVoidMethod(env, NDKBridge, callbackROM, (*env)->NewStringUTF(env, m1snd_get_info_str(M1_SINF_VISNAME, i)), i);
 		return;
 		//free(fullZipName);
 
