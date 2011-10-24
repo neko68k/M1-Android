@@ -654,6 +654,9 @@ TrkT *trklist_load(char *base)
 	int i, j, end, state, cursong;
 	char token[128];
 
+
+// TODO: fix this to work on android also
+// change to directory we set in front end options
         #if __MACOSX__
         change_to_app_directory();
         #endif

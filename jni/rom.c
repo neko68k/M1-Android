@@ -202,6 +202,7 @@ static int rom_loadrom(RomEntryT *entry, unzFile zipArc, int region)
 	}
 
 	// check it's SHA1 if we got one from the xml
+	//if (!strcmp(entry->sha1, ""))//entry->sha1[0] != '\0')
 	if (entry->sha1[0] != '\0')
 	{
 		sha1_init(&sha1ctx);

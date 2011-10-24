@@ -19,7 +19,7 @@
 #endif
 
 static int max_games;
-static char *rompath, *wavpath;
+static char *rompath, *wavpath, *rompathshort;
 int booted = 0;
 void *m1ui_this;
 
@@ -132,6 +132,7 @@ static void read_config(FILE *cnf)
 					case 1:	// in "rompath" state, add line to rompath
 						strip_down(linebuf);
 						strcat(rompath, linebuf);
+						strcat(rompathshort, linebuf);
 						strcat(rompath, ";");
 						break;
 
@@ -414,7 +415,17 @@ void Java_com_neko68k_M1_NDKBridge_unPause(JNIEnv* env, jobject thiz){
 	m1snd_run(M1_CMD_UNPAUSE, 0);
 }
 
+int Java_com_neko68k_M1_NDKBridge_GetSongLen(JNIEnv* env, jobject thiz){
+//	M1_IINF_TRKLENGTH
+// returns the length of time to play a track in 1/60 second units.
+// the low 16 bits is the game #, the top is the command number.
+// -1 is returned if no length is set in the .lst file.
+	int game = m1snd_get_info_int(M1_IINF_CURGAME, 0);
+	int cmd = m1snd_get_info_int(M1_IINF_CURCMD, 0);
+	int optcmd = cmd<<16|game;
+	return m1snd_get_info_int(M1_IINF_TRKLENGTH, optcmd);
 
+}
 
 void Java_com_neko68k_M1_NDKBridge_waitForBoot(){
 	waitForBoot();
@@ -513,7 +524,7 @@ void Java_com_neko68k_M1_NDKBridge_simpleAudit( JNIEnv*  env, jobject thiz, int 
 	//__android_log_print(ANDROID_LOG_INFO, "M1Android", "Checking...%s", fullZipName);
 	jint test = i;
 	//chdir("/sdcard/m1/roms/");
-	chdir(rompath);
+	chdir(rompathshort);
 	FILE *testFile = fopen(fullZipName, "r");
 	if(testFile!=NULL){
 		fclose(testFile);
@@ -534,15 +545,20 @@ jstring Java_com_neko68k_M1_NDKBridge_CRCAudit( JNIEnv*  env, jobject thiz, int 
 
 }
 
-// need to update this to take rompath and mixrate
+void Java_com_neko68k_M1_NDKBridge_SetOption( JNIEnv*  env, jobject thiz, int opt, jint val){
+	int vali = val;
+	m1snd_setoption(opt, vali);
+}
+
+// TODO: fix this shit up to take a jstring arg that is the rompath
 void Java_com_neko68k_M1_NDKBridge_nativeInit( JNIEnv*  env, jobject thiz)
 {
 		FILE *cnf = NULL;
 		m1snd_setoption(M1_OPT_RETRIGGER, 0);
 		m1snd_setoption(M1_OPT_WAVELOG, 0);
-		m1snd_setoption(M1_OPT_NORMALIZE, 1);
-		m1snd_setoption(M1_OPT_LANGUAGE, M1_LANG_EN);
-		m1snd_setoption(M1_OPT_RESETNORMALIZE, 0);
+		//m1snd_setoption(M1_OPT_NORMALIZE, 1);
+//		m1snd_setoption(M1_OPT_LANGUAGE, M1_LANG_EN);
+		//m1snd_setoption(M1_OPT_RESETNORMALIZE, 0);
 		m1snd_setoption(M1_OPT_SAMPLERATE, 44100);
 		__android_log_print(ANDROID_LOG_INFO, "M1Android", "Starting init...");
 		m1snd_init(NULL, m1ui_message);
@@ -554,20 +570,24 @@ void Java_com_neko68k_M1_NDKBridge_nativeInit( JNIEnv*  env, jobject thiz)
 		//printf("Copyright (c) 2001-2010.  All Rights Reserved.\n\n");
 
 		// this will be removed after the options are hooked up
+		
+
 		cnf = fopen("/sdcard/m1/m1.ini", "rt");
 		if (!cnf)
 		{
 			__android_log_print(ANDROID_LOG_INFO, "M1Android", "No config file found, using defaults\n");
 			rompath = (char *)malloc(512);
-			strcpy(rompath, "roms;");	// default rompath
+			strcpy(rompath, "/sdcard/m1/roms;");	// default rompath
 			wavpath = (char *)malloc(512);
-			strcpy(wavpath, "wave;");	// default wavepath
+			strcpy(wavpath, "/sdcard/m1/wave;");	// default wavepath
 		}
 		else
 		{
 			__android_log_print(ANDROID_LOG_INFO, "M1Android", "Reading configuration from m1.ini\n");
 			rompath = (char *)malloc(65536);
 			rompath[0] = '\0';
+			rompathshort = (char *)malloc(65536);
+			rompathshort[0] = '\0';
 			wavpath = (char *)malloc(65536);
 			wavpath[0] = '\0';
 			read_config(cnf);
@@ -576,70 +596,4 @@ void Java_com_neko68k_M1_NDKBridge_nativeInit( JNIEnv*  env, jobject thiz)
 	
 }
 
-// Quick MAME -listinfo compatible thing -pjp
-// No info about parent roms if it isn't supported, therefore ignore
-// Removes duplicate roms in same set
-/*static void listinfo(void)
-{
-	int i,j,k;
 
-	// For each game
-	for (i = 0; i < max_games; i++)
-	{
-		int parent = -1;
-
-		printf("game (\n");
-		printf("\tname %s\n", m1snd_get_info_str(M1_SINF_ROMNAME, i));
-		printf("\tdescription \"%s\"\n", m1snd_get_info_str(M1_SINF_VISNAME, i));
-		printf("\tmanufacturer \"%s\"\n", m1snd_get_info_str(M1_SINF_MAKER, i));
-
-		// Only sets parent if it actually exists, otherwise ignores
-		if (m1snd_get_info_str(M1_SINF_PARENTNAME, i)[0] != '\0')
-			for (j = 0; j < max_games; j++)
-				if (!strcmp( m1snd_get_info_str(M1_SINF_ROMNAME, j), m1snd_get_info_str(M1_SINF_PARENTNAME, i)))
-					parent = j;
-
-		if (parent != -1)
-		{
-			printf("\tcloneof %s\n", m1snd_get_info_str(M1_SINF_PARENTNAME, i));
-			printf("\tromof %s\n", m1snd_get_info_str(M1_SINF_PARENTNAME, i));
-		}
-
-		// For each rom in the set
-		for (j = 0; j < m1snd_get_info_int(M1_IINF_ROMNUM, i); j++)
-		{
-			int dupe = 0;
-			unsigned int crc = m1snd_get_info_int(M1_IINF_ROMCRC, i|(j<<16));
-
-			// If the name matches any earlier roms in same set then we will skip (Note that dupe crc's are shown)
-			for (k = 0; k < j; k++)
-				if (!strcmp(m1snd_get_info_str(M1_SINF_ROMFNAME, i|(j<<16)), m1snd_get_info_str(M1_SINF_ROMFNAME, i|(k<<16)) ))
-					dupe = 1;
-
-			if(!dupe)
-			{
-				int rom_in_parent=0;
-
-				// If the crc matches any rom in parent set flag it
-				if (parent != -1)
-					for (k = 0; k < m1snd_get_info_int(M1_IINF_ROMNUM, parent); k++)
-						if ((unsigned int)m1snd_get_info_int(M1_IINF_ROMCRC, parent|(k<<16)) == crc )
-							rom_in_parent = 1;
-
-				// Set to merge if crc matches any rom in parent
-				if (rom_in_parent)
-					printf("\trom ( name %s merge %s size %d crc %08x )\n",
-						m1snd_get_info_str(M1_SINF_ROMFNAME, i|(j<<16)),
-						m1snd_get_info_str(M1_SINF_ROMFNAME, i|(j<<16)),
-						m1snd_get_info_int(M1_IINF_ROMSIZE, i|(j<<16)),
-						crc);
-				else
-					printf("\trom ( name %s size %d crc %08x )\n",
-						m1snd_get_info_str(M1_SINF_ROMFNAME, i|(j<<16)),
-						m1snd_get_info_int(M1_IINF_ROMSIZE, i|(j<<16)),
-						crc);
-			}
-		}
-		printf(")\n\n"); // game ()
-	}
-}*/

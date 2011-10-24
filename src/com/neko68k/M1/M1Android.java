@@ -2,8 +2,8 @@ package com.neko68k.M1;
 
 
 
-import java.io.File;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -12,9 +12,11 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,7 +26,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.neko68k.emu.M1Android.R;
@@ -59,6 +60,15 @@ public class M1Android extends Activity {
 	TimerTask timerTask;
 	int numSongs = 0;
 	int maxSongs = 0;
+	Map<String, ?> preferences;
+	Integer defLen;	// seconds
+	int skipTime = 0;
+	Boolean listLen;
+	Boolean normalize;
+	Boolean resetNorm;
+	Boolean useList;
+	Integer lstLang;
+	
 	
 	InitM1Task task;
 	
@@ -87,11 +97,6 @@ public class M1Android extends Activity {
         
         NDKBridge.ctx = this;
         if(inited==false){
-        	/* this crap is here to protect the stupid */
-            File ini = new File("/sdcard/m1/m1.ini");
-            File xml = new File("/sdcard/m1/m1.xml");
-            /* end checks for stupidity */
-        	if(xml.exists()==true&&ini.exists()==true){
 		        listItems.add("No game loaded");
 		        adapter=new ArrayAdapter<String>(this,
 					    android.R.layout.simple_list_item_1,
@@ -100,100 +105,140 @@ public class M1Android extends Activity {
 		        trackList.setOnItemClickListener(mMessageClickedHandler);
 		        task = new InitM1Task(this);
 		        task.execute();
-		        inited = true;
-        	}
-        	else{
-        		Toast.makeText(this, "You did not read the instructions.", Toast.LENGTH_SHORT).show();
-        		listItems.add("M1 not initialized");
-        		listItems.add("Make sure m1.xml and m1.ini");
-        		listItems.add("are placed in /sdcard/m1");
-        		listItems.add("Press back to quit.");
-        		adapter=new ArrayAdapter<String>(this,
-					    android.R.layout.simple_list_item_1,
-					    listItems);
-        		trackList.setAdapter(adapter);
-        	}
-        }
-        
-        // dont set up the buttons unless stuff inited
-        if(inited){
-	        // set up the button handlers
-	        // NEXT
-	        nextButton.setOnClickListener(new View.OnClickListener() 
-	        {
-	            public void onClick(View v) {
-	            	if(playing==true){
-		            	if(paused==false){
-		            		trackNum.setText("Command: "+(NDKBridge.next()));	
-		            		NDKBridge.playerService.setNoteText();
-		            		NDKBridge.playtime = 0;
-		            	}
+		        //GetPrefs();
+		        Init();
+		        GetPrefs();
+        }        
+    }
+   
+    
+    private void GetPrefs(){
+    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    	preferences = prefs.getAll();
+    	normalize = (Boolean) preferences.get("normPref");
+    	if(normalize==null)
+    		NDKBridge.SetOption(NDKBridge.M1_OPT_NORMALIZE,  1);
+    	else if(normalize)
+    		NDKBridge.SetOption(NDKBridge.M1_OPT_NORMALIZE,  1);
+    	else
+    		NDKBridge.SetOption(NDKBridge.M1_OPT_NORMALIZE,  0);
+    	
+    	resetNorm = (Boolean) preferences.get("resetNormPref");
+    	if(resetNorm==null)
+    		NDKBridge.SetOption(NDKBridge.M1_OPT_RESETNORMALIZE,  1);
+    	else if(resetNorm)
+    		NDKBridge.SetOption(NDKBridge.M1_OPT_RESETNORMALIZE,  1);
+    	else
+    		NDKBridge.SetOption(NDKBridge.M1_OPT_RESETNORMALIZE,  0);
+    	
+    	useList = (Boolean) preferences.get("listPref");
+    	if(useList==null)
+    		NDKBridge.SetOption(NDKBridge.M1_OPT_USELIST,  1);
+    	else if(useList)
+    		NDKBridge.SetOption(NDKBridge.M1_OPT_USELIST,  1);
+    	else
+    		NDKBridge.SetOption(NDKBridge.M1_OPT_USELIST,  0);
+    	
+    	String tmp = (String) preferences.get("langPref");
+    	if(tmp!=null){
+    		lstLang = new Integer(tmp);
+    		NDKBridge.SetOption(NDKBridge.M1_OPT_LANGUAGE,  lstLang);
+    	}
+    	
+    	tmp = (String) preferences.get("defLenPref");
+    	if(tmp!=null){
+    		NDKBridge.defLen = new Integer(tmp);    		
+    	}
+    	else
+    		NDKBridge.defLen = 300;
+    	
+    	listLen = (Boolean) preferences.get("listLenPref");
+    	if(listLen!=null){
+    		if(!listLen){
+    			NDKBridge.songLen = NDKBridge.defLen;
+    		}
+    	}
+    	else
+    		NDKBridge.songLen = NDKBridge.defLen;
+    	
+    }
+    
+    private void Init(){
+    	 // set up the button handlers
+        // NEXT
+    	
+    	
+        nextButton.setOnClickListener(new View.OnClickListener() 
+        {
+            public void onClick(View v) {
+            	if(playing==true){
+	            	if(paused==false){
+	            		trackNum.setText("Command: "+(NDKBridge.next()));	
+	            		NDKBridge.playerService.setNoteText();
+	            		NDKBridge.playtime = 0;
+	            		if(listLen)
+	            			NDKBridge.getSongLen();
 	            	}
-	            }
-	        });
-	        // PREV
-	        prevButton.setOnClickListener(new View.OnClickListener() 
-	        {
-	            public void onClick(View v) {
-	            	if(playing==true){
-		            	if(paused==false){
-		            		trackNum.setText("Command: "+(NDKBridge.prevSong()));
-		            		NDKBridge.playerService.setNoteText();
-		            		NDKBridge.playtime = 0;
-		            	}
+            	}
+            }
+        });
+        // PREV
+        prevButton.setOnClickListener(new View.OnClickListener() 
+        {
+            public void onClick(View v) {
+            	if(playing==true){
+	            	if(paused==false){
+	            		trackNum.setText("Command: "+(NDKBridge.prevSong()));
+	            		NDKBridge.playerService.setNoteText();
+	            		NDKBridge.playtime = 0;
+	            		if(listLen)
+	            			NDKBridge.getSongLen();
 	            	}
-	            }
-	        });
-	        // STOP
-	        stopButton.setOnClickListener(new View.OnClickListener() 
-	        {
-	        	// need to to something with this. it basically kills
-	        	// the game now and thats kind of unfriendly
-	            public void onClick(View v) {  
-	            	playing = false;
-	            	paused = false;
-	            	playButton.setText("Play");
-	            	//ad.PlayStop();
-	            	NDKBridge.playerService.stop();
-	            	doUnbindService();
-	            	//NDKBridge.pause();
-	            	//NDKBridge.stop();
-	            	NDKBridge.playtime = 0;
-	            }
-	        });
-	        // PLAY
-	        playButton.setOnClickListener(new View.OnClickListener() 
-	        {        	
-	            public void onClick(View v) {
-	            	if(playing==true)
-	            	{
-	            		if(paused==true)
-		                {
-		                	playButton.setText("Pause");
-		                	NDKBridge.unPause();
-		                	//ad.UnPause();
-		                	NDKBridge.playerService.unpause();
-		                	paused=false;	                	
-		                }
-	            		else if(paused==false)
-		                {
-		                	NDKBridge.pause();
-		                	playButton.setText("Play");
-		                	//ad.PlayPause();
-		                	NDKBridge.playerService.pause();
-		                	paused=true;
-		                }
-	            	}
-	            }
-	        });
-        }
-        
-        
-        
-        
-        
-        
-        
+            	}
+            }
+        });
+        // STOP
+        stopButton.setOnClickListener(new View.OnClickListener() 
+        {
+        	// need to to something with this. it basically kills
+        	// the game now and thats kind of unfriendly
+            public void onClick(View v) {  
+            	playing = false;
+            	paused = false;
+            	playButton.setText("Play");
+            	//ad.PlayStop();
+            	NDKBridge.playerService.stop();
+            	doUnbindService();
+            	//NDKBridge.pause();
+            	//NDKBridge.stop();
+            	NDKBridge.playtime = 0;
+            }
+        });
+        // PLAY
+        playButton.setOnClickListener(new View.OnClickListener() 
+        {        	
+            public void onClick(View v) {
+            	if(playing==true)
+            	{
+            		if(paused==true)
+	                {
+	                	playButton.setText("Pause");
+	                	NDKBridge.unPause();
+	                	//ad.UnPause();
+	                	NDKBridge.playerService.unpause();
+	                	paused=false;	                	
+	                }
+            		else if(paused==false)
+	                {
+	                	NDKBridge.pause();
+	                	playButton.setText("Play");
+	                	//ad.PlayPause();
+	                	NDKBridge.playerService.pause();
+	                	paused=true;
+	                }
+            	}
+            }
+        });
     }
    
     private OnItemClickListener mMessageClickedHandler = new OnItemClickListener() {
@@ -202,6 +247,7 @@ public class M1Android extends Activity {
         	if(mIsBound){
         		NDKBridge.jumpSong(position);
         		NDKBridge.playerService.setNoteText();
+        		NDKBridge.getSongLen();
         	}
         }
     };
@@ -231,13 +277,19 @@ public class M1Android extends Activity {
     		  		   if(playing==true){
     		  			   if(paused==false){
     		  				   int seconds=NDKBridge.getCurTime()/60;
-    		  				   if(seconds>300){
+    		  				   if(seconds>NDKBridge.songLen){
     		  					   NDKBridge.nextSong();
+    		  					   if(listLen)
+    		  						 NDKBridge.getSongLen();
     		  				   }
     		  				   int minutes=seconds/60;
     		  				   seconds -= minutes*60;
+    		  				   
     		  				   trackNum.setText("Command: "+(NDKBridge.getCurrentCmd()+1));
-    		  				   playTime.setText("Time: "+minutes+":"+seconds);
+    		  				   if(seconds<10)
+    		  					 playTime.setText("Time: "+minutes+":0"+seconds);
+    		  				   else
+    		  					   playTime.setText("Time: "+minutes+":"+seconds);
     		  				   song.setText("Song: "+NDKBridge.getSong(NDKBridge.getCurrentCmd()));
     		  				   
     		  			   }
@@ -318,7 +370,10 @@ public class M1Android extends Activity {
 	    			doBindService();
 	    		}
 	    		else{
-	    			NDKBridge.playerService.play();    			
+	    			if(listLen)
+	    				NDKBridge.getSongLen();
+	    			NDKBridge.playerService.play();
+
 	    		}
 	    		playing=true;
 	    		paused=false;
@@ -339,6 +394,10 @@ public class M1Android extends Activity {
     			playButton.setText("Play");
     			//Toast.makeText(this, NDKBridge.m1error, Toast.LENGTH_SHORT).show();
     		}
+    	} else if(requestCode == 2 && resultCode == RESULT_OK){
+    		// options returned
+    		// stop everything and set options
+    		GetPrefs();
     	}
     }
     
@@ -385,8 +444,8 @@ public class M1Android extends Activity {
         	startActivityForResult(intent, 1);        	
             return true;
         case R.id.options:
-        	intent = new Intent(this, OptionsActivity.class);
-        	startActivityForResult(intent, 1); 
+        	intent = new Intent(this, Prefs.class);
+        	startActivityForResult(intent, 2);
             return true;
 
         default:

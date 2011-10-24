@@ -20,6 +20,21 @@ import android.widget.Toast;
 
 // this is all the Java to native stuff
 public class NDKBridge {
+	
+	static final int M1_OPT_RETRIGGER=0;	// 0 for no auto-retrigger mode, 1 otherwise
+	static final int M1_OPT_DEFCMD = 1;		// command # to override the default with
+	static final int M1_OPT_WAVELOG =2;		// 0 for no log to .WAV, 1 otherwise
+	static final int M1_OPT_NORMALIZE =3;	// enable/disable normalization
+	static final int M1_OPT_LANGUAGE =4;	// language for track list names
+	static final int M1_OPT_USELIST =5;		// set the ability to use track lists
+	static final int M1_OPT_INTERNALSND =6; // set if M1 should use the system's audio output
+	static final int M1_OPT_SAMPLERATE =7;	// set the sample rate M1 runs at (default 44100, min 8000, max 48000)
+	static final int M1_OPT_RESETNORMALIZE=8;	// 0 = DON'T reset normalization state between songs (useful for albums), 1 = do reset it
+	static final int M1_OPT_FIXEDVOLUME=9;	// 0 = silence, 100 = regular volume, 300 = 3 times regular volume
+	static final int M1_OPT_POSTVOLUME=10;
+	
+	static int defLen;
+	static int songLen;
 	static boolean inited = false;
 	static int playtime;
 	static Integer curGame;
@@ -135,6 +150,17 @@ public class NDKBridge {
     public static native int getBootState();
     public static native void waitForBoot();  
     public static native void jumpSong(int i);
+    public static native void SetOption(int opt, Integer val);
+    public static native int GetSongLen();
+    
+    public static void getSongLen(){
+    	songLen = GetSongLen();
+    	if(songLen==-1)
+    		songLen = defLen;    	
+    	else 
+    		songLen = songLen/60;
+    }
+
     
     static {
         System.loadLibrary("M1");

@@ -371,6 +371,7 @@ static int unkEncodingHandler(void *handlerData, const XML_Char *name, XML_Encod
 	return XML_STATUS_OK;
 }
 
+// TODO: fix this to take the m1.xml path as an option
 int gamelist_load(void)
 {
 	XML_Parser parser = XML_ParserCreate(NULL);

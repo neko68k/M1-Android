@@ -16,7 +16,7 @@ public class AudioDevice extends Thread{
 	      track = new AudioTrack( AudioManager.STREAM_MUSIC, 44100, 
 	                                        AudioFormat.CHANNEL_CONFIGURATION_STEREO, AudioFormat.ENCODING_PCM_16BIT, 
 	                                        minSize, AudioTrack.MODE_STREAM);	      
-	       theProducer = new M1UpdateThread("updateThread");
+	       theProducer = new M1UpdateThread("updateThread");	       
 	   }	   
 	 
 	   private M1UpdateThread theProducer; 

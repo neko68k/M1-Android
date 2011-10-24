@@ -25,7 +25,7 @@ public class M1UpdateThread extends Thread{
 	      inIndex = 0; 
 	      outIndex = 0; 
 	      localCountIn = 0; 
-	      localCountOut = 0; 
+	      localCountOut = 0; 	      
 	   } 
 	    
 	     
