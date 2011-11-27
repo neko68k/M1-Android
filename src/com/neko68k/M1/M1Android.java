@@ -103,11 +103,12 @@ public class M1Android extends Activity {
 					    listItems);
 		        trackList.setAdapter(adapter);
 		        trackList.setOnItemClickListener(mMessageClickedHandler);
+		        GetPrefs();
 		        task = new InitM1Task(this);
 		        task.execute();
 		        //GetPrefs();
 		        Init();
-		        GetPrefs();
+		        //GetPrefs();
         }        
     }
    

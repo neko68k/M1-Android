@@ -150,7 +150,7 @@ public class NDKBridge {
     public static native int getBootState();
     public static native void waitForBoot();  
     public static native void jumpSong(int i);
-    public static native void SetOption(int opt, Integer val);
+    public static native void SetOption(int opt, int val);
     public static native int GetSongLen();
     
     public static void getSongLen(){

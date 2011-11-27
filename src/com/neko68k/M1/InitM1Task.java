@@ -78,8 +78,8 @@ public class InitM1Task extends AsyncTask<Void, Void, Void>{
 		if(NDKBridge.globalGLA.isEmpty()){
 			for(i = 0; i<numGames;i++){
 				NDKBridge.cur = i;
-				NDKBridge.auditROM(i);	
-				
+				String title = NDKBridge.auditROM(i);	
+				NDKBridge.addROM(title, i);
 			}
 		}
 		return(null);

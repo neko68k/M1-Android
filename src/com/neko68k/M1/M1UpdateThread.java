@@ -3,8 +3,8 @@ package com.neko68k.M1;
 import java.util.Arrays;
 
 public class M1UpdateThread extends Thread{
-	 //final int            MAX_BUFFERS = 256; 
-	 final int            MAX_BUFFERS = 4;
+	 final int            MAX_BUFFERS = 32; 
+	 //final int            MAX_BUFFERS = 4;
 	   volatile private byte buffers[][] = new byte[MAX_BUFFERS][]; // two channels, 16-bit
 	   volatile int         count;    
 	   int                  localCountIn; 
@@ -36,6 +36,7 @@ public class M1UpdateThread extends Thread{
 			   if(paused==false){
 				   buffer = NDKBridge.m1sdrGenerationCallback(); 
 				   make_product( buffer );
+				   
 			   }			   
 		   }	
 		   
@@ -102,8 +103,11 @@ public class M1UpdateThread extends Thread{
 	         notEmpty.sem_signal(); 
 	               
 	      inIndex = (inIndex + 1); 
-	      if( inIndex == MAX_BUFFERS ) 
-	        inIndex = 0; 
+	      if( inIndex == MAX_BUFFERS ) {
+	    	  
+				inIndex = 0;
+	      }
+	         
 	      if(stopped==true){
 	    	  NDKBridge.stop();
 	    	  clearBuffers();
