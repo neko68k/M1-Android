@@ -147,10 +147,10 @@ public class M1Android extends Activity {
     	}
     	
     	tmp = (String) preferences.get("defLenPref");
-    	if(tmp!=null){
+    	/*if(tmp!=null){
     		NDKBridge.defLen = new Integer(tmp);    		
     	}
-    	else
+    	else*/
     		NDKBridge.defLen = 300;
     	
     	listLen = (Boolean) preferences.get("listLenPref");
@@ -159,8 +159,11 @@ public class M1Android extends Activity {
     			NDKBridge.songLen = NDKBridge.defLen;
     		}
     	}
-    	else
+    	else{
     		NDKBridge.songLen = NDKBridge.defLen;
+    		listLen = false;
+    	}
+    		
     	
     }
     
@@ -356,9 +359,9 @@ public class M1Android extends Activity {
 	    			}     
 	    			
 	    			
-	    			trackList.setOnItemClickListener(mMessageClickedHandler);
+	    			trackList.setOnItemClickListener(mMessageClickedHandler);	    			
 	    			adapter.notifyDataSetChanged();
-	
+	    			trackList.setSelection(0);
 	    			
 	    		}
 	    		else{

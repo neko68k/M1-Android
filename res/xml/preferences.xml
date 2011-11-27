@@ -32,9 +32,9 @@
                         android:defaultValue="true"
                         android:summary="Use the song length stored in the list file, if any."
                         android:key="listLenPref" />
-                <EditTextPreference
+                <TimePickerPreference
                         android:title="Default Song Length"
-                        android:defaultValue="300"
+                        
                         android:summary="Time to wait before skipping songs, in seconds."
                         android:key="defLenPref" />
 		</PreferenceCategory>
