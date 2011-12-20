@@ -282,7 +282,7 @@ public class M1Android extends Activity {
     		  			   if(paused==false){
     		  				   int seconds=NDKBridge.getCurTime()/60;
     		  				   if(seconds>NDKBridge.songLen){
-    		  					   NDKBridge.nextSong();
+    		  					   NDKBridge.next();
     		  					   if(listLen)
     		  						 NDKBridge.getSongLen();
     		  				   }
@@ -338,6 +338,18 @@ public class M1Android extends Activity {
     	if(requestCode == 1 && resultCode == RESULT_OK){
     		
     		//playerService.//.startService(new Intent(this, PlayerService.class));
+        	if(playing==true){
+        		
+        		//ad.PlayStop();
+        		//doUnbindService();
+        		playing = false;
+        		paused = true;
+        		NDKBridge.playerService.stop();
+        		doUnbindService();
+    			NDKBridge.playtime = 0;
+        	}
+        	int gameid = data.getIntExtra("com.neko68k.M1.position", 0);
+        	NDKBridge.loadROM(NDKBridge.globalGLA.get(gameid));
     		
     		if(NDKBridge.loadError==false){
 	    		NDKBridge.playtime = 0;
@@ -433,16 +445,7 @@ public class M1Android extends Activity {
         // Handle item selection
         switch (item.getItemId()) {
         case R.id.open:
-        	if(playing==true){
-        		
-        		//ad.PlayStop();
-        		//doUnbindService();
-        		playing = false;
-        		paused = true;
-        		NDKBridge.playerService.stop();
-        		doUnbindService();
-    			NDKBridge.playtime = 0;
-        	}
+
         	NDKBridge.loadError=false;
         	intent = new Intent(this, GameListActivity.class);
         	startActivityForResult(intent, 1);        	

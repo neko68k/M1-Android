@@ -54,13 +54,14 @@ public class GameListActivity extends ListActivity{
     protected void onListItemClick(ListView l, View v, int position, long id) {
             int selectionRowID = (int)position;
             
-            NDKBridge.loadROM(NDKBridge.globalGLA.get(selectionRowID));
+            
             //LoadROMTask loadTask = new LoadROMTask(this);
             //loadTask.execute(new Integer(selectionRowID));
             
             Intent i = new Intent();
             String title = NDKBridge.getGameList(selectionRowID);
         	i.putExtra("com.neko68k.M1.title", title);
+        	i.putExtra("com.neko68k.M1.position", position);
         	//startActivity(i);
         	setResult(RESULT_OK, i);                	
         	finish();                       

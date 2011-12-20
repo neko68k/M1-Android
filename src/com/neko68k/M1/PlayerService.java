@@ -32,7 +32,7 @@ public class PlayerService extends Service{
 	
 	@Override
 	public void onCreate(){
-		mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+		//mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
 		play();
 	}
 	
@@ -49,26 +49,47 @@ public class PlayerService extends Service{
 	}
 	public void stop(){
 		ad.PlayQuit();
-		mNM.cancelAll();
+		//mNM.cancelAll();
+		stopForeground(true);
 	}
 	public void play(){
+		notification=new Notification(R.drawable.ic_media_play,
+                "",
+                System.currentTimeMillis());
+		Intent i=new Intent(this, M1Android.class);
+		
+		i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|
+		Intent.FLAG_ACTIVITY_SINGLE_TOP);
+		
+		PendingIntent pi=PendingIntent.getActivity(this, 0,
+		                        i, 0);
+		
+		//notification.setLatestEventInfo(this, "M1 Android",
+		    //"Now Playing: \"Ummmm, Nothing\"",
+		    //pi);
+		setNoteText();
+		notification.flags|=Notification.FLAG_NO_CLEAR;
+		
+		startForeground(1337, notification);
 		ad.PlayStart();
-		showNotification();
+		//showNotification();
 	}
 	
 	public void setNoteText(){
 
-		text = NDKBridge.getSong(NDKBridge.getCurrentCmd());
+		text = NDKBridge.getGameTitle(NDKBridge.curGame).getText()+"\n"+NDKBridge.getSong(NDKBridge.getCurrentCmd());
 		if(text==null){
 			text = NDKBridge.getGameTitle(NDKBridge.curGame).getText();
 		}
 
 		contentIntent = PendingIntent.getActivity(this, 0, 
-				new Intent(this, M1Android.class), 0);
+				new Intent(this, M1Android.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|
+		Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
 		
-		notification.setLatestEventInfo(getApplicationContext(), "M1 Android", text, contentIntent);
-		notification.flags = Notification.FLAG_NO_CLEAR|Notification.DEFAULT_SOUND|Notification.DEFAULT_VIBRATE|Notification.DEFAULT_LIGHTS;
-		mNM.notify(NOTIFICATION, notification);		
+		notification.setLatestEventInfo(this, "M1 Android", text, contentIntent);
+		startForeground(1337, notification);
+		//notification.flags = Notification.FLAG_NO_CLEAR|Notification.DEFAULT_SOUND|Notification.DEFAULT_VIBRATE|Notification.DEFAULT_LIGHTS;
+		//mNM.notify(NOTIFICATION, notification);		
 	}
 	
 	//@Override
@@ -86,7 +107,7 @@ public class PlayerService extends Service{
 	
 	private void showNotification(){
 		
-		 notification = new Notification(R.drawable.ic_media_play, text, System.currentTimeMillis());
+		 //notification = new Notification(R.drawable.ic_media_play, text, System.currentTimeMillis());
 		 setNoteText();
 	}
 	

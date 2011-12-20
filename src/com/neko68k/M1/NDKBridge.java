@@ -89,14 +89,16 @@ public class NDKBridge {
 	}
 	public static void Silence(){
 		NDKBridge.next();
-		playerService.setNoteText();
+		//playerService.setNoteText();
 
 		// if we are to skip songs when we here silence, this is where we do it
 	}
 	
 	public static int next(){
 		playtime = 0;
-		return(nextSong());
+		int i = nextSong();
+		playerService.setNoteText();
+		return i;
 	}
 	public static void initM1(){
     	nativeInit();		      	
