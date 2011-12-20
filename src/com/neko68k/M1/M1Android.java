@@ -108,6 +108,10 @@ public class M1Android extends Activity {
 		        trackList.setAdapter(adapter);
 		        trackList.setOnItemClickListener(mMessageClickedHandler);
 		        GetPrefs();
+		        if(NDKBridge.basepath != null){
+		        	task = new InitM1Task(NDKBridge.ctx);
+			        task.execute();
+		        }
         }        
     }
    
@@ -118,46 +122,38 @@ public class M1Android extends Activity {
     	preferences = prefs.getAll();
     	 	
     	Boolean firstRun = prefs.getBoolean("firstRun", true);
+    	NDKBridge.basepath = prefs.getString("basepath", null);
     	
-    	AlertDialog alert = new AlertDialog.Builder(M1Android.this)            
-        .setTitle("Note:").setMessage("It looks like this is your first run. Long press on a folder to choose. " +
-        		"If you already have a folder with the XML, LST and ROMs, choose it. We will not overwrite any files in it. " +
-        		"\n - Structure is:" +
-        		"\n   .../m1/m1.xml" +
-        		"\n   .../m1/lst" +
-        		"\n   .../m1/roms")
-        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-            	Intent intent = new Intent().setClass(getApplicationContext(), FileBrowser.class);
-        		intent.putExtra("title", "Select install directory...");
-        		intent.putExtra("dirpick", true);
-            	startActivityForResult(intent, 65535);
-                /* User clicked OK so do some stuff */
-            }
-        })
-        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
+    	if(firstRun==null || firstRun==true || NDKBridge.basepath == null){
+	    	AlertDialog alert = new AlertDialog.Builder(M1Android.this)            
+	        .setTitle("First Run").setMessage("It looks like this is your first run. Long press on a folder to choose where to install. " +
+	        		"For example, select '/sdcard' and I will install to '/sdcard/m1'. " +
+	        		"If you already have a folder with the XML, LST and ROMs, choose its parent. For example, if you have " +
+	        		"'/sdcard/m1' choose '/sdcard'. " +
+	        		"I will not overwrite any files in it. " +
+	        		"\n - Structure is:" +
+	        		"\n   .../m1/m1.xml" +
+	        		"\n   .../m1/lists" +
+	        		"\n   .../m1/roms")
+	        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+	            public void onClick(DialogInterface dialog, int whichButton) {
+	            	Intent intent = new Intent().setClass(getApplicationContext(), FileBrowser.class);
+	        		intent.putExtra("title", "Select install directory...");
+	        		intent.putExtra("dirpick", true);
+	            	startActivityForResult(intent, 65535);
+	                /* User clicked OK so do some stuff */
+	            }
+	        })
+	        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+	            public void onClick(DialogInterface dialog, int whichButton) {
+	
+	                /* User clicked Cancel so do some stuff */
+	            }
+	        })
+	        .create();
+	    	alert.show();
+    	}    	
 
-                /* User clicked Cancel so do some stuff */
-            }
-        })
-        .create();
-    	alert.show();
-    	//return alert;
-    	/*if(firstRun==null || firstRun==true){
-    		
-    		
-    	    
-    	    
-    	    showDialog(0);
-    		
-    		
-    		Intent intent = new Intent().setClass(this, FileBrowser.class);
-    		intent.putExtra("title", "Select install directory...");
-    		intent.putExtra("dirpick", true);
-        	startActivityForResult(intent, 65535);
-            
-    	}*/
     	
     	normalize = (Boolean) preferences.get("normPref");
     	
@@ -206,7 +202,7 @@ public class M1Android extends Activity {
     		listLen = false;
     	}
     		
-    	
+    	Init();
     }
     
     private void Init(){
@@ -465,8 +461,11 @@ public class M1Android extends Activity {
 		        
 			    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		    	preferences = prefs.getAll();
-		    	preferences.put("firstRun",  0);
-			    
+		    	
+		    	SharedPreferences.Editor editor = prefs.edit();
+		    	editor.putBoolean("firstRun", false);
+			    editor.putString("basepath", NDKBridge.basepath);
+			    editor.commit();
 		        Init();
 	    	}
     	}

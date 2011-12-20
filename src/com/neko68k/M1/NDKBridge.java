@@ -48,7 +48,7 @@ public class NDKBridge {
 	static String listPath;
 	static String romPath;
 	
-	static String basepath;
+	static String basepath = null;
 	
 	static GameListAdapter globalGLA = new GameListAdapter();
 	static Map<String, Integer> lookup = new HashMap<String, Integer>();
