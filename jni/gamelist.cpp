@@ -372,7 +372,17 @@ static int unkEncodingHandler(void *handlerData, const XML_Char *name, XML_Encod
 }
 
 // TODO: fix this to take the m1.xml path as an option
-int gamelist_load(void)
+// easy fix, just take the path as a parameter to this method
+// also need to fix m1snd to explicitly call this only when
+// we need to update for a new XML
+
+// I think I'll let m1 load everything into GameT structs like it does now
+// when the XML parse is done I'll go back through and pass each GameT
+// to Java. since this only happens on first run or when the user
+// explicitly tell us to this should be ok performance wise.
+// then when we load a game I can just pass the GameT and the id(do I even need to do this?)
+// back to native and let m1 handle it from there
+int gamelist_load(char *basepath)
 {
 	XML_Parser parser = XML_ParserCreate(NULL);
 	FILE *f;
@@ -382,8 +392,9 @@ int gamelist_load(void)
 	curgame = -1;
 	numgames = 0;
 	games = (M1GameT *)NULL;	// realloc() will become malloc() if ptr is NULL, which is handy
-
-	f = fopen("/sdcard/m1/m1.xml", "r");
+	char *xmlpath = (char *)malloc(512);
+	sprintf(xmlpath, "%s/m1/m1.xml\0", basepath);
+	f = fopen(xmlpath, "r");
 	if (!f)
 	{
 		return 0;

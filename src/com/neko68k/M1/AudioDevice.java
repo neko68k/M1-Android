@@ -29,6 +29,10 @@ public class AudioDevice extends Thread{
 	   
 	   public void PlayStart()
 	   {		   
+		   int minSize =AudioTrack.getMinBufferSize( 44100, AudioFormat.CHANNEL_CONFIGURATION_STEREO, AudioFormat.ENCODING_PCM_16BIT );
+		   track = new AudioTrack( AudioManager.STREAM_MUSIC, 44100, 
+                   AudioFormat.CHANNEL_CONFIGURATION_STEREO, AudioFormat.ENCODING_PCM_16BIT, 
+                   minSize, AudioTrack.MODE_STREAM);
 		   track.play();
 		   theProducer.PlayStart();
 		   playing = true;

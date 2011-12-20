@@ -193,18 +193,18 @@ static int find_rompath(char *fn)
 	return 0;
 }
 
-jclass NDKBridge;
-jmethodID callbackSilence;
-jmethodID callbackSetGameName;
-jmethodID callbackSetDriverName;
-jmethodID callbackSetHardwareDesc;
-jmethodID callbackLoadError;
-jmethodID callbackStartingSong;
-jmethodID callbackGenericError;
-jmethodID callbackGetWaveData;
-jmethodID callbackROM;
-JNIEnv *cbEnv;
-JavaVM *VM;
+static jclass NDKBridge;
+static jmethodID callbackSilence;
+static jmethodID callbackSetGameName;
+static jmethodID callbackSetDriverName;
+static jmethodID callbackSetHardwareDesc;
+static jmethodID callbackLoadError;
+static jmethodID callbackStartingSong;
+static jmethodID callbackGenericError;
+static jmethodID callbackGetWaveData;
+static jmethodID callbackROM;
+//static JNIEnv *cbEnv;
+static JavaVM *VM;
 
 jint JNI_OnLoad(JavaVM* vm, void* reserved){
 	JNIEnv *env;
@@ -215,8 +215,9 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved){
 	    /* register methods with (*env)->RegisterNatives */
 
 
-	cbEnv = env;
-	NDKBridge = (*env)->FindClass(env, "com/neko68k/M1/NDKBridge");
+	//cbEnv = env;
+	jclass lNDKBridge = (*env)->FindClass(env, "com/neko68k/M1/NDKBridge");
+	NDKBridge = (*env)->NewGlobalRef(env, lNDKBridge);
 
 	callbackSetGameName = (*env)->GetStaticMethodID(env, NDKBridge, "SetGameName", "(Ljava/lang/String;)V");
 	//callbackSetDriverName = (*env)->GetStaticMethodID(env, NDKBridge, "SetDriverName", "(Ljava/lang/String;)V");
@@ -514,7 +515,7 @@ int Java_com_neko68k_M1_NDKBridge_getNumSongs( JNIEnv*  env, jobject thiz, int i
 
 // just check zip names to see if they exist, nothing fancy
 //jstring Java_com_neko68k_M1_NDKBridge_simpleAudit( JNIEnv*  env, jobject thiz, int i){
-void Java_com_neko68k_M1_NDKBridge_simpleAudit( JNIEnv*  env, jobject thiz, int i){
+jstring Java_com_neko68k_M1_NDKBridge_simpleAudit( JNIEnv*  env, jobject thiz, int i){
 
 	char *zipName = m1snd_get_info_str(M1_SINF_ROMNAME, i);
 
@@ -523,15 +524,17 @@ void Java_com_neko68k_M1_NDKBridge_simpleAudit( JNIEnv*  env, jobject thiz, int 
 	sprintf(fullZipName, "%s.zip", zipName);
 	//__android_log_print(ANDROID_LOG_INFO, "M1Android", "Checking...%s", fullZipName);
 	jint test = i;
+	jstring title;
 	//chdir("/sdcard/m1/roms/");
-	chdir(rompathshort);
+	chdir(rompath);
 	FILE *testFile = fopen(fullZipName, "r");
+;
 	if(testFile!=NULL){
 		fclose(testFile);
-
 		//__android_log_print(ANDROID_LOG_INFO, "M1Android", "Found...%s", fullZipName);
-		(*env)->CallStaticVoidMethod(env, NDKBridge, callbackROM, (*env)->NewStringUTF(env, m1snd_get_info_str(M1_SINF_VISNAME, i)), i);
-		return;
+//(*env)->CallStaticVoidMethod(env, NDKBridge, callbackROM, (*env)->NewStringUTF(env, m1snd_get_info_str(M1_SINF_VISNAME, i)), i);
+		title = (*env)->NewStringUTF(env, (char*)m1snd_get_info_str(M1_SINF_VISNAME, i));
+		return title;
 		//free(fullZipName);
 
 		//return((*env)->NewStringUTF(env, m1snd_get_info_str(M1_SINF_VISNAME, i)));
@@ -545,13 +548,13 @@ jstring Java_com_neko68k_M1_NDKBridge_CRCAudit( JNIEnv*  env, jobject thiz, int 
 
 }
 
-void Java_com_neko68k_M1_NDKBridge_SetOption( JNIEnv*  env, jobject thiz, int opt, jint val){
+void Java_com_neko68k_M1_NDKBridge_SetOption( JNIEnv*  env, jobject thiz, int opt, int val){
 	int vali = val;
 	m1snd_setoption(opt, vali);
 }
 
 // TODO: fix this shit up to take a jstring arg that is the rompath
-void Java_com_neko68k_M1_NDKBridge_nativeInit( JNIEnv*  env, jobject thiz)
+void Java_com_neko68k_M1_NDKBridge_nativeInit( JNIEnv*  env, jobject thiz, jstring basepath)
 {
 		FILE *cnf = NULL;
 		m1snd_setoption(M1_OPT_RETRIGGER, 0);
@@ -561,7 +564,8 @@ void Java_com_neko68k_M1_NDKBridge_nativeInit( JNIEnv*  env, jobject thiz)
 		//m1snd_setoption(M1_OPT_RESETNORMALIZE, 0);
 		m1snd_setoption(M1_OPT_SAMPLERATE, 44100);
 		__android_log_print(ANDROID_LOG_INFO, "M1Android", "Starting init...");
-		m1snd_init(NULL, m1ui_message);
+		const char *nbasepath = (*env)->GetStringUTFChars(env, basepath, 0);
+		m1snd_init(NULL, m1ui_message, nbasepath);
 		max_games = m1snd_get_info_int(M1_IINF_TOTALGAMES, 0);
 
 		__android_log_print(ANDROID_LOG_INFO, "M1Android", "Max games: %i", max_games);
@@ -572,15 +576,25 @@ void Java_com_neko68k_M1_NDKBridge_nativeInit( JNIEnv*  env, jobject thiz)
 		// this will be removed after the options are hooked up
 		
 
-		cnf = fopen("/sdcard/m1/m1.ini", "rt");
+		/*cnf = fopen("/sdcard/m1/m1.ini", "rt");
 		if (!cnf)
-		{
-			__android_log_print(ANDROID_LOG_INFO, "M1Android", "No config file found, using defaults\n");
+		{*/
+			__android_log_print(ANDROID_LOG_INFO, "M1Android", "Setting basepath...\n");
+			
+			
+
+			// use your string
+
+			
+			
 			rompath = (char *)malloc(512);
-			strcpy(rompath, "/sdcard/m1/roms;");	// default rompath
+			sprintf(rompath, "%s/m1/roms/\0", nbasepath);
+//			strcpy(rompath, "/sdcard/m1/roms;");	// default rompath
 			wavpath = (char *)malloc(512);
-			strcpy(wavpath, "/sdcard/m1/wave;");	// default wavepath
-		}
+			sprintf(wavpath, "%s/m1/wave;\0", nbasepath);
+			//strcpy(wavpath, "/sdcard/m1/wave;");	// default wavepath
+			(*env)->ReleaseStringUTFChars(env, basepath, nbasepath);
+		/*}
 		else
 		{
 			__android_log_print(ANDROID_LOG_INFO, "M1Android", "Reading configuration from m1.ini\n");
@@ -592,7 +606,7 @@ void Java_com_neko68k_M1_NDKBridge_nativeInit( JNIEnv*  env, jobject thiz)
 			wavpath[0] = '\0';
 			read_config(cnf);
 			fclose(cnf);
-		}
+		}*/
 	
 }
 

@@ -19,7 +19,7 @@ typedef struct TrkT
 	struct TrkT *next;
 } TrkT;
 
-TrkT *trklist_load(char *base);
+TrkT *trklist_load(char *base, char *basepath);
 void trklist_unload(TrkT *ltodel);
 char *trklist_getname(TrkT *list, int num);
 long trklist_getlength(TrkT *list, int num);

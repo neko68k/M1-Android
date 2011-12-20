@@ -73,6 +73,8 @@ void *m1ui_this;
 static void audio_init(void);
 //static void audio_kill(void);
 
+static char *basepath;
+
 #undef DRIVER
 #define DRIVER( name ) &brd_##name,
 
@@ -525,6 +527,7 @@ static void m1snd_initnewgame(void)
 
 static int m1snd_switchgame(int newgame)
 {
+	//trklist_unload(game_trklists[curgame]);
 	curgame = newgame;
 
 	if (bUseInternalSnd)
@@ -557,10 +560,10 @@ static int m1snd_switchgame(int newgame)
 	}
 
 #if PLAYLISTS_ON_DEMAND
-	if (!game_trklists[curgame])
-	{
-		game_trklists[curgame] = trklist_load(games[curgame].zipname);
-	}
+	//if (!game_trklists[curgame])
+	//{
+		game_trklists[curgame] = trklist_load(games[curgame].zipname, basepath);
+	//}
 #endif
 
 	// default to no album mode
@@ -598,10 +601,11 @@ static int m1snd_switchgame(int newgame)
 extern void initialise_decoder(void);
 
 // called to init the m1 core
-DLLEXPORT void m1snd_init(void *m1this, int (STDCALL *m1ui_msg)(void *,int, char *, int))                  
+DLLEXPORT void m1snd_init(void *m1this, int (STDCALL *m1ui_msg)(void *,int, char *, int), char* bp)                  
 {
 	int i;
-
+	basepath = (char *)malloc(512);
+	strcpy(basepath, bp);
 	b_pause = 0;
 	flushframes = 0;
 	min = max = 0;
@@ -643,7 +647,7 @@ DLLEXPORT void m1snd_init(void *m1this, int (STDCALL *m1ui_msg)(void *,int, char
 	workram = (unsigned char *)malloc(WORKRAM_SIZE);
 
 	// load and construct the gamelist
-	total_games = gamelist_load();
+	total_games = gamelist_load(basepath);
 
 	// if no games were found, error out
 	if (total_games == 0)
@@ -668,7 +672,7 @@ DLLEXPORT void m1snd_init(void *m1this, int (STDCALL *m1ui_msg)(void *,int, char
 	for (i = 0; i < total_games; i++)
 	{
 //		printf("game %d: zipname = [%s]\n", i, games[i].zipname);
-		game_trklists[i] = trklist_load(games[i].zipname);
+		game_trklists[i] = trklist_load(games[i].zipname, basepath);
 #if 0
 		if (game_trklists[i] != NULL)
 		{

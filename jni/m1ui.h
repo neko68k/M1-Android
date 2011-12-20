@@ -190,7 +190,7 @@ enum
 // services m1snd defines for the use of the UI
 
 // call this on startup to initialize the core.
-DLLEXPORT void m1snd_init(void *, int (STDCALL *m1ui_message)(void *,int, char *, int));
+DLLEXPORT void m1snd_init(void *, int (STDCALL *m1ui_message)(void *,int, char *, int), char *basepath);
 
 // call this for "running" messages.
 DLLEXPORT int m1snd_run(int command, int iparm);
