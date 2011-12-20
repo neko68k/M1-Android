@@ -1,17 +1,20 @@
 // Please note this must be the package if you want to use XML-based preferences
 package android.preference;
  
+
 import android.content.Context;
-import android.preference.DialogPreference;
+import android.content.SharedPreferences;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TimePicker;
+
+import com.neko68k.M1.NumberPicker;
+import com.neko68k.emu.M1Android.R;
  
 /**
  * A preference type that allows a user to choose a time
  */
-public class TimePickerPreference extends DialogPreference implements
-		TimePicker.OnTimeChangedListener {
+public class TimePickerPreference extends DialogPreference  {
  
 	/**
 	 * The validation expression for this preference
@@ -47,43 +50,15 @@ public class TimePickerPreference extends DialogPreference implements
 	 * Initialize this preference
 	 */
 	private void initialize() {
+		this.setDialogLayoutResource(R.layout.timepicker);
+		
+		
 		setPersistent(true);
 	}
  
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see android.preference.DialogPreference#onCreateDialogView()
-	 */
-	@Override
-	protected View onCreateDialogView() {
+	
  
-		TimePicker tp = new TimePicker(getContext());
-		tp.setOnTimeChangedListener(this);
-		//tp.is24HourView()
-		tp.setIs24HourView(true);
-		
-		int h = getHour();
-		int m = getMinute();
-		if (h >= 0 && m >= 0) {
-			tp.setCurrentHour(h);
-			tp.setCurrentMinute(m);
-		}
- 
-		return tp;
-	}
- 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * android.widget.TimePicker.OnTimeChangedListener#onTimeChanged(android
-	 * .widget.TimePicker, int, int)
-	 */
-	public void onTimeChanged(TimePicker view, int hour, int minute) {
- 
-		persistString(hour + ":" + minute);
-	}
+	
  
 	/*
 	 * (non-Javadoc)
@@ -106,32 +81,44 @@ public class TimePickerPreference extends DialogPreference implements
  
 		this.defaultValue = (String) defaultValue;
 	}
- 
-	/**
-	 * Get the hour value (in 24 hour time)
-	 * 
-	 * @return The hour value, will be 0 to 23 (inclusive)
-	 */
-	private int getHour() {
-		String time = getPersistedString(this.defaultValue);
-		if (time == null || !time.matches(VALIDATION_EXPRESSION)) {
-			return -1;
-		}
- 
-		return Integer.valueOf(time.split(":")[0]);
+	
+	NumberPicker hours;
+	NumberPicker minutes;
+	NumberPicker seconds;
+	
+	@Override
+	protected void onBindDialogView(View view) {
+
+	    hours = (NumberPicker) view.findViewById(R.id.hours);
+	    minutes = (NumberPicker) view.findViewById(R.id.minutes);
+	    seconds = (NumberPicker) view.findViewById(R.id.seconds);
+	    
+	    SharedPreferences pref = getSharedPreferences();
+	    
+	    
+	    hours.setValue((int) pref.getLong("defLenHours", 0)/120);
+	    minutes.setValue((int) pref.getLong("defLenMins", 0)/60);
+	    seconds.setValue((int) pref.getLong("defLenSecs", 0));
+	    
+	    if(minutes.getValue()==0){
+	    	minutes.setValue(5);
+	    }
+	}
+	
+	@Override
+	protected void onDialogClosed(boolean positiveResult){
+		if(!positiveResult)
+	        return;
+
+	    SharedPreferences.Editor editor = getEditor();
+	    //
+	    editor.putLong("defLenHours",new Integer(hours.getValue()*120));
+	    editor.putLong("defLenMins",new Integer(minutes.getValue()*60));
+	    editor.putLong("defLenSecs",new Integer(seconds.getValue()));	   
+	    editor.commit();
+
+	    super.onDialogClosed(positiveResult);
 	}
  
-	/**
-	 * Get the minute value
-	 * 
-	 * @return the minute value, will be 0 to 59 (inclusive)
-	 */
-	private int getMinute() {
-		String time = getPersistedString(this.defaultValue);
-		if (time == null || !time.matches(VALIDATION_EXPRESSION)) {
-			return -1;
-		}
- 
-		return Integer.valueOf(time.split(":")[1]);
-	}
+	
 }

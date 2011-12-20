@@ -12,11 +12,11 @@
                         android:defaultValue="true"
                         android:summary="Reset normalization between songs"
                         android:key="resetNormPref" />
-                <CheckBoxPreference
+                <!--  <CheckBoxPreference
                         android:title="Use Lists"
                         android:defaultValue="true"
                         android:summary="Use list files if available."
-                        android:key="listPref" />
+                        android:key="listPref" />-->
                 <ListPreference
                         android:title="List Language"
                         android:summary="Select the language for list files."

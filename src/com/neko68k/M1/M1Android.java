@@ -8,8 +8,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
@@ -22,13 +25,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
 
 import com.neko68k.emu.M1Android.R;
+
 
 public class M1Android extends Activity {	
 	ListView trackList;
@@ -104,19 +108,59 @@ public class M1Android extends Activity {
 		        trackList.setAdapter(adapter);
 		        trackList.setOnItemClickListener(mMessageClickedHandler);
 		        GetPrefs();
-		        task = new InitM1Task(this);
-		        task.execute();
-		        //GetPrefs();
-		        Init();
-		        //GetPrefs();
         }        
     }
    
     
+    
     private void GetPrefs(){
     	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
     	preferences = prefs.getAll();
+    	 	
+    	Boolean firstRun = prefs.getBoolean("firstRun", true);
+    	
+    	AlertDialog alert = new AlertDialog.Builder(M1Android.this)            
+        .setTitle("Note:").setMessage("It looks like this is your first run. Long press on a folder to choose. " +
+        		"If you already have a folder with the XML, LST and ROMs, choose it. We will not overwrite any files in it. " +
+        		"\n - Structure is:" +
+        		"\n   .../m1/m1.xml" +
+        		"\n   .../m1/lst" +
+        		"\n   .../m1/roms")
+        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+            	Intent intent = new Intent().setClass(getApplicationContext(), FileBrowser.class);
+        		intent.putExtra("title", "Select install directory...");
+        		intent.putExtra("dirpick", true);
+            	startActivityForResult(intent, 65535);
+                /* User clicked OK so do some stuff */
+            }
+        })
+        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+
+                /* User clicked Cancel so do some stuff */
+            }
+        })
+        .create();
+    	alert.show();
+    	//return alert;
+    	/*if(firstRun==null || firstRun==true){
+    		
+    		
+    	    
+    	    
+    	    showDialog(0);
+    		
+    		
+    		Intent intent = new Intent().setClass(this, FileBrowser.class);
+    		intent.putExtra("title", "Select install directory...");
+    		intent.putExtra("dirpick", true);
+        	startActivityForResult(intent, 65535);
+            
+    	}*/
+    	
     	normalize = (Boolean) preferences.get("normPref");
+    	
     	if(normalize==null)
     		NDKBridge.SetOption(NDKBridge.M1_OPT_NORMALIZE,  1);
     	else if(normalize)
@@ -146,12 +190,10 @@ public class M1Android extends Activity {
     		NDKBridge.SetOption(NDKBridge.M1_OPT_LANGUAGE,  lstLang);
     	}
     	
-    	tmp = (String) preferences.get("defLenPref");
-    	/*if(tmp!=null){
-    		NDKBridge.defLen = new Integer(tmp);    		
-    	}
-    	else*/
-    		NDKBridge.defLen = 300;
+    	int time = (int) prefs.getLong("defLenHours", 0) + (int) prefs.getLong("defLenMins", 300) + (int) prefs.getLong("defLenSecs", 0);    	
+    	
+    	NDKBridge.defLen = new Integer(time);    		
+    	
     	
     	listLen = (Boolean) preferences.get("listLenPref");
     	if(listLen!=null){
@@ -335,85 +377,98 @@ public class M1Android extends Activity {
     protected void onActivityResult (int requestCode, int resultCode, Intent data){
     	 			
     	super.onActivityResult(requestCode, resultCode, data);
-    	if(requestCode == 1 && resultCode == RESULT_OK){
-    		
-    		//playerService.//.startService(new Intent(this, PlayerService.class));
-        	if(playing==true){
-        		
-        		//ad.PlayStop();
-        		//doUnbindService();
-        		playing = false;
-        		paused = true;
-        		NDKBridge.playerService.stop();
-        		doUnbindService();
-    			NDKBridge.playtime = 0;
-        	}
-        	int gameid = data.getIntExtra("com.neko68k.M1.position", 0);
-        	NDKBridge.loadROM(NDKBridge.globalGLA.get(gameid));
-    		
-    		if(NDKBridge.loadError==false){
-	    		NDKBridge.playtime = 0;
-	    		mHandler.post(mUpdateTimeTask);
-	    		board.setText("Board: "+NDKBridge.board);
-				mfg.setText("Maker: "+NDKBridge.mfg);
-				hardware.setText("Hardware: "+NDKBridge.hdw);
-				
-	    		playButton.setText("Pause");
-	    		numSongs = NDKBridge.getNumSongs(NDKBridge.curGame);
-	    		if(numSongs>0){
-	    			
-	    			listItems.clear();
-	    			for(int i = 0; i<numSongs;i++){
-	    				String song = NDKBridge.getSong(i);
-	    				if(song!=null){
-	    					listItems.add((i+1)+". "+song);
-	    				}
-	    			}     
-	    			
-	    			
-	    			trackList.setOnItemClickListener(mMessageClickedHandler);	    			
-	    			adapter.notifyDataSetChanged();
-	    			trackList.setSelection(0);
-	    			
+    	if(resultCode == RESULT_OK){
+	    	if(requestCode == 1 ){
+	    		
+	    		//playerService.//.startService(new Intent(this, PlayerService.class));
+	        	if(playing==true){
+	        		
+	        		//ad.PlayStop();
+	        		//doUnbindService();
+	        		playing = false;
+	        		paused = true;
+	        		NDKBridge.playerService.stop();
+	        		doUnbindService();
+	    			NDKBridge.playtime = 0;
+	        	}
+	        	int gameid = data.getIntExtra("com.neko68k.M1.position", 0);
+	        	NDKBridge.loadROM(NDKBridge.globalGLA.get(gameid));
+	    		
+	    		if(NDKBridge.loadError==false){
+		    		NDKBridge.playtime = 0;
+		    		mHandler.post(mUpdateTimeTask);
+		    		board.setText("Board: "+NDKBridge.board);
+					mfg.setText("Maker: "+NDKBridge.mfg);
+					hardware.setText("Hardware: "+NDKBridge.hdw);
+					
+		    		playButton.setText("Pause");
+		    		numSongs = NDKBridge.getNumSongs(NDKBridge.curGame);
+		    		if(numSongs>0){
+		    			
+		    			listItems.clear();
+		    			for(int i = 0; i<numSongs;i++){
+		    				String song = NDKBridge.getSong(i);
+		    				if(song!=null){
+		    					listItems.add((i+1)+". "+song);
+		    				}
+		    			}     
+		    			
+		    			
+		    			trackList.setOnItemClickListener(mMessageClickedHandler);	    			
+		    			adapter.notifyDataSetChanged();
+		    			trackList.setSelection(0);
+		    			
+		    		}
+		    		else{
+		    			listItems.clear();
+		    			listItems.add("No playlist");
+		    			trackList.setOnItemClickListener(mDoNothing);
+		    			adapter.notifyDataSetChanged();
+		    		}
+		    		if(!mIsBound){
+		    			doBindService();
+		    		}
+		    		else{
+		    			if(listLen)
+		    				NDKBridge.getSongLen();
+		    			NDKBridge.playerService.play();
+	
+		    		}
+		    		playing=true;
+		    		paused=false;
 	    		}
 	    		else{
 	    			listItems.clear();
-	    			listItems.add("No playlist");
+	    			listItems.add("No game loaded");
 	    			trackList.setOnItemClickListener(mDoNothing);
 	    			adapter.notifyDataSetChanged();
+	    			board.setText("");
+	    			mfg.setText("");
+	    			hardware.setText("");
+	    			song.setText("");
+	    			playTime.setText("Time:");
+	    			trackNum.setText("Command:");
+	    			
+	    			title.setText("No game loaded");
+	    			playButton.setText("Play");
+	    			//Toast.makeText(this, NDKBridge.m1error, Toast.LENGTH_SHORT).show();
 	    		}
-	    		if(!mIsBound){
-	    			doBindService();
-	    		}
-	    		else{
-	    			if(listLen)
-	    				NDKBridge.getSongLen();
-	    			NDKBridge.playerService.play();
-
-	    		}
-	    		playing=true;
-	    		paused=false;
-    		}
-    		else{
-    			listItems.clear();
-    			listItems.add("No game loaded");
-    			trackList.setOnItemClickListener(mDoNothing);
-    			adapter.notifyDataSetChanged();
-    			board.setText("");
-    			mfg.setText("");
-    			hardware.setText("");
-    			song.setText("");
-    			playTime.setText("Time:");
-    			trackNum.setText("Command:");
-    			
-    			title.setText("No game loaded");
-    			playButton.setText("Play");
-    			//Toast.makeText(this, NDKBridge.m1error, Toast.LENGTH_SHORT).show();
-    		}
-    	} else if(requestCode == 2 && resultCode == RESULT_OK){
-    		// options returned
-    		// stop everything and set options
-    		GetPrefs();
+	    	} else if(requestCode == 2){
+	    		// options returned
+	    		// stop everything and set options
+	    		GetPrefs();
+	    	} else if(requestCode == 65535){
+	    		NDKBridge.basepath = data.getStringExtra("com.neko68k.M1.FN");
+	    		task = new InitM1Task(NDKBridge.ctx);
+		        task.execute();
+		        //GetPrefs();
+		        
+			    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		    	preferences = prefs.getAll();
+		    	preferences.put("firstRun",  0);
+			    
+		        Init();
+	    	}
     	}
     }
     

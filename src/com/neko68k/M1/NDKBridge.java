@@ -43,7 +43,12 @@ public class NDKBridge {
 	static String mfg;
 	
 	static int mixrate;
+		
+	static String xmlPath;
+	static String listPath;
 	static String romPath;
+	
+	static String basepath;
 	
 	static GameListAdapter globalGLA = new GameListAdapter();
 	static Map<String, Integer> lookup = new HashMap<String, Integer>();
@@ -101,7 +106,7 @@ public class NDKBridge {
 		return i;
 	}
 	public static void initM1(){
-    	nativeInit();		      	
+    	nativeInit(basepath);		      	
 	}		
 	public static void loadROM(String name){
 		
@@ -119,7 +124,7 @@ public class NDKBridge {
 	public static native int getMaxGames();
     public static native String getGameList(int i);
     
-    public static native void nativeInit();
+    public static native void nativeInit(String basepath);
     //public static native void initCallbacks();
     public static native void nativeClose();
     public static String auditROM(int i){

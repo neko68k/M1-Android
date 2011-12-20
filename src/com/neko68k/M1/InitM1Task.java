@@ -34,11 +34,11 @@ public class InitM1Task extends AsyncTask<Void, Void, Void>{
 	@Override
 	protected Void doInBackground(Void... unused){				
 		String outpath = null;
-		File xml = new File("/sdcard/m1/m1.xml");
+		File xml = new File(NDKBridge.basepath+"/m1/m1.xml");
 		if(xml.exists()==false){
 			File extdir = Environment.getExternalStorageDirectory();
 	    	try {
-				outpath = extdir.getCanonicalPath() + "/m1/";
+				outpath = NDKBridge.basepath + "/m1/";
 				File m1dir = new File(outpath);
 		    	m1dir.mkdirs();
 			} catch (Exception e1) {
@@ -49,7 +49,7 @@ public class InitM1Task extends AsyncTask<Void, Void, Void>{
 			Unzip(outpath, R.raw.m1xml20111011);
 			
 			try {
-				outpath = extdir.getCanonicalPath() + "/m1/lists/";
+				outpath = NDKBridge.basepath + "/m1/lists/";
 				File m1dir = new File(outpath);
 		    	m1dir.mkdirs();
 			} catch (Exception e1) {
@@ -59,7 +59,7 @@ public class InitM1Task extends AsyncTask<Void, Void, Void>{
 			Unzip(outpath, R.raw.lists);
 			
 			try {
-				outpath = extdir.getCanonicalPath() + "/m1/roms/";
+				outpath = NDKBridge.basepath + "/m1/roms/";
 				File m1dir = new File(outpath);
 		    	m1dir.mkdirs();
 			} catch (Exception e1) {

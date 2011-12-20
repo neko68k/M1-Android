@@ -58,8 +58,11 @@ public class PlayerService extends Service{
 	}
 	public void play(){
 				
-		if(notification != null)
-			notification=new Notification();
+		if(notification == null)
+			notification=new Notification(R.drawable.icon,
+	                "",
+	                System.currentTimeMillis());
+			Intent i=new Intent(this, M1Android.class);
 
 		setNoteText();
 		ad.PlayStart();		
