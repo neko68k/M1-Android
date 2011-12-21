@@ -250,7 +250,7 @@ public class M1Android extends Activity {
             	playButton.setText("Play");
             	//ad.PlayStop();
             	NDKBridge.playerService.stop();
-            	doUnbindService();
+            	//doUnbindService();
             	//NDKBridge.pause();
             	//NDKBridge.stop();
             	NDKBridge.playtime = 0;

@@ -104,8 +104,9 @@ public class PlayerService extends Service{
 	
 	//@Override
 	public void onDestory(){
-		stopForeground(true);
 		ad.PlayQuit();
+		stopForeground(true);
+		
 	}
 	
 	@Override
