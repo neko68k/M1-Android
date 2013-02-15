@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 
  
@@ -81,13 +82,27 @@ public class FileBrowser extends ListActivity {
         }
        
         private void browseTo(final File aDirectory){
+        	String fn = null;
+        	File files[] = null;
                 if (aDirectory.isDirectory()){
                         this.currentDirectory = aDirectory;
-                        fill(aDirectory.listFiles());
+                        try{
+                        	files = aDirectory.listFiles();
+                        }
+                        catch(SecurityException e){
+                        	Toast.makeText(this, "Permission denied.",Toast.LENGTH_SHORT).show();
+                        	return;
+                        }
+                        fill(files);
                 }else{   
                 	if(!dirpick){
 	                	Intent i = new Intent();
-	                	String fn = new String(aDirectory.getAbsolutePath());
+	                	try{
+	                		fn = new String(aDirectory.getAbsolutePath());
+	                	}
+	                	catch(SecurityException e){
+	                		fn = null;
+	                	}
 	                	i.putExtra("com.neko68k.M1.FN", fn);
 	                	//startActivity(i);
 	                	setResult(RESULT_OK, i);                	
@@ -108,16 +123,16 @@ public class FileBrowser extends ListActivity {
                         e1.printStackTrace();
                 }
                 //this.directoryEntries.add(".");
-               String test = this.currentDirectory.getAbsolutePath();
+               //String test = this.currentDirectory.getAbsolutePath();
                 if(this.currentDirectory.getParent() != null)
-                	if(this.currentDirectory.getParent()!="/")	//TODO: fix this
+                	//if(this.currentDirectory.getParent()!="/")	//TODO: fix this
                         this.directoryEntries.add("..");
                
                 switch(this.displayMode){
                         case ABSOLUTE:
                                 for (File file : files){
                                 	int extOfs = file.getName().lastIndexOf(".");
-                            		String ext = file.getName().substring(extOfs, file.getName().length());                                
+                            		//String ext = file.getName().substring(extOfs, file.getName().length());                                
                                     this.directoryEntries.add(file.getPath());
                                 }
                                 break;
@@ -132,10 +147,12 @@ public class FileBrowser extends ListActivity {
                                 	{      
                                 		if(!dirpick){
 	                                		int extOfs = file.getName().lastIndexOf(".");
-	                                		String ext = file.getName().substring(extOfs, file.getName().length());          
-	                                		if(ext.contentEquals(".mcd")||ext.contentEquals(".MCD")||ext.contentEquals(".mcr")||ext.contentEquals(".MCR")||
-	                                				ext.contentEquals(".GME")||ext.contentEquals(".gme")){
-	                                			this.directoryEntries.add(file.getAbsolutePath().substring(currentPathStringLenght));
+	                                		if(extOfs!=-1){
+		                                		String ext = file.getName().substring(extOfs, file.getName().length());          
+		                                		if(ext.contentEquals(".mcd")||ext.contentEquals(".MCD")||ext.contentEquals(".mcr")||ext.contentEquals(".MCR")||
+		                                				ext.contentEquals(".GME")||ext.contentEquals(".gme")){
+		                                			this.directoryEntries.add(file.getAbsolutePath().substring(currentPathStringLenght));
+		                                		}
 	                                		}
                                 		}
                                 	}
@@ -161,11 +178,21 @@ public class FileBrowser extends ListActivity {
                 File clickedFile = null;
                 switch(this.displayMode){
                         case RELATIVE:
-                                clickedFile = new File(this.currentDirectory.getAbsolutePath()
+                        	try{
+                                clickedFile = new File(this.currentDirectory.getAbsolutePath()                        	
                                      + this.directoryEntries.get(selectionRowID));
+                        	}
+                        	catch(SecurityException e){
+                        		clickedFile = null;
+                        	}
                                 break;
                         case ABSOLUTE:
+                        	try{
                                 clickedFile = new File(this.directoryEntries.get(selectionRowID));
+                        	}
+                        	catch(SecurityException e){
+                        		clickedFile = null;
+                        	}
                                 break;
                 }
                 if(clickedFile!=null&&clickedFile.isDirectory()){
