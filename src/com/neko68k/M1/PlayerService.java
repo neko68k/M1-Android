@@ -72,7 +72,7 @@ public class PlayerService extends Service{
 
 		notification.flags|=Notification.FLAG_NO_CLEAR;
 		RemoteViews contentView = new RemoteViews(getPackageName(), R.layout.custom_notification);
-		contentView.setImageViewResource(R.id.image, R.drawable.icon);
+		contentView.setImageViewResource(R.id.image, R.drawable.ic_launcher);
 		contentView.setTextViewText(R.id.title, "M1Android");
 		
 		
