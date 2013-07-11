@@ -5,8 +5,6 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
 
-import com.neko68k.emu.M1Android.R;
-
 public class Prefs extends PreferenceActivity implements Preference.OnPreferenceChangeListener{
 	@Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -9,7 +9,6 @@ import java.util.TimerTask;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -30,8 +29,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import com.neko68k.emu.M1Android.R;
 
 
 public class M1Android extends Activity {	

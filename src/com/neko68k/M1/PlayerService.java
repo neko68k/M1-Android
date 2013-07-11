@@ -9,9 +9,7 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.widget.RemoteViews;
-
 //import android.R;
-import com.neko68k.emu.M1Android.R;
 
 // this will handle all the threading and shit
 // so we can properly stop it and allow the app

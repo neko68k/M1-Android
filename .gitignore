@@ -2,3 +2,11 @@
 *.d
 *.class
 *.dex
+*.apk
+*.jar
+*.prefs
+*.so
+*.a
+*.sh
+*.ap_
+*.cache

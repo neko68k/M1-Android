@@ -13,8 +13,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Environment;
 
-import com.neko68k.emu.M1Android.R;
-
 public class InitM1Task extends AsyncTask<Void, Void, Void>{
 	ProgressDialog dialog;
 	

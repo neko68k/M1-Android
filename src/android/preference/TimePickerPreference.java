@@ -6,10 +6,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.TimePicker;
 
 import com.neko68k.M1.NumberPicker;
-import com.neko68k.emu.M1Android.R;
+import com.neko68k.M1.R;
  
 /**
  * A preference type that allows a user to choose a time

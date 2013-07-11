@@ -1,6 +1,5 @@
 package com.neko68k.M1;
 
-import com.neko68k.emu.M1Android.R;
 
 // this will implement the settings window
 // for now the results will be stored in 
