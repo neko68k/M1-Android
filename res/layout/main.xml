@@ -55,8 +55,8 @@
 		       android:layout_weight="0.025"
 		       />
 		       <Button
-		       android:id="@+id/stop"
-		   	android:text="Stop"       
+		       android:id="@+id/rest"
+		   	android:text="Rest"       
 		       android:layout_width="fill_parent"
 		       android:layout_height="wrap_content"        
 		       android:textSize="18sp"

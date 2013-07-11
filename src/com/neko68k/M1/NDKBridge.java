@@ -145,6 +145,7 @@ public class NDKBridge {
     public static native void stop();
     public static native void pause();
     public static native void unPause();
+    public static native void restSong();
     
     public static native int getCurTime();
     public static native String getMaker(int parm);

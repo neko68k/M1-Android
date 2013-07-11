@@ -38,9 +38,9 @@ public final class R {
         public static final int play=0x7f0a000d;
         public static final int playTime=0x7f0a0009;
         public static final int prev=0x7f0a000c;
+        public static final int rest=0x7f0a000e;
         public static final int seconds=0x7f0a0015;
         public static final int song=0x7f0a000a;
-        public static final int stop=0x7f0a000e;
         public static final int text=0x7f0a0003;
         public static final int text2=0x7f0a0004;
         public static final int title=0x7f0a0002;

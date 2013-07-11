@@ -35,7 +35,7 @@ public class M1Android extends Activity {
 	ListView trackList;
 	Button nextButton;
 	Button prevButton;
-	Button stopButton;
+	Button restButton;
 	Button playButton;	
 	TextView trackNum;
 	TextView playTime;
@@ -85,7 +85,7 @@ public class M1Android extends Activity {
         trackList = (ListView)findViewById(R.id.listView1);
         nextButton = (Button)findViewById(R.id.next);
         prevButton = (Button)findViewById(R.id.prev);
-        stopButton = (Button)findViewById(R.id.stop);
+        restButton = (Button)findViewById(R.id.rest);
         playButton = (Button)findViewById(R.id.play);
         trackNum = (TextView)findViewById(R.id.trackNum);
         playTime = (TextView)findViewById(R.id.playTime);
@@ -237,19 +237,21 @@ public class M1Android extends Activity {
             }
         });
         // STOP
-        stopButton.setOnClickListener(new View.OnClickListener() 
+        restButton.setOnClickListener(new View.OnClickListener() 
         {
         	// need to to something with this. it basically kills
         	// the game now and thats kind of unfriendly
             public void onClick(View v) {  
-            	playing = false;
-            	paused = false;
-            	playButton.setText("Play");
+            	//playing = false;
+            	//paused = false;
+            	//playButton.setText("Play");
             	//ad.PlayStop();
-            	NDKBridge.playerService.stop();
+            	//NDKBridge.playerService.stop();
             	//doUnbindService();
             	//NDKBridge.pause();
             	//NDKBridge.stop();
+            	
+            	NDKBridge.restSong();
             	NDKBridge.playtime = 0;
             }
         });

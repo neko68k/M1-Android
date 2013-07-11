@@ -509,6 +509,11 @@ void Java_com_neko68k_M1_NDKBridge_jumpSong(JNIEnv* env, jobject thiz, int track
 	m1snd_run(M1_CMD_SONGJMP, tracknum);
 }
 
+void Java_com_neko68k_M1_NDKBridge_restSong(JNIEnv* env, jobject thiz){
+	int cursong = m1snd_get_info_int(M1_IINF_CURSONG, 0);
+	m1snd_run(M1_CMD_SONGJMP, cursong);
+}
+
 int Java_com_neko68k_M1_NDKBridge_getNumSongs( JNIEnv*  env, jobject thiz, int i){
 	return(m1snd_get_info_int(M1_IINF_TRACKS, i));
 }
