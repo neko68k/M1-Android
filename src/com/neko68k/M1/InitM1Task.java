@@ -72,6 +72,8 @@ public class InitM1Task extends AsyncTask<Void, Void, Void>{
 		int numGames = NDKBridge.getMaxGames();
 		int i =0;		
 		
+		NDKBridge.m1db = new GameListOpenHelper(context);
+		
 		//List<GameList> mItems = new ArrayList<GameList>();
 		if(NDKBridge.globalGLA.isEmpty()){
 			for(i = 0; i<numGames;i++){
