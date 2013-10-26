@@ -37,11 +37,8 @@ public class GameListOpenHelper {
                 //"sound5" + " TEXT, " +
                 KEY_LISTAVAIL + " INTEGER);";
     
-    private static SQLiteDatabase dbloc;
-
-    
-    public static void onCreate(SQLiteDatabase db) {
-    	dbloc = db;
+        
+    public static void onCreate(SQLiteDatabase db) {    	
     	db.execSQL("DROP TABLE IF EXISTS " + GAMELIST_TABLE_NAME);
         db.execSQL(GAMELIST_TABLE_CREATE);
     }
@@ -55,13 +52,13 @@ public class GameListOpenHelper {
         onCreate(db);
 	}
 	
-	public static Cursor getAllTitles(){
+	public static Cursor getAllTitles(SQLiteDatabase db){
 		
 		
-		return(dbloc.query(GAMELIST_TABLE_NAME, null, null, null, null, null, null));
+		return(db.query(GAMELIST_TABLE_NAME, null, null, null, null, null, null));
 	}
 	
-	public static void addGame(Game game) {
+	public static void addGame(SQLiteDatabase db, Game game) {
 	    //SQLiteDatabase db = this.getWritableDatabase();
 	 
 	    ContentValues values = new ContentValues();
@@ -78,8 +75,9 @@ public class GameListOpenHelper {
 	    values.put(KEY_SOUND4, game.getTitle()); 	   
 	    values.put(KEY_LISTAVAIL, game.getListavail()); 
 	 
+	    
 	    // Inserting Row
-	    //NDKBridge.m1db.insert(GAMELIST_TABLE_NAME, null, values);
-	    //NDKBridge.m1db.close(); // Closing database connection
+	    db.insert(GAMELIST_TABLE_NAME, null, values);
+	    //db.close(); // Closing database connection
 	}
 }

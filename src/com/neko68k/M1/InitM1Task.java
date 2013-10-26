@@ -10,6 +10,7 @@ import java.util.zip.ZipInputStream;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Environment;
 
@@ -72,7 +73,7 @@ public class InitM1Task extends AsyncTask<Void, Void, Void>{
 		int numGames = NDKBridge.getMaxGames();
 		int i =0;		
 		
-		NDKBridge.db = new GameListOpenHelper();
+		SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
 		
 		//List<GameList> mItems = new ArrayList<GameList>();
 		/*if(NDKBridge.globalGLA.isEmpty()){
@@ -110,10 +111,10 @@ public class InitM1Task extends AsyncTask<Void, Void, Void>{
 			case 0:
 				break;
 			}			
-			
-			NDKBridge.db.addGame(game);
-		}
 		
+			GameListOpenHelper.addGame(db, game);
+		}
+		db.close();
 		return(null);
 	}
 	

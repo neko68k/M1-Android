@@ -2,7 +2,7 @@ package com.neko68k.M1;
 
 import android.app.ListActivity;
 import android.content.Intent;
-import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -25,12 +25,12 @@ public class GameListActivity extends ListActivity{
 	public void onCreate(Bundle savedInstanceState) {
 		
 		
-		
+		SQLiteDatabase db = NDKBridge.m1db.getReadableDatabase();
 		//Cursor cursor;
 		
 		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, 
 		        R.layout.gamelist_detailed, 
-		        NDKBridge.db.getAllTitles(), 
+		        GameListOpenHelper.getAllTitles(db), 
 		        new String[] { "title", "year", "mfg", "board" }, 
 		        new int[] { R.id.title, R.id.year, R.id.mfg, R.id.board });
 		

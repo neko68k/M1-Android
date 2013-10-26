@@ -76,7 +76,7 @@ public class NDKBridge {
 
 	//////////////////////////// END ENUMS
 	
-	static GameListOpenHelper db;
+	static GameDatabaseHelper m1db;
 	
 	static int defLen;
 	static int songLen;
@@ -96,8 +96,7 @@ public class NDKBridge {
 	static String basepath = null;
 	
 	static GameListAdapter globalGLA = new GameListAdapter();
-	static Map<String, Integer> lookup = new HashMap<String, Integer>();
-	static GameListOpenHelper m1db;
+	static Map<String, Integer> lookup = new HashMap<String, Integer>();	
 	//Map<String, Integer> m = new HashMap<String, Integer>();
 	
 	static TextView Title;
