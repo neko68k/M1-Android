@@ -13,7 +13,7 @@ public class Game {
 		String sound3;
 		String sound4;		
 		Integer listavail;
-		public Game(int index, String title, String year, String romname,
+		/*public Game(int index, String title, String year, String romname,
 				String mfg, String sys, String cpu, String sound1,
 				String sound2, String sound3, String sound4, 
 				Integer listavail) {
@@ -29,7 +29,7 @@ public class Game {
 			this.sound3 = sound3;
 			this.sound4 = sound4;		
 			this.listavail = listavail;
-		}
+		}*/
 		public Game() {
 			
 		}

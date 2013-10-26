@@ -39,8 +39,12 @@ public class GameListOpenHelper {
     
         
     public static void onCreate(SQLiteDatabase db) {    	
-    	db.execSQL("DROP TABLE IF EXISTS " + GAMELIST_TABLE_NAME);
+    	
         db.execSQL(GAMELIST_TABLE_CREATE);
+    }
+    
+    public static void dropTable(SQLiteDatabase db) {
+    	//db.execSQL("DROP TABLE IF EXISTS " + GAMELIST_TABLE_NAME);
     }
 
 	

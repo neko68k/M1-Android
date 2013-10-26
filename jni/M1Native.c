@@ -351,6 +351,55 @@ jstring Java_com_neko68k_M1_NDKBridge_getInfoStr(JNIEnv* env, jobject thiz, int 
 /*jstring Java_com_neko68k_M1_NDKBridge_getInfoStrEX(JNIEnv* env, jobject thiz, int cmd, int parm){
 	return((*env)->NewStringUTF(env, m1snd_get_info_str_ex(cmd, parm)));
 }*/
+jobject Java_com_neko68k_M1_NDKBridge_queryRom(JNIEnv* env, jobject thiz, int game){
+	jclass complexClass = (*env)->FindClass(env, "com/neko68k/M1/Game");
+	jmethodID constructor = (*env)->GetMethodID(env, complexClass, "<init>", "()V"); //The name of constructor method is "<init>"
+	jobject instance = (*env)->NewObject(env, complexClass, constructor);
+
+	__android_log_print(ANDROID_LOG_INFO, "M1Android", "%i\t%s\n", game, m1snd_get_info_str(M1_SINF_VISNAME, game));
+	m1snd_run(M1_CMD_GAMEJMP, game);
+	waitForBoot();
+	//m1snd_run(M1_CMD_PAUSE, 0);
+	(*env)->SetObjectField(env, instance, (*env)->GetFieldID(env, complexClass, "title", "Ljava/lang/String;"),
+				(*env)->NewStringUTF(env, (char*)m1snd_get_info_str(M1_SINF_VISNAME, game)));
+	(*env)->SetObjectField(env, instance, (*env)->GetFieldID(env, complexClass, "romname", "Ljava/lang/String;"),
+				(*env)->NewStringUTF(env, (char*)m1snd_get_info_str(M1_SINF_ROMNAME, game)));
+	(*env)->SetObjectField(env, instance, (*env)->GetFieldID(env, complexClass, "mfg", "Ljava/lang/String;"),
+				(*env)->NewStringUTF(env, (char*)m1snd_get_info_str(M1_SINF_MAKER, game)));
+	(*env)->SetObjectField(env, instance, (*env)->GetFieldID(env, complexClass, "sys", "Ljava/lang/String;"),
+				(*env)->NewStringUTF(env, (char*)m1snd_get_info_str(M1_SINF_BNAME, game)));
+	(*env)->SetObjectField(env, instance, (*env)->GetFieldID(env, complexClass, "year", "Ljava/lang/String;"),
+				(*env)->NewStringUTF(env, (char*)m1snd_get_info_str(M1_SINF_YEAR, game)));
+	(*env)->SetObjectField(env, instance, (*env)->GetFieldID(env, complexClass, "cpu", "Ljava/lang/String;"),
+				(*env)->NewStringUTF(env, (char*)m1snd_get_info_str(M1_SINF_VISNAME, game)));
+	/*(*env)->SetObjectField(env, instance, (*env)->GetFieldID(env, complexClass, "title", "Ljava/lang/String;"),
+				(*env)->NewStringUTF(env, (char*)m1snd_get_info_str(M1_SINF_VISNAME, game)));
+	(*env)->SetObjectField(env, instance, (*env)->GetFieldID(env, complexClass, "title", "Ljava/lang/String;"),
+				(*env)->NewStringUTF(env, (char*)m1snd_get_info_str(M1_SINF_VISNAME, game)));
+	(*env)->SetObjectField(env, instance, (*env)->GetFieldID(env, complexClass, "title", "Ljava/lang/String;"),
+				(*env)->NewStringUTF(env, (char*)m1snd_get_info_str(M1_SINF_VISNAME, game)));
+	(*env)->SetObjectField(env, instance, (*env)->GetFieldID(env, complexClass, "title", "Ljava/lang/String;"),
+				(*env)->NewStringUTF(env, (char*)m1snd_get_info_str(M1_SINF_VISNAME, game)));
+	(*env)->SetObjectField(env, instance, (*env)->GetFieldID(env, complexClass, "title", "Ljava/lang/String;"),
+				(*env)->NewStringUTF(env, (char*)m1snd_get_info_str(M1_SINF_VISNAME, game)));
+
+
+
+	String title;
+			String year;
+			String romname;
+			String mfg;
+			String sys;
+			String cpu;
+			String sound1;
+			String sound2;
+			String sound3;
+			String sound4;
+			Integer listavail;
+*/
+	__android_log_print(ANDROID_LOG_INFO, "M1Android", "Done.\n");
+	return instance;
+}
 
 
 jstring Java_com_neko68k_M1_NDKBridge_getSongs(JNIEnv* env, jobject thiz, int song){

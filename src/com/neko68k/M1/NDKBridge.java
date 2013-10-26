@@ -113,7 +113,7 @@ public class NDKBridge {
 	}
 
 	public static void SetGameName(String name){
-		Title.setText(name);
+		//Title.setText(name);
 	}
 	
 	 
@@ -153,7 +153,9 @@ public class NDKBridge {
 	public static void initM1(){
     	nativeInit(basepath);		      	
 	}		
-	public static Game queryROM(int i){
+	//jobject Java_com_neko68k_M1_NDKBridge_queryRom(JNIEnv* env, jobject thiz, int game);
+	public static native Game queryRom(int game);
+	/*public static Game queryROM(int i){
 		Game game = new Game();
 		String bhardware;
 		game.setIndex(i);
@@ -179,7 +181,7 @@ public class NDKBridge {
 		}
 		game.setListavail(0);
 		return game;
-	}
+	}*/
 	public static void queryROM(Game game, String name){
 		
 	}

@@ -10,6 +10,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <jni.h>
+#include <android/log.h>
 #if SHOW_CLIPPING
 #include <limits.h>
 #endif
@@ -340,14 +342,15 @@ static void construct_board(int num)
 					cpu++;
 					cur_board->bcpus[cpu].CPU_type = (long)tboard->tags[tag].data0;
 					cur_board->bcpus[cpu].speed = (long)tboard->tags[tag].data1;
-//					printf("Adding CPU type %d speed %ld\n", cur_board->bcpus[cpu].CPU_type, cur_board->bcpus[cpu].speed);
+					//__android_log_print(ANDROID_LOG_INFO, "Adding CPU type %d speed %ld\n", cur_board->bcpus[cpu].CPU_type, cur_board->bcpus[cpu].speed);
+
 					break;
 
 				case TID_SOUND:
 					dsp++;
 					cur_board->bmachine[dsp].sound_type = (long)tboard->tags[tag].data0; 
 					cur_board->bmachine[dsp].sound_interface = tboard->tags[tag].data1; 
-//					printf("Adding DSP type %d intf %x\n", cur_board->bmachine[dsp].sound_type, (unsigned int)cur_board->bmachine[dsp].sound_interface);
+					//__android_log_print(ANDROID_LOG_INFO, "Adding DSP type %d intf %x\n", cur_board->bmachine[dsp].sound_type, (unsigned int)cur_board->bmachine[dsp].sound_interface);
 					break;
 
 				case TID_CPUMEMHAND:
@@ -368,18 +371,18 @@ static void construct_board(int num)
 
 				case TID_NAME:
 					cur_board->bname = (char *)tboard->tags[tag].data0;
-//					printf("Board name is [%s]\n", cur_board->bname);
+					//__android_log_print(ANDROID_LOG_INFO, "Board name is [%s]\n", cur_board->bname);
 					break;
 
 				case TID_HW:
 					cur_board->bhw = (char *)tboard->tags[tag].data0;
-//					printf("Board hardware is [%s]\n", cur_board->bhw);
+					//__android_log_print(ANDROID_LOG_INFO, "Board hardware is [%s]\n", cur_board->bhw);
 					break;
 
 				case TID_DELAYS:
 					cur_board->startupTime = (long)tboard->tags[tag].data0; 
 					cur_board->interCmdTime = (long)tboard->tags[tag].data1; 
-//					printf("Board delays are %ld %ld\n", cur_board->startupTime, cur_board->interCmdTime);
+					//__android_log_print(ANDROID_LOG_INFO, "Board delays are %ld %ld\n", cur_board->startupTime, cur_board->interCmdTime);
 					break;
 
 				case TID_INIT:
@@ -520,7 +523,7 @@ static void m1snd_initnewgame(void)
 
 	if (bUseInternalSnd)
 	{
-		m1sdr_PlayStart();
+		//m1sdr_PlayStart();
 	}
 
 }

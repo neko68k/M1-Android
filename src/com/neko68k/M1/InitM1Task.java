@@ -83,21 +83,27 @@ public class InitM1Task extends AsyncTask<Void, Void, Void>{
 				NDKBridge.addROM(title, i);
 			}
 		}*/
-		
-		//for(i = 0; i<numGames;i++){
-		i = 1;
+		game = new Game();
+		for(i = 0; i<numGames;i++){		
 			NDKBridge.cur = i;
 			// simple zipname audit, need to add a full audit procedure...
-			String title = NDKBridge.auditROM(i);	
+			//String title = NDKBridge.auditROM(i);	
 			//NDKBridge.addROM(title, i);
 			
-			game = new Game(i, NDKBridge.getInfoStr(NDKBridge.M1_SINF_VISNAME, i), NDKBridge.getInfoStr(NDKBridge.M1_SINF_YEAR, i), 
-					NDKBridge.getInfoStr(NDKBridge.M1_SINF_ROMNAME, i), NDKBridge.getInfoStr(NDKBridge.M1_SINF_MAKER, i),
-					NDKBridge.getInfoStr(NDKBridge.M1_SINF_BNAME, i), "", "", "", "", "",
-					0);
+			
+			
+			game = NDKBridge.queryRom(i);
+			
+			game.setIndex(i);
+			/*game.setTitle(NDKBridge.getInfoStr(NDKBridge.M1_SINF_VISNAME, i));
+			game.setYear(NDKBridge.getInfoStr(NDKBridge.M1_SINF_YEAR, i)); 
+			game.setRomname(NDKBridge.getInfoStr(NDKBridge.M1_SINF_ROMNAME, i));
+			game.setMfg(NDKBridge.getInfoStr(NDKBridge.M1_SINF_MAKER, i));
+			//game.setSys(NDKBridge.getInfoStr(NDKBridge.M1_SINF_BNAME, i));
+			game.setListavail(0);			
 			
 			String sound = NDKBridge.getInfoStr(NDKBridge.M1_SINF_BHARDWARE, i);
-			String soundary[] = sound.split(", ");
+			/*String soundary[] = sound.split(", ");
 			switch(soundary.length){
 			case 5:
 				game.setSound4(soundary[4]);
@@ -111,10 +117,10 @@ public class InitM1Task extends AsyncTask<Void, Void, Void>{
 				game.setCpu(soundary[0]);
 			case 0:
 				break;
-			}			
+			}*/			
 		
 			GameListOpenHelper.addGame(db, game);
-		//}
+		}
 		db.close();
 		return(null);
 	}
