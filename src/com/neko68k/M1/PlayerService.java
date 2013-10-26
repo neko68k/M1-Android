@@ -78,13 +78,15 @@ public class PlayerService extends Service{
 		
 		
 		text = NDKBridge.getSong(NDKBridge.getCurrentCmd());
+		text=null;
 		if(text!=null){
 			contentView.setTextViewText(R.id.text, text);
 			contentView.setTextViewText(R.id.text2, NDKBridge.getGameTitle(NDKBridge.curGame).getText());
 		}
 		if(text==null){
 			contentView.setTextViewText(R.id.text, "No track list");
-			contentView.setTextViewText(R.id.text2, NDKBridge.getGameTitle(NDKBridge.curGame).getText()); 
+			//contentView.setTextViewText(R.id.text2, NDKBridge.getGameTitle(NDKBridge.curGame).getText()); 
+			contentView.setTextViewText(R.id.text2, "FIXME");
 		}
 		
 		

@@ -65,7 +65,7 @@ public class GameListActivity extends ListActivity{
         //gla = NDKBridge.globalGLA;
         //gla.sort();
         //NDKBridge.globalGLA.sort();
-        NDKBridge.globalGLA.setContext(this);
+        //NDKBridge.globalGLA.setContext(this);
         //this.setListAdapter(NDKBridge.globalGLA);
         this.setListAdapter(adapter);
         db.close();
@@ -82,7 +82,7 @@ public class GameListActivity extends ListActivity{
             //loadTask.execute(new Integer(selectionRowID));
             
             Intent i = new Intent();
-            String title = NDKBridge.getGameList(selectionRowID);
+            String title = "";//NDKBridge.getGameList(selectionRowID);
         	i.putExtra("com.neko68k.M1.title", title);
         	i.putExtra("com.neko68k.M1.position", position);
         	//startActivity(i);
