@@ -1,11 +1,8 @@
 package com.neko68k.M1;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-
-
-
-
 
 public class GameListOpenHelper {
 	public static final String KEY_ID = "_id";
@@ -52,6 +49,11 @@ public class GameListOpenHelper {
  
         // Create tables again
         onCreate(db);
+	}
+	
+	public Cursor getAllTitles(){
+		Cursor cursor = null;
+		return(cursor);
 	}
 	
 	public static void addGame(Game game) {

@@ -2,10 +2,12 @@ package com.neko68k.M1;
 
 import android.app.ListActivity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 
 public class GameListActivity extends ListActivity{
 	GameListAdapter gla;
@@ -13,6 +15,20 @@ public class GameListActivity extends ListActivity{
 	int max_games;
 	
 	public void onCreate(Bundle savedInstanceState) {
+		
+		
+		GameListOpenHelper db = new GameListOpenHelper();
+		Cursor cursor;
+		
+		
+		
+		
+		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, 
+		        R.layout.gamelist_detailed, 
+		        db.getAllTitles(), 
+		        new String[] { "title", "year", "mfg", "board" }, 
+		        new int[] { R.id.title, R.id.year, R.id.mfg, R.id.board });
+		
 		
 		//gla=null;
 		//String fn = new String();
@@ -45,7 +61,8 @@ public class GameListActivity extends ListActivity{
         //gla.sort();
         NDKBridge.globalGLA.sort();
         NDKBridge.globalGLA.setContext(this);
-        this.setListAdapter(NDKBridge.globalGLA);
+        //this.setListAdapter(NDKBridge.globalGLA);
+        this.setListAdapter(adapter);
         //this.setListAdapter(gla);
         
 	}

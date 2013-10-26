@@ -2,4 +2,5 @@
 <resources>
     <string name="hello">Hello World, M1Android!</string>
     <string name="app_name">M1 Android</string>
+    <string name="appname">M1 Android</string>
 </resources>
