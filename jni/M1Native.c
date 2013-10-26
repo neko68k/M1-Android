@@ -345,12 +345,12 @@ jint Java_com_neko68k_M1_NDKBridge_getInfoInt(JNIEnv* env, jobject thiz, int cmd
 }
 
 jstring Java_com_neko68k_M1_NDKBridge_getInfoStr(JNIEnv* env, jobject thiz, int cmd, int parm){
-	return((*env)->NewStringUTF(env, m1snd_get_info_str_ex(cmd, parm)));
+	return((*env)->NewStringUTF(env, m1snd_get_info_str(cmd, parm)));
 }
 
-jstring Java_com_neko68k_M1_NDKBridge_getInfoStrEX(JNIEnv* env, jobject thiz, int cmd, int parm){
+/*jstring Java_com_neko68k_M1_NDKBridge_getInfoStrEX(JNIEnv* env, jobject thiz, int cmd, int parm){
 	return((*env)->NewStringUTF(env, m1snd_get_info_str_ex(cmd, parm)));
-}
+}*/
 
 
 jstring Java_com_neko68k_M1_NDKBridge_getSongs(JNIEnv* env, jobject thiz, int song){

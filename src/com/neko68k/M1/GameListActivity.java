@@ -31,7 +31,7 @@ public class GameListActivity extends ListActivity{
 		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, 
 		        R.layout.gamelist_detailed, 
 		        GameListOpenHelper.getAllTitles(db), 
-		        new String[] { "title", "year", "mfg", "board" }, 
+		        new String[] { "title", "year", "mfg", "sys" }, 
 		        new int[] { R.id.title, R.id.year, R.id.mfg, R.id.board });
 		
 		
@@ -68,6 +68,7 @@ public class GameListActivity extends ListActivity{
         NDKBridge.globalGLA.setContext(this);
         //this.setListAdapter(NDKBridge.globalGLA);
         this.setListAdapter(adapter);
+        db.close();
         //this.setListAdapter(gla);
         
 	}

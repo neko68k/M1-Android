@@ -72,7 +72,7 @@ public class InitM1Task extends AsyncTask<Void, Void, Void>{
 		NDKBridge.initM1();
 		int numGames = NDKBridge.getMaxGames();
 		int i =0;		
-		
+		NDKBridge.m1db = new GameDatabaseHelper(context);
 		SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
 		
 		//List<GameList> mItems = new ArrayList<GameList>();
@@ -84,18 +84,19 @@ public class InitM1Task extends AsyncTask<Void, Void, Void>{
 			}
 		}*/
 		
-		for(i = 0; i<numGames;i++){
+		//for(i = 0; i<numGames;i++){
+		i = 1;
 			NDKBridge.cur = i;
 			// simple zipname audit, need to add a full audit procedure...
 			String title = NDKBridge.auditROM(i);	
 			//NDKBridge.addROM(title, i);
 			
-			game = new Game(i, NDKBridge.getInfoString(NDKBridge.M1_SINF_VISNAME, i), NDKBridge.getInfoString(NDKBridge.M1_SINF_YEAR, i), 
-					NDKBridge.getInfoString(NDKBridge.M1_SINF_ROMNAME, i), NDKBridge.getInfoString(NDKBridge.M1_SINF_MAKER, i),
-					NDKBridge.getInfoString(NDKBridge.M1_SINF_BNAME, i), "", "", "", "", "",
+			game = new Game(i, NDKBridge.getInfoStr(NDKBridge.M1_SINF_VISNAME, i), NDKBridge.getInfoStr(NDKBridge.M1_SINF_YEAR, i), 
+					NDKBridge.getInfoStr(NDKBridge.M1_SINF_ROMNAME, i), NDKBridge.getInfoStr(NDKBridge.M1_SINF_MAKER, i),
+					NDKBridge.getInfoStr(NDKBridge.M1_SINF_BNAME, i), "", "", "", "", "",
 					0);
 			
-			String sound = NDKBridge.getInfoString(NDKBridge.M1_SINF_BHARDWARE, i);
+			String sound = NDKBridge.getInfoStr(NDKBridge.M1_SINF_BHARDWARE, i);
 			String soundary[] = sound.split(", ");
 			switch(soundary.length){
 			case 5:
@@ -113,7 +114,7 @@ public class InitM1Task extends AsyncTask<Void, Void, Void>{
 			}			
 		
 			GameListOpenHelper.addGame(db, game);
-		}
+		//}
 		db.close();
 		return(null);
 	}

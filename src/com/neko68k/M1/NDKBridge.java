@@ -157,12 +157,12 @@ public class NDKBridge {
 		Game game = new Game();
 		String bhardware;
 		game.setIndex(i);
-		game.setTitle(getInfoString(M1_SINF_VISNAME, i));
-		game.setYear(getInfoString(M1_SINF_YEAR, i));
-		game.setRomname(getInfoString(M1_SINF_ROMFNAME, i));
-		game.setMfg(getInfoString(M1_SINF_MAKER, i));
-		game.setSys(getInfoString(M1_SINF_BNAME, i));
-		bhardware = getInfoString(M1_SINF_BHARDWARE, i);
+		game.setTitle(getInfoStr(M1_SINF_VISNAME, i));
+		game.setYear(getInfoStr(M1_SINF_YEAR, i));
+		game.setRomname(getInfoStr(M1_SINF_ROMFNAME, i));
+		game.setMfg(getInfoStr(M1_SINF_MAKER, i));
+		game.setSys(getInfoStr(M1_SINF_BNAME, i));
+		bhardware = getInfoStr(M1_SINF_BHARDWARE, i);
 		List<String> hardwareitems = Arrays.asList(bhardware.split("\\s*,\\s*"));
 		switch(hardwareitems.size()){
 		case 4:
@@ -207,8 +207,8 @@ public class NDKBridge {
     }
     public static native String simpleAudit(int i);
     
-    public static native Integer getInfoInteger(int cmd, int parm);
-    public static native String getInfoString(int cmd, int parm);
+    public static native Integer getInfoInt(int cmd, int parm);
+    public static native String getInfoStr(int cmd, int parm);
     public static native String getInfoStringEx(int cmd, int parm);
     
     public static native int getCurrentCmd();
