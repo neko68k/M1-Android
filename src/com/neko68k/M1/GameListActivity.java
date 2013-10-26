@@ -14,18 +14,23 @@ public class GameListActivity extends ListActivity{
 	int isRunning = 0;
 	int max_games;
 	
+	@Override
+	protected void onPause(){
+		
+		
+		super.onPause();
+	}
+	
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		
 		
-		GameListOpenHelper db = new GameListOpenHelper();
-		Cursor cursor;
 		
-		
-		
+		//Cursor cursor;
 		
 		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, 
 		        R.layout.gamelist_detailed, 
-		        db.getAllTitles(), 
+		        NDKBridge.db.getAllTitles(), 
 		        new String[] { "title", "year", "mfg", "board" }, 
 		        new int[] { R.id.title, R.id.year, R.id.mfg, R.id.board });
 		
@@ -59,7 +64,7 @@ public class GameListActivity extends ListActivity{
         
         //gla = NDKBridge.globalGLA;
         //gla.sort();
-        NDKBridge.globalGLA.sort();
+        //NDKBridge.globalGLA.sort();
         NDKBridge.globalGLA.setContext(this);
         //this.setListAdapter(NDKBridge.globalGLA);
         this.setListAdapter(adapter);

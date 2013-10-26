@@ -36,9 +36,13 @@ public class GameListOpenHelper {
                 KEY_SOUND4 + " TEXT, " +
                 //"sound5" + " TEXT, " +
                 KEY_LISTAVAIL + " INTEGER);";
+    
+    private static SQLiteDatabase dbloc;
 
     
     public static void onCreate(SQLiteDatabase db) {
+    	dbloc = db;
+    	db.execSQL("DROP TABLE IF EXISTS " + GAMELIST_TABLE_NAME);
         db.execSQL(GAMELIST_TABLE_CREATE);
     }
 
@@ -51,9 +55,10 @@ public class GameListOpenHelper {
         onCreate(db);
 	}
 	
-	public Cursor getAllTitles(){
-		Cursor cursor = null;
-		return(cursor);
+	public static Cursor getAllTitles(){
+		
+		
+		return(dbloc.query(GAMELIST_TABLE_NAME, null, null, null, null, null, null));
 	}
 	
 	public static void addGame(Game game) {

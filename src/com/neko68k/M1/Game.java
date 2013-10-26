@@ -15,7 +15,7 @@ public class Game {
 		Integer listavail;
 		public Game(int index, String title, String year, String romname,
 				String mfg, String sys, String cpu, String sound1,
-				String sound2, String sound3, String sound4, String sound5,
+				String sound2, String sound3, String sound4, 
 				Integer listavail) {
 			this.index = index;
 			this.title = title;

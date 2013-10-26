@@ -76,6 +76,8 @@ public class NDKBridge {
 
 	//////////////////////////// END ENUMS
 	
+	static GameListOpenHelper db;
+	
 	static int defLen;
 	static int songLen;
 	static boolean inited = false;
