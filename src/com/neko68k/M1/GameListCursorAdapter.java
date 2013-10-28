@@ -1,6 +1,5 @@
 package com.neko68k.M1;
 
-import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -9,6 +8,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SimpleCursorAdapter;
@@ -28,7 +28,8 @@ public class GameListCursorAdapter extends SimpleCursorAdapter{
 		TextView mfg;
 		TextView board;
 		TextView hardware;
-		
+		String romname;
+		int position;
 		
 	}
 	public GameListCursorAdapter(Context context, int layout, Cursor cursor,
@@ -67,8 +68,43 @@ public class GameListCursorAdapter extends SimpleCursorAdapter{
 		holder.board.setText(cursor.getString(tblBoard));
 		holder.hardware.setText(cursor.getString(tblHardware));
 		//KEY_ROMNAME
-		String romname = cursor.getString(tblRomname);
-		File file = new File(NDKBridge.basepath+"/m1/icons/"+romname+".ico");
+		holder.romname = cursor.getString(tblRomname);
+		new AsyncTask<ViewHolder, Void, Bitmap>(){
+			private ViewHolder v;
+
+			 @Override
+			    protected Bitmap doInBackground(ViewHolder... params) {
+					Bitmap bm=null;
+			        v = params[0];
+			        File file = new File(NDKBridge.basepath+"/m1/icons/"+v.romname+".ico");
+					FileInputStream inputStream;					
+					try{
+			            inputStream = new FileInputStream(file);
+			            bm = BitmapFactory.decodeStream(inputStream);
+			            //v.icon.setImageBitmap(Bitmap.createScaledBitmap(bm, 128, 128, false));
+			            }
+			            catch (FileNotFoundException e)
+			            {
+			                    e.printStackTrace();
+			            }
+					return(Bitmap.createScaledBitmap(bm, 128, 128, false));
+			    }
+
+			    @Override
+			    protected void onPostExecute(Bitmap result) {
+			        super.onPostExecute(result);
+			        if (v.position == position) {
+			            // If this item hasn't been recycled already, hide the
+			            // progress and set and show the image
+			            //v.progress.setVisibility(View.GONE);
+			            v.icon.setVisibility(View.VISIBLE);
+			            v.icon.setImageBitmap(result);
+			        }
+			        v.icon.setImageBitmap(result);
+			    }
+		}.execute(holder);
+		
+		/*File file = new File(NDKBridge.basepath+"/m1/icons/"+romname+".ico");
 		FileInputStream inputStream;
 		Bitmap bm;
 		try{
@@ -79,7 +115,7 @@ public class GameListCursorAdapter extends SimpleCursorAdapter{
             catch (FileNotFoundException e)
             {
                     e.printStackTrace();
-            }
+            }*/
 		
 	//	read();
 		

@@ -78,14 +78,7 @@ public class InitM1Task extends AsyncTask<Void, Void, Void>{
 		NDKBridge.m1db = new GameDatabaseHelper(context);
 		SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
 		
-		//List<GameList> mItems = new ArrayList<GameList>();
-		/*if(NDKBridge.globalGLA.isEmpty()){
-			for(i = 0; i<numGames;i++){
-				NDKBridge.cur = i;
-				String title = NDKBridge.auditROM(i);	
-				NDKBridge.addROM(title, i);
-			}
-		}*/
+		
 		game = new Game();
 		//m1snd_get_info_int(M1_IINF_MAXDRVS);
 		//int numdrvs = NDKBridge.getInfoInt(8,0);
