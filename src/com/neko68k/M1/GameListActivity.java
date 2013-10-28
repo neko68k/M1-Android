@@ -28,12 +28,18 @@ public class GameListActivity extends ListActivity{
 		SQLiteDatabase db = NDKBridge.m1db.getReadableDatabase();
 		//Cursor cursor;
 		
-		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, 
+		/*SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, 
 		        R.layout.gamelist_detailed, 
 		        GameListOpenHelper.getAllTitles(db), 
 		        new String[] { "title", "year", "mfg", "sys", "cpu" }, 
 		        new int[] { R.id.title, R.id.year, R.id.mfg, R.id.board, R.id.hardware });
+		*/
 		
+		GameListCursorAdapter adapter = new GameListCursorAdapter(this, 
+		        R.layout.gamelist_detailed, 
+		        GameListOpenHelper.getAllTitles(db), 
+		        new String[] { "title", "year", "mfg", "sys", "cpu" }, 
+		        new int[] { R.id.title, R.id.year, R.id.mfg, R.id.board, R.id.hardware });
 		
 		//gla=null;
 		//String fn = new String();

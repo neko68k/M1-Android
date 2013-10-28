@@ -3,6 +3,12 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+    >
+    <ImageView android:id="@+id/icon" android:layout_width="wrap_content" android:layout_height="wrap_content"></ImageView>
+    <LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"    
         android:orientation="vertical"
     >	
     	<TextView android:text="No game loaded " android:id="@+id/title" android:layout_width="fill_parent" android:layout_height="wrap_content"  android:minLines="2"></TextView>    	
@@ -12,5 +18,5 @@
     	<TextView android:text="Board: " android:id="@+id/board" android:layout_width="fill_parent" android:layout_height="wrap_content"></TextView>
     	<TextView android:text="Hardware: " android:id="@+id/hardware" android:layout_width="fill_parent" android:layout_height="wrap_content" android:minLines="2"></TextView>
    	 	
-   
+   </LinearLayout>
 </LinearLayout>

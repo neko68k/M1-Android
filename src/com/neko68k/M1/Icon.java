@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 class ICONDIR{
 	public short reserved; 		// always 0
@@ -60,13 +61,15 @@ public class Icon {
 	byte[] bitmapPixels;
 	byte[] palette;
 	byte[] andMask;
-	int finalPixels;
+	int[] finalPixels;
 	final int maskSize = 32*32/4;
+	Bitmap bm;
 	
 	private static FileInputStream inputStream;
 	private static DataInputStream dInputStream; 
 	
 	public Icon(String in) {
+		bm=null;
 		fn = in;
 		File file = new File(in);
 		try{
@@ -77,11 +80,16 @@ public class Icon {
             {
                     e.printStackTrace();
             }
-		read();
+	//	read();
+		Bitmap bm = BitmapFactory.decodeStream(inputStream);
+	}
+	public Bitmap getBitmap(){
+		return(bm);
 	}
 
 	private Bitmap Convert(){
-		Bitmap bm=null;
+		if(bm==null)
+			bm = Bitmap.createBitmap(finalPixels, 32, 32, Bitmap.Config.ARGB_8888 );
 		
 		return(bm);
 	}
@@ -122,6 +130,14 @@ public class Icon {
 			case 32:
 				bitmapPixels = new byte[32*32*4];
 				dInputStream.read(bitmapPixels, 0, 32*32*4);
+				int copyPixel = 0;
+				int j;
+				int i;
+				
+				for(i =0,j =32*32;i<32*32*4;i+=4,j--){
+					copyPixel = bitmapPixels[i]<<16|bitmapPixels[i+1]<<8|bitmapPixels[i+2]|bitmapPixels[i+3]<<24;
+					finalPixels[j]=copyPixel;
+				}
 				break;
 			case 16:
 				bitmapPixels = new byte[32*32*2];
