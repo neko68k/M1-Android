@@ -14,7 +14,7 @@ class ICONDIR{
 	public short numImg;
 
 
-	public ICONDIR(){};
+	public ICONDIR(){}
 	
 					
 }
@@ -29,7 +29,7 @@ class ICONDIRENTRY{
 	public int sizeInBytes;
 	public int pixelOffset;
 
-	public ICONDIRENTRY(){};
+	public ICONDIRENTRY(){}
 
 	
 	
@@ -43,16 +43,25 @@ class BITMAPINFOHEADER{
 	public short biBitCount;
 	public int biCompression;
 	public int biSizeImage;
-	public int biXPelsPerMeter;
-	public int biYPelsPerMeter;
+	public long biXPelsPerMeter;
+	public long biYPelsPerMeter;
 	public int biClrUsed;
 	public int biClrImportant;
+	
+	public BITMAPINFOHEADER(){}
 }
 
 public class Icon {
 	ICONDIR id;
 	ICONDIRENTRY ide;
+	BITMAPINFOHEADER bmih;
 	String fn;
+	
+	byte[] bitmapPixels;
+	byte[] palette;
+	byte[] andMask;
+	int finalPixels;
+	final int maskSize = 32*32/4;
 	
 	private static FileInputStream inputStream;
 	private static DataInputStream dInputStream; 
@@ -79,6 +88,7 @@ public class Icon {
 	
 	private void read(){
 		try {
+			// read icon headers
 			id.reserved = dInputStream.readShort();
 			id.type = dInputStream.readShort();
 			id.numImg = dInputStream.readShort();
@@ -91,6 +101,69 @@ public class Icon {
 			ide.bpp = dInputStream.readShort();
 			ide.sizeInBytes = dInputStream.readInt();
 			ide.pixelOffset = dInputStream.readInt();
+			
+			// read bitmap header including palette
+			// image bits follow 32x32 
+			// AND mask seems to follow color bits
+			
+			bmih.biSize = dInputStream.readInt();
+			bmih.biWidth = dInputStream.readLong();
+			bmih.biHeight = dInputStream.readLong();
+			bmih.biPlanes = dInputStream.readShort();
+			bmih.biBitCount = dInputStream.readShort();
+			bmih.biCompression = dInputStream.readInt();
+			bmih.biSizeImage = dInputStream.readInt();
+			bmih.biXPelsPerMeter = dInputStream.readLong();
+			bmih.biYPelsPerMeter = dInputStream.readLong();
+			bmih.biClrUsed = dInputStream.readInt();
+			bmih.biClrImportant = dInputStream.readInt();
+			
+			switch(bmih.biBitCount){
+			case 32:
+				bitmapPixels = new byte[32*32*4];
+				dInputStream.read(bitmapPixels, 0, 32*32*4);
+				break;
+			case 16:
+				bitmapPixels = new byte[32*32*2];
+				dInputStream.read(bitmapPixels, 0, 32*32*2);
+				break;
+			case 8:
+				bitmapPixels = new byte[32*32];
+				palette = new byte[256*4];
+				andMask = new byte[maskSize];
+				dInputStream.read(palette, 0, 256*4);
+				dInputStream.read(bitmapPixels, 0, 32*32);
+				dInputStream.read(andMask, 0, maskSize);
+				break;
+			case 4:
+				bitmapPixels = new byte[32*32/2];
+				palette = new byte[16*4];
+				andMask = new byte[maskSize];
+				dInputStream.read(palette, 0, 16*2);
+				dInputStream.read(bitmapPixels, 0, 32*32/2);
+				dInputStream.read(andMask, 0, maskSize);
+				break;
+			case 2:
+				bitmapPixels = new byte[32*32/4];
+				palette = new byte[4*4];
+				andMask = new byte[maskSize];
+				dInputStream.read(palette, 0, 4*4);
+				dInputStream.read(bitmapPixels, 0, 32*32/4);
+				dInputStream.read(andMask, 0, maskSize);
+				break;
+			case 1:
+				bitmapPixels = new byte[32*32/8];
+				palette = new byte[2*4];
+				andMask = new byte[maskSize];
+				dInputStream.read(palette, 0, 2*4);
+				dInputStream.read(bitmapPixels, 0, 32*32/8);
+				dInputStream.read(andMask, 0, maskSize);
+				break;
+			default:
+				break;
+			}
+			dInputStream.close();
+			inputStream.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
