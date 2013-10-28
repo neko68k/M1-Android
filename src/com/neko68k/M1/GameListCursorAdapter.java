@@ -68,13 +68,13 @@ public class GameListCursorAdapter extends SimpleCursorAdapter{
 		holder.hardware.setText(cursor.getString(tblHardware));
 		//KEY_ROMNAME
 		String romname = cursor.getString(tblRomname);
-		File file = new File("/storage/extSdCard/m1/icons/"+romname+".ico");
+		File file = new File(NDKBridge.basepath+"/m1/icons/"+romname+".ico");
 		FileInputStream inputStream;
 		Bitmap bm;
 		try{
             inputStream = new FileInputStream(file);
             bm = BitmapFactory.decodeStream(inputStream);
-            holder.icon.setImageBitmap(Bitmap.createScaledBitmap(bm, 64, 64, false));
+            holder.icon.setImageBitmap(Bitmap.createScaledBitmap(bm, 128, 128, false));
             }
             catch (FileNotFoundException e)
             {
