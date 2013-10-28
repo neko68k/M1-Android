@@ -72,7 +72,7 @@ public class GameListOpenHelper {
 	    values.put(KEY_ROMNAME, game.getRomname()); 
 	    values.put(KEY_MFG, game.getMfg()); 
 	    values.put(KEY_SYS, game.getSys()); 
-	    values.put(KEY_CPU, game.getTitle()); 
+	    values.put(KEY_CPU, game.getCpu()); 
 	    values.put(KEY_SOUND1, game.getTitle()); 
 	    values.put(KEY_SOUND2, game.getTitle()); 
 	    values.put(KEY_SOUND3, game.getTitle()); 

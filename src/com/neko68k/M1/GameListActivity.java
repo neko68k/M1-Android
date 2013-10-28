@@ -31,8 +31,8 @@ public class GameListActivity extends ListActivity{
 		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, 
 		        R.layout.gamelist_detailed, 
 		        GameListOpenHelper.getAllTitles(db), 
-		        new String[] { "title", "year", "mfg", "sys" }, 
-		        new int[] { R.id.title, R.id.year, R.id.mfg, R.id.board });
+		        new String[] { "title", "year", "mfg", "sys", "cpu" }, 
+		        new int[] { R.id.title, R.id.year, R.id.mfg, R.id.board, R.id.hardware });
 		
 		
 		//gla=null;
