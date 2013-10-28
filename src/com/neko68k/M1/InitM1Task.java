@@ -13,6 +13,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.util.Log;
 
 public class InitM1Task extends AsyncTask<Void, Void, Void>{
 	ProgressDialog dialog;
@@ -28,6 +29,8 @@ public class InitM1Task extends AsyncTask<Void, Void, Void>{
 	@Override
 	protected void onPreExecute (){
 		dialog = ProgressDialog.show(context, "", "Please wait, initializing...", true);	
+		Log.v("com.neko68.M1", "Starting init...");
+		
 	}
 	
 	@Override
@@ -84,6 +87,8 @@ public class InitM1Task extends AsyncTask<Void, Void, Void>{
 			}
 		}*/
 		game = new Game();
+		//m1snd_get_info_int(M1_IINF_MAXDRVS);
+		//int numdrvs = NDKBridge.getInfoInt(8,0);
 		for(i = 0; i<numGames;i++){		
 			NDKBridge.cur = i;
 			// simple zipname audit, need to add a full audit procedure...

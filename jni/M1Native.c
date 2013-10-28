@@ -357,9 +357,7 @@ jobject Java_com_neko68k_M1_NDKBridge_queryRom(JNIEnv* env, jobject thiz, int ga
 	jobject instance = (*env)->NewObject(env, complexClass, constructor);
 
 	__android_log_print(ANDROID_LOG_INFO, "M1Android", "%i\t%s\n", game, m1snd_get_info_str(M1_SINF_VISNAME, game));
-	m1snd_run(M1_CMD_GAMEJMP, game);
-	waitForBoot();
-	//m1snd_run(M1_CMD_PAUSE, 0);
+	//M1_SINF_BHARDWARE, m1snd_get_info_int(M1_IINF_BRDDRV, parm)
 	(*env)->SetObjectField(env, instance, (*env)->GetFieldID(env, complexClass, "title", "Ljava/lang/String;"),
 				(*env)->NewStringUTF(env, (char*)m1snd_get_info_str(M1_SINF_VISNAME, game)));
 	(*env)->SetObjectField(env, instance, (*env)->GetFieldID(env, complexClass, "romname", "Ljava/lang/String;"),
@@ -367,11 +365,11 @@ jobject Java_com_neko68k_M1_NDKBridge_queryRom(JNIEnv* env, jobject thiz, int ga
 	(*env)->SetObjectField(env, instance, (*env)->GetFieldID(env, complexClass, "mfg", "Ljava/lang/String;"),
 				(*env)->NewStringUTF(env, (char*)m1snd_get_info_str(M1_SINF_MAKER, game)));
 	(*env)->SetObjectField(env, instance, (*env)->GetFieldID(env, complexClass, "sys", "Ljava/lang/String;"),
-				(*env)->NewStringUTF(env, (char*)m1snd_get_info_str(M1_SINF_BNAME, game)));
+				(*env)->NewStringUTF(env, (char*)m1snd_get_info_str(M1_SINF_BNAME, m1snd_get_info_int(M1_IINF_BRDDRV, game))));
 	(*env)->SetObjectField(env, instance, (*env)->GetFieldID(env, complexClass, "year", "Ljava/lang/String;"),
 				(*env)->NewStringUTF(env, (char*)m1snd_get_info_str(M1_SINF_YEAR, game)));
 	(*env)->SetObjectField(env, instance, (*env)->GetFieldID(env, complexClass, "cpu", "Ljava/lang/String;"),
-				(*env)->NewStringUTF(env, (char*)m1snd_get_info_str(M1_SINF_VISNAME, game)));
+				(*env)->NewStringUTF(env, (char*)m1snd_get_info_str(M1_SINF_BHARDWARE, m1snd_get_info_int(M1_IINF_BRDDRV, game))));
 	/*(*env)->SetObjectField(env, instance, (*env)->GetFieldID(env, complexClass, "title", "Ljava/lang/String;"),
 				(*env)->NewStringUTF(env, (char*)m1snd_get_info_str(M1_SINF_VISNAME, game)));
 	(*env)->SetObjectField(env, instance, (*env)->GetFieldID(env, complexClass, "title", "Ljava/lang/String;"),
