@@ -52,30 +52,11 @@ public class GameListActivity extends ListActivity{
                 onListItemClick(lv, v,pos,id);
             }
         });                
-        /*gla = new GameListAdapter(this);
-        max_games = NDKBridge.getMaxGames();
-        for(int i=0;i<max_games;i++){
-        	GameList gl = NDKBridge.getGameTitle(i);
-        	gla.addItem(gl);
-        }*/
-        /*if(NDKBridge.globalGLA.isEmpty()){
-			// we should call the ROM audit task
-			ROMAuditTask task = new ROMAuditTask(this);
-            task.execute();
-            if(NDKBridge.globalGLA.isEmpty()){
-            	// toast the user about not having any roms then finish
-            	finish();
-            }
-		}*/
         
-        //gla = NDKBridge.globalGLA;
-        //gla.sort();
-        //NDKBridge.globalGLA.sort();
-        //NDKBridge.globalGLA.setContext(this);
-        //this.setListAdapter(NDKBridge.globalGLA);
+        max_games = NDKBridge.getMaxGames();
+        
         this.setListAdapter(adapter);
-        db.close();
-        //this.setListAdapter(gla);
+        db.close();        
         
 	}
 

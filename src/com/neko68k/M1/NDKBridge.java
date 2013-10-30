@@ -1,11 +1,17 @@
 package com.neko68k.M1;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -193,6 +199,46 @@ public class NDKBridge {
 		hdw = getHardware(curGame);
 		mfg = getMaker(curGame);
 		nativeLoadROM(curGame);
+	}
+	public static Bitmap getIcon(){
+		Bitmap bm=null;
+	    //v = params[0];
+	    File file = new File(NDKBridge.basepath+"/m1/icons/"+NDKBridge.getInfoStr(cur,0)+".ico");
+		FileInputStream inputStream;					
+		try{
+	        inputStream = new FileInputStream(file);
+	        bm = BitmapFactory.decodeStream(inputStream);
+	        inputStream.close();
+	        //v.icon.setImageBitmap(Bitmap.createScaledBitmap(bm, 128, 128, false));
+	        }
+	        catch (FileNotFoundException e)
+	        {
+	        	// check for parent(and clone) romsets
+	        	// if none set default icon
+	        	file = new File(NDKBridge.basepath+"/m1/icons/"+NDKBridge.getInfoStr(NDKBridge.M1_SINF_PARENTNAME, cur)+".ico");
+	        	try {
+					inputStream = new FileInputStream(file);
+					bm = BitmapFactory.decodeStream(inputStream);
+		            inputStream.close();
+	
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					
+					e1.printStackTrace();
+					return(null);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+	            
+	                e.printStackTrace();
+	        } catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		//v.icon.setImageBitmap(Bitmap.createScaledBitmap(bm, 128, 128, false));
+		
+		return(Bitmap.createScaledBitmap(bm, 128, 128, false));
 	}
 	public static GameList getGameTitle(int i){
 		GameList entry = new GameList(getGameList(i));		

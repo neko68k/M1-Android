@@ -3,6 +3,7 @@ package com.neko68k.M1;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -21,6 +22,7 @@ public class GameListCursorAdapter extends SimpleCursorAdapter{
 	final int tblBoard;
 	final int tblHardware;
 	final int tblRomname;
+	final int tblId;
 	
 	static class ViewHolder{
 		ImageView icon;
@@ -29,6 +31,7 @@ public class GameListCursorAdapter extends SimpleCursorAdapter{
 		TextView board;
 		TextView hardware;
 		String romname;
+		int index;
 		int position;
 		
 	}
@@ -41,6 +44,7 @@ public class GameListCursorAdapter extends SimpleCursorAdapter{
 		tblBoard = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_SYS);
 		tblHardware = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_CPU);
 		tblRomname = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_ROMNAME);
+		tblId = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_ID);
 		
 		// TODO Auto-generated constructor stub
 	}
@@ -67,6 +71,7 @@ public class GameListCursorAdapter extends SimpleCursorAdapter{
 		holder.mfg.setText(cursor.getString(tblMfg));
 		holder.board.setText(cursor.getString(tblBoard));
 		holder.hardware.setText(cursor.getString(tblHardware));
+		holder.index = cursor.getInt(tblId);
 		//KEY_ROMNAME
 		holder.romname = cursor.getString(tblRomname);
 		new AsyncTask<ViewHolder, Void, Bitmap>(){
@@ -81,26 +86,51 @@ public class GameListCursorAdapter extends SimpleCursorAdapter{
 					try{
 			            inputStream = new FileInputStream(file);
 			            bm = BitmapFactory.decodeStream(inputStream);
+			            inputStream.close();
 			            //v.icon.setImageBitmap(Bitmap.createScaledBitmap(bm, 128, 128, false));
 			            }
 			            catch (FileNotFoundException e)
 			            {
+			            	// check for parent(and clone) romsets
+			            	// if none set default icon
+			            	file = new File(NDKBridge.basepath+"/m1/icons/"+NDKBridge.getInfoStr(NDKBridge.M1_SINF_PARENTNAME, v.index)+".ico");
+			            	try {
+								inputStream = new FileInputStream(file);
+								bm = BitmapFactory.decodeStream(inputStream);
+					            inputStream.close();
+
+							} catch (FileNotFoundException e1) {
+								// TODO Auto-generated catch block
+								
+								e1.printStackTrace();
+								return(null);
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+				            
 			                    e.printStackTrace();
-			            }
+			            } catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					//v.icon.setImageBitmap(Bitmap.createScaledBitmap(bm, 128, 128, false));
+					
 					return(Bitmap.createScaledBitmap(bm, 128, 128, false));
 			    }
 
 			    @Override
 			    protected void onPostExecute(Bitmap result) {
 			        super.onPostExecute(result);
-			        if (v.position == position) {
+			        /*if (v.position == position) {
 			            // If this item hasn't been recycled already, hide the
 			            // progress and set and show the image
 			            //v.progress.setVisibility(View.GONE);
 			            v.icon.setVisibility(View.VISIBLE);
 			            v.icon.setImageBitmap(result);
-			        }
-			        v.icon.setImageBitmap(result);
+			        }*/
+			        
+			        	v.icon.setImageBitmap(result);
 			    }
 		}.execute(holder);
 		

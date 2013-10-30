@@ -117,7 +117,7 @@ public class InitM1Task extends AsyncTask<Void, Void, Void>{
 				break;
 			}*/			
 		
-			GameListOpenHelper.addGame(db, game);
+			//GameListOpenHelper.addGame(db, game);
 		}
 		db.close();
 		return(null);

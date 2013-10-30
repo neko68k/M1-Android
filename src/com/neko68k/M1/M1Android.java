@@ -392,6 +392,7 @@ public class M1Android extends Activity {
 	    		
 	    		if(NDKBridge.loadError==false){
 		    		NDKBridge.playtime = 0;
+		    		//Game game = NDKBridge.queryRom(NDKBridge.curGame);
 		    		mHandler.post(mUpdateTimeTask);
 		    		board.setText("Board: "+NDKBridge.board);
 					mfg.setText("Maker: "+NDKBridge.mfg);
