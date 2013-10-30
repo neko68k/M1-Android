@@ -1,6 +1,9 @@
 package com.neko68k.M1;
 
-public class Game {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Game implements Parcelable{
 		int index;
 		String title;
 		String year;
@@ -105,5 +108,50 @@ public class Game {
 		public void setListavail(Integer listavail) {
 			this.listavail = listavail;
 		}
-
+		public int describeContents() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+		public void writeToParcel(Parcel out, int flags) {
+			// TODO Auto-generated method stub
+			
+			out.writeInt(index);
+			out.writeString(title);
+			out.writeString(year);
+			out.writeString(romname);
+			out.writeString(mfg);
+			out.writeString(sys);
+			out.writeString(cpu);
+			out.writeString("");
+			out.writeString("");
+			out.writeString("");
+			out.writeString("");		
+			out.writeInt(0);
+			
+		}
+		public Game(Parcel in){
+			index = in.readInt();
+			title = in.readString();
+			year = in.readString();
+			romname = in.readString();
+			mfg = in.readString();
+			sys = in.readString();
+			cpu = in.readString();
+			sound1 = in.readString();
+			sound2 = in.readString();
+			sound3 = in.readString();
+			sound4 = in.readString();
+			listavail = in.readInt();			
+		}
+		public static final Parcelable.Creator<Game>CREATOR = new
+		        Parcelable.Creator<Game>(){
+		               // @Override
+		                public Game createFromParcel(Parcel source){                                
+		                        return new Game(source);
+		                }
+		               // @Override
+		                public Game[] newArray(int size){
+		                        return new Game[size];
+		                }
+		        };
 }

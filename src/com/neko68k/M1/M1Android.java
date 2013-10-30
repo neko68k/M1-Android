@@ -393,14 +393,16 @@ public class M1Android extends Activity {
 	    		if(NDKBridge.loadError==false){
 		    		NDKBridge.playtime = 0;
 		    		//Game game = NDKBridge.queryRom(NDKBridge.curGame);
+		    		Game game = data.getParcelableExtra("com.neko68k.M1.game");
 		    		mHandler.post(mUpdateTimeTask);
-		    		board.setText("Board: "+NDKBridge.board);
-					mfg.setText("Maker: "+NDKBridge.mfg);
-					hardware.setText("Hardware: "+NDKBridge.hdw);
+		    		title.setText(game.title);
+		    		board.setText("Board: "+game.sys);
+					mfg.setText("Maker: "+game.mfg);
+					hardware.setText("Hardware: "+game.cpu);
 					
 		    		playButton.setText("Pause");
-		    		//numSongs = NDKBridge.getNumSongs(NDKBridge.curGame);
-		    		numSongs=0;
+		    		numSongs = NDKBridge.getNumSongs(gameid);
+		    		//numSongs=0;
 		    		if(numSongs>0){
 		    			
 		    			listItems.clear();
