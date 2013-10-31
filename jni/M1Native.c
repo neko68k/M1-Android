@@ -69,13 +69,12 @@ static jclass Game;
 static jmethodID callbackSilence;
 static jmethodID callbackLoadError;
 static jmethodID callbackGenericError;
-static jmethodID callbackROM;
 //static JNIEnv *cbEnv;
 static JavaVM *VM;
 
 jint JNI_OnLoad(JavaVM* vm, void* reserved){
 	JNIEnv *env;
-	    if ((*vm)->GetEnv(vm, (void**) &env, JNI_VERSION_1_4) != JNI_OK)
+	    if ((*vm)->GetEnv(vm, (void**) &env, JNI_VERSION_1_6) != JNI_OK)
 	        return -1;
 	    VM = vm;
 	    /* get class with (*env)->FindClass */
@@ -88,7 +87,6 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved){
 	callbackLoadError = (*env)->GetStaticMethodID(env, NDKBridge, "RomLoadErr", "()V");
 	callbackGenericError = (*env)->GetStaticMethodID(env, NDKBridge, "GenericError", "(Ljava/lang/String;)V");
 	callbackSilence = (*env)->GetStaticMethodID(env, NDKBridge, "Silence", "()V");
-	callbackROM = (*env)->GetStaticMethodID(env, NDKBridge, "addROM", "(Ljava/lang/String;Ljava/lang/Integer;)V");
 
 	jclass tmp = (*env)->FindClass(env, "com/neko68k/M1/Game");
 	Game = (jclass)(*env)->NewGlobalRef(env, tmp);
@@ -177,7 +175,7 @@ static int m1ui_message(void *this, int message, char *txt, int iparm)
 
 		case M1_MSG_MATCHPATH:
 			return find_rompath(txt);
-			break;
+		break;
 
 		case M1_MSG_GETWAVPATH:
 			{
@@ -201,7 +199,7 @@ static int m1ui_message(void *this, int message, char *txt, int iparm)
 	return 0;
 }
 
-jint Java_com_neko68k_M1_NDKBridge_getInfoInt(JNIEnv* env, jobject thiz, int cmd, int parm){
+int Java_com_neko68k_M1_NDKBridge_getInfoInt(JNIEnv* env, jobject thiz, int cmd, int parm){
 	return(m1snd_get_info_int(cmd, parm));
 }
 
@@ -233,7 +231,7 @@ jobject Java_com_neko68k_M1_NDKBridge_queryRom(JNIEnv* env, jobject thiz, int ga
 				(*env)->NewStringUTF(env, (char*)m1snd_get_info_str(M1_SINF_YEAR, game)));
 	(*env)->SetObjectField(env, instance, (*env)->GetFieldID(env, Game, "cpu", "Ljava/lang/String;"),
 				(*env)->NewStringUTF(env, (char*)m1snd_get_info_str(M1_SINF_BHARDWARE, m1snd_get_info_int(M1_IINF_BRDDRV, game))));
-	__android_log_print(ANDROID_LOG_INFO, "M1Android", "Added %i: %s\n", game, m1snd_get_info_str(M1_SINF_VISNAME, game));
+	__android_log_print(ANDROID_LOG_INFO, "M1Android", "Finished %i: %s\n", game, m1snd_get_info_str(M1_SINF_VISNAME, game));
 	//(*env)->SetIntField(env, instance, (*env)->GetFieldID(env, Game, "romavail", "I"),
 		//	 1);
 	/*(*env)->SetObjectField(env, instance, (*env)->GetFieldID(env, complexClass, "title", "Ljava/lang/String;"),
@@ -252,15 +250,15 @@ jobject Java_com_neko68k_M1_NDKBridge_queryRom(JNIEnv* env, jobject thiz, int ga
 	return instance;
 }
 
-jint Java_com_neko68k_M1_NDKBridge_getCurTime(JNIEnv* env, jobject thiz){
+int Java_com_neko68k_M1_NDKBridge_getCurTime(JNIEnv* env, jobject thiz){
 	return(m1snd_get_info_int(M1_IINF_CURTIME, 0));
 }
 
-jint Java_com_neko68k_M1_NDKBridge_getMaxSongs(JNIEnv* env, jobject thiz){
+int Java_com_neko68k_M1_NDKBridge_getMaxSongs(JNIEnv* env, jobject thiz){
 	return(m1snd_get_info_int(M1_IINF_MAXSONG, 0));
 }
 
-jint Java_com_neko68k_M1_NDKBridge_nextSong(JNIEnv* env, jobject thiz){
+int Java_com_neko68k_M1_NDKBridge_nextSong(JNIEnv* env, jobject thiz){
 	int current = m1snd_get_info_int(M1_IINF_CURSONG, 0);
 	if (current < m1snd_get_info_int(M1_IINF_MAXSONG, 0))
 	{
@@ -269,7 +267,7 @@ jint Java_com_neko68k_M1_NDKBridge_nextSong(JNIEnv* env, jobject thiz){
 	}
 	return current;
 }
-jint Java_com_neko68k_M1_NDKBridge_prevSong(JNIEnv* env, jobject thiz){
+int Java_com_neko68k_M1_NDKBridge_prevSong(JNIEnv* env, jobject thiz){
 	int current = m1snd_get_info_int(M1_IINF_CURSONG, 0);
 	if (current > m1snd_get_info_int(M1_IINF_MINSONG, 0))
 	{
@@ -308,12 +306,12 @@ void Java_com_neko68k_M1_NDKBridge_waitForBoot(){
 jbyteArray Java_com_neko68k_M1_NDKBridge_m1sdrGenerationCallback(JNIEnv *env, jobject thiz){
 	return(m1sdrGenerationCallback(env));
 }
-jint Java_com_neko68k_M1_NDKBridge_getBootState(JNIEnv *env, jobject thiz){
+int Java_com_neko68k_M1_NDKBridge_getBootState(JNIEnv *env, jobject thiz){
 	__android_log_print(ANDROID_LOG_INFO, "M1Android", "Booted.");
 	return booted;
 }
 
-jint Java_com_neko68k_M1_NDKBridge_getMaxGames(JNIEnv *env, jobject thiz){
+int Java_com_neko68k_M1_NDKBridge_getMaxGames(JNIEnv *env, jobject thiz){
 	return max_games;
 }
 

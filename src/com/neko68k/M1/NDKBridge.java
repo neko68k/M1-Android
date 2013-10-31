@@ -147,14 +147,6 @@ public class NDKBridge {
 	}
 
 
-	public static void addROM(String name, Integer id){
-		if(name!=null){
-			GameList it = new GameList(name);
-			NDKBridge.lookup.put(name, new Integer(cur));
-			//Log.v("M1Android", "Adding item");
-			globalGLA.addItem(it);
-		}
-	}
 	public static void RomLoadErr(){
 		// this flag prevents it from attempting to start playing
 		// if the rom didn't load
@@ -240,7 +232,7 @@ public class NDKBridge {
     
     public static native int simpleAudit(int i);
     
-    public static native Integer getInfoInt(int cmd, int parm);
+    public static native int getInfoInt(int cmd, int parm);
     public static native String getInfoStr(int cmd, int parm);
     public static native String getInfoStringEx(int cmd, int parm);
     

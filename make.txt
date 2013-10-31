@@ -3,4 +3,12 @@ Invalid attribute name:
 /d/android/android-ndk-r8e/build/core/add-application.mk:128: Android NDK: WARNING: APP_PLATFORM android-14 is larger than android:minSdkVersion  in ./AndroidManifest.xml    
 Invalid attribute name: 
       package
+Compile arm    : M1 <= M1Native.c
+jni/M1Native.c: In function 'Java_com_neko68k_M1_NDKBridge_simpleAudit':
+jni/M1Native.c:350:2: warning: implicit declaration of function 'chdir' [-Wimplicit-function-declaration]
+jni/M1Native.c: In function 'Java_com_neko68k_M1_NDKBridge_nativeInit':
+jni/M1Native.c:380:3: warning: passing argument 3 of 'm1snd_init' discards 'const' qualifier from pointer target type [enabled by default]
+jni/m1ui.h:193:16: note: expected 'char *' but argument is of type 'char const *'
+jni/M1Native.c:371:9: warning: unused variable 'cnf' [-Wunused-variable]
+SharedLibrary  : libM1.so
 Install        : libM1.so => libs/armeabi-v7a/libM1.so

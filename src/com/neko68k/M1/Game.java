@@ -1,5 +1,6 @@
 package com.neko68k.M1;
 
+import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -35,6 +36,23 @@ public class Game implements Parcelable{
 		}*/
 		public Game() {
 			
+		}
+		public Game(Cursor cursor){
+			int tblYear = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_YEAR);
+            int tblMfg = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_MFG);
+            int tblBoard = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_SYS);
+            int tblHardware = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_CPU);
+            int tblRomname = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_ROMNAME);
+            int tblId = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_ID);
+			index = cursor.getInt(tblId);
+			year = cursor.getString(tblYear);
+			mfg = cursor.getString(tblMfg);
+			sys = cursor.getString(tblBoard);
+			cpu = cursor.getString(tblHardware);
+			romname = cursor.getString(tblRomname);
+					
+					
+			return;		
 		}
 		public int getIndex() {
 			return index;

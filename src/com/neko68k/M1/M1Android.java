@@ -315,6 +315,7 @@ public class M1Android extends Activity {
     		   runOnUiThread(new Runnable() {
     			   
     		  	   public void run() {
+    		  		 Integer cursong=0;
     		  		   if(playing==true){
     		  			   if(paused==false){
     		  				   int seconds=NDKBridge.getCurTime()/60;
@@ -325,7 +326,7 @@ public class M1Android extends Activity {
     		  				   }
     		  				   int minutes=seconds/60;
     		  				   seconds -= minutes*60;
-    		  				 Integer cursong = NDKBridge.getInfoInt(NDKBridge.M1_IINF_CURSONG, 0)+1;//M1_IINF_CURSONG;
+    		  				 cursong = NDKBridge.getInfoInt(NDKBridge.M1_IINF_CURSONG, 0)+1;//M1_IINF_CURSONG;
     		  				 trackNum.setText("Command: "+cursong);    		  				 
     		  				   if(seconds<10)
     		  					 playTime.setText("Time: "+minutes+":0"+seconds);
@@ -341,11 +342,9 @@ public class M1Android extends Activity {
     		  					//cmdNum = m1snd_get_info_int(M1_IINF_TRACKCMD,(song<<16|game));
     		  					//__android_log_print(ANDROID_LOG_INFO, "M1Android", "Cmd: %i", cmdNum);
 
-    		  					String track = NDKBridge.getInfoStr(NDKBridge.M1_SINF_TRKNAME, 
-    		  							(NDKBridge.getInfoInt(NDKBridge.M1_IINF_TRACKCMD, 
-    		  									cursong)<<16|NDKBridge.curGame));
+//    		 String track = NDKBridge.getInfoStr(NDKBridge.M1_SINF_TRKNAME, cursong<<16|NDKBridge.curGame);
     		  				   
-    		  				   song.setText("Song: "+track);
+    		  				   song.setText("Song: ");//+track);
     		  				   
     		  			   }
     		  		   }

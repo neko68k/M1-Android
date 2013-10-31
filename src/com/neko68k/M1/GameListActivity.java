@@ -2,12 +2,12 @@ package com.neko68k.M1;
 
 import android.app.ListActivity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 
 public class GameListActivity extends ListActivity{
 	GameListAdapter gla;
@@ -62,13 +62,14 @@ public class GameListActivity extends ListActivity{
 
 	@Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
-            int selectionRowID = (int)position;
+            Cursor cursor = (Cursor)l.getItemAtPosition(position);
             
-            Game game = NDKBridge.queryRom(position);
-
+            Game game = new Game(cursor);
+            //Game game = NDKBridge.queryRom(position);
+            
             //LoadROMTask loadTask = new LoadROMTask(this);
             //loadTask.execute(new Integer(selectionRowID));
-            game.index= position;
+            //game.index= position;
             Intent i = new Intent();
             String title = "";//NDKBridge.getGameList(selectionRowID);
         	i.putExtra("com.neko68k.M1.title", title);
