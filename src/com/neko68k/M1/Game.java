@@ -126,7 +126,7 @@ public class Game implements Parcelable{
 			out.writeString("");
 			out.writeString("");
 			out.writeString("");		
-			out.writeInt(romavail);
+			//out.writeInt(1);
 			
 		}
 		public Game(Parcel in){
@@ -141,7 +141,7 @@ public class Game implements Parcelable{
 			sound2 = in.readString();
 			sound3 = in.readString();
 			sound4 = in.readString();
-			romavail = in.readInt();			
+			//romavail = in.readInt();			
 		}
 		public static final Parcelable.Creator<Game>CREATOR = new
 		        Parcelable.Creator<Game>(){

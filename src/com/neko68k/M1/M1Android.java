@@ -386,14 +386,15 @@ public class M1Android extends Activity {
 	        		doUnbindService();
 	    			NDKBridge.playtime = 0;
 	        	}
-	        	int gameid = data.getIntExtra("com.neko68k.M1.position", 0);
+	        	//int gameid = data.getIntExtra("com.neko68k.M1.position", 0);
 	        	//NDKBridge.loadROM(NDKBridge.globalGLA.get(gameid));
-	        	NDKBridge.nativeLoadROM(gameid);
+	        	Game game = data.getParcelableExtra("com.neko68k.M1.game");
+	        	NDKBridge.nativeLoadROM(game.index);
 	    		
 	    		if(NDKBridge.loadError==false){
 		    		NDKBridge.playtime = 0;
 		    		//Game game = NDKBridge.queryRom(NDKBridge.curGame);
-		    		Game game = data.getParcelableExtra("com.neko68k.M1.game");
+		    		
 		    		mHandler.post(mUpdateTimeTask);
 		    		title.setText(game.title);
 		    		board.setText("Board: "+game.sys);
@@ -401,7 +402,7 @@ public class M1Android extends Activity {
 					hardware.setText("Hardware: "+game.cpu);
 					
 		    		playButton.setText("Pause");
-		    		numSongs = NDKBridge.getNumSongs(gameid);
+		    		numSongs = NDKBridge.getNumSongs(game.index);
 		    		//numSongs=0;
 		    		if(numSongs>0){
 		    			
