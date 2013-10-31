@@ -28,7 +28,7 @@ public class InitM1Task extends AsyncTask<Void, Void, Void>{
 	
 	@Override
 	protected void onPreExecute (){
-		dialog = ProgressDialog.show(context, "", "Please wait, initializing...", true);	
+		dialog = ProgressDialog.show(context, "", "Initializing. This may take a long time...", true);	
 		Log.v("com.neko68.M1", "Starting init...");
 		
 	}
@@ -77,7 +77,7 @@ public class InitM1Task extends AsyncTask<Void, Void, Void>{
 		
 		int i =0;		
 		NDKBridge.m1db = new GameDatabaseHelper(context);
-		/*SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
+		SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
 		
 		
 		game = new Game();
@@ -117,12 +117,12 @@ public class InitM1Task extends AsyncTask<Void, Void, Void>{
 				game.setCpu(soundary[0]);
 			case 0:
 				break;
-			}		
+			}	*/	
 			//if(game.romavail==1){
 				GameListOpenHelper.addGame(db, game);
 			//}
 		}
-		db.close();*/
+		db.close();
 		return(null);
 	}
 	

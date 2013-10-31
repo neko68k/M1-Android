@@ -215,7 +215,7 @@ public class M1Android extends Activity {
             public void onClick(View v) {
             	if(playing==true){
 	            	if(paused==false){
-	            		trackNum.setText("Command: "+(NDKBridge.next()));	
+	            		trackNum.setText("Track: "+(NDKBridge.next()));	
 	            		NDKBridge.playerService.setNoteText();
 	            		NDKBridge.playtime = 0;
 	            		if(listLen)
@@ -230,7 +230,7 @@ public class M1Android extends Activity {
             public void onClick(View v) {
             	if(playing==true){
 	            	if(paused==false){
-	            		trackNum.setText("Command: "+(NDKBridge.prevSong()));
+	            		trackNum.setText("Track: "+(NDKBridge.prevSong()));
 	            		NDKBridge.playerService.setNoteText();
 	            		NDKBridge.playtime = 0;
 	            		if(listLen)
@@ -330,11 +330,18 @@ public class M1Android extends Activity {
     		  				   int minutes=seconds/60;
     		  				   seconds -= minutes*60;
     		  				 cursong = NDKBridge.getInfoInt(NDKBridge.M1_IINF_CURSONG, 0)+1;//M1_IINF_CURSONG;
-    		  				 trackNum.setText("Command: "+cursong);    		  				 
-    		  				   if(seconds<10)
-    		  					 playTime.setText("Time: "+minutes+":0"+seconds);
+    		  				 trackNum.setText("Track: "+cursong);   
+    		  				String tmp;
+		  					   if(NDKBridge.songLen%60<10)
+		  						   tmp=":0"; 
+		  					   else
+		  						   tmp=":";
+    		  				   if(seconds<10){
+    		  					   
+    		  					 playTime.setText("Time: "+minutes+":0"+seconds+"/"+NDKBridge.songLen/60+tmp+NDKBridge.songLen%60);
+    		  				   }
     		  				   else
-    		  					   playTime.setText("Time: "+minutes+":"+seconds);
+    		  					   playTime.setText("Time: "+minutes+":"+seconds+"/"+NDKBridge.songLen/60+tmp+NDKBridge.songLen%60);
     		  				   
     		  				   
     		  				 //int game =  m1snd_get_info_int(M1_IINF_CURGAME, 0);
@@ -349,7 +356,7 @@ public class M1Android extends Activity {
     		  				 int cmdNum = NDKBridge.getInfoInt(NDKBridge.M1_IINF_TRACKCMD, 
     		  						(NDKBridge.getInfoInt(NDKBridge.M1_IINF_CURSONG,0)<<16|NDKBridge.getInfoInt(NDKBridge.M1_IINF_CURGAME,0)));
     		  				String text = NDKBridge.getInfoStr(NDKBridge.M1_SINF_TRKNAME, cmdNum<<16|NDKBridge.getInfoInt(NDKBridge.M1_IINF_CURGAME,0));
-    		  				   song.setText("Song: "+text);//+track);
+    		  				   song.setText("Title: "+text);//+track);
     		  				   
     		  			   }
     		  		   }
