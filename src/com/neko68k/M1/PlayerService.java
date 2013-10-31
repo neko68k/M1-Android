@@ -75,13 +75,15 @@ public class PlayerService extends Service{
 		
 		
 		notification.contentView = contentView;
-		
-		text = NDKBridge.getInfoStr(NDKBridge.M1_IINF_CURSONG, 0);
+		int cmdNum = NDKBridge.getInfoInt(NDKBridge.M1_IINF_TRACKCMD, 
+				(NDKBridge.getInfoInt(NDKBridge.M1_IINF_CURSONG,0)<<16|NDKBridge.getInfoInt(NDKBridge.M1_IINF_CURGAME,0)));
+		text = NDKBridge.getInfoStr(NDKBridge.M1_SINF_TRKNAME, cmdNum<<16|NDKBridge.getInfoInt(NDKBridge.M1_IINF_CURGAME,0));
 		//text = NDKBridge.getSong(NDKBridge.getCurrentCmd());
 		//text=null;
 		if(text!=null){
 			contentView.setTextViewText(R.id.text, text);
-			contentView.setTextViewText(R.id.text2, NDKBridge.game.title);
+			contentView.setTextViewText(R.id.text2, NDKBridge.getInfoStr(NDKBridge.M1_SINF_VISNAME, 
+					NDKBridge.getInfoInt(NDKBridge.M1_IINF_CURGAME,0)));
 		}
 		if(text==null){
 			contentView.setTextViewText(R.id.text, "No track list");
