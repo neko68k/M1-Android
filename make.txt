@@ -4,15 +4,16 @@ Invalid attribute name:
 Invalid attribute name: 
       package
 Compile arm    : M1 <= M1Native.c
+jni/M1Native.c: In function 'simpleAudit':
+jni/M1Native.c:591:2: warning: implicit declaration of function 'chdir' [-Wimplicit-function-declaration]
 jni/M1Native.c: In function 'Java_com_neko68k_M1_NDKBridge_simpleAudit':
-jni/M1Native.c:595:2: warning: implicit declaration of function 'chdir' [-Wimplicit-function-declaration]
-jni/M1Native.c:592:7: warning: unused variable 'test' [-Wunused-variable]
+jni/M1Native.c:611:7: warning: unused variable 'test' [-Wunused-variable]
 jni/M1Native.c: In function 'Java_com_neko68k_M1_NDKBridge_nativeInit':
-jni/M1Native.c:634:3: warning: passing argument 3 of 'm1snd_init' discards 'const' qualifier from pointer target type [enabled by default]
+jni/M1Native.c:654:3: warning: passing argument 3 of 'm1snd_init' discards 'const' qualifier from pointer target type [enabled by default]
 jni/m1ui.h:193:16: note: expected 'char *' but argument is of type 'char const *'
-jni/M1Native.c:657:4: warning: embedded '\0' in format [-Wformat-contains-nul]
-jni/M1Native.c:660:4: warning: embedded '\0' in format [-Wformat-contains-nul]
-jni/M1Native.c:625:9: warning: unused variable 'cnf' [-Wunused-variable]
+jni/M1Native.c:677:4: warning: embedded '\0' in format [-Wformat-contains-nul]
+jni/M1Native.c:680:4: warning: embedded '\0' in format [-Wformat-contains-nul]
+jni/M1Native.c:645:9: warning: unused variable 'cnf' [-Wunused-variable]
 jni/M1Native.c: At top level:
 jni/M1Native.c:89:13: warning: 'read_config' defined but not used [-Wunused-function]
 jni/M1Native.c:199:18: warning: 'callbackSetDriverName' defined but not used [-Wunused-variable]
@@ -20,8 +21,6 @@ jni/M1Native.c:200:18: warning: 'callbackSetHardwareDesc' defined but not used [
 jni/M1Native.c:202:18: warning: 'callbackStartingSong' defined but not used [-Wunused-variable]
 jni/M1Native.c:204:18: warning: 'callbackGetWaveData' defined but not used [-Wunused-variable]
 jni/M1Native.c: In function 'Java_com_neko68k_M1_NDKBridge_CRCAudit':
-jni/M1Native.c:615:1: warning: control reaches end of non-void function [-Wreturn-type]
-jni/M1Native.c: In function 'Java_com_neko68k_M1_NDKBridge_simpleAudit':
-jni/M1Native.c:610:1: warning: control reaches end of non-void function [-Wreturn-type]
+jni/M1Native.c:635:1: warning: control reaches end of non-void function [-Wreturn-type]
 SharedLibrary  : libM1.so
 Install        : libM1.so => libs/armeabi-v7a/libM1.so

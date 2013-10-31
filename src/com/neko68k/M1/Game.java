@@ -15,7 +15,7 @@ public class Game implements Parcelable{
 		String sound2;
 		String sound3;
 		String sound4;		
-		Integer listavail;
+		Integer romavail;
 		/*public Game(int index, String title, String year, String romname,
 				String mfg, String sys, String cpu, String sound1,
 				String sound2, String sound3, String sound4, 
@@ -102,11 +102,11 @@ public class Game implements Parcelable{
 		public void setSound4(String sound4) {
 			this.sound4 = sound4;
 		}
-		public Integer getListavail() {
-			return listavail;
+		public Integer getromavail() {
+			return romavail;
 		}
-		public void setListavail(Integer listavail) {
-			this.listavail = listavail;
+		public void setromavail(Integer romavail) {
+			this.romavail = romavail;
 		}
 		public int describeContents() {
 			// TODO Auto-generated method stub
@@ -126,7 +126,7 @@ public class Game implements Parcelable{
 			out.writeString("");
 			out.writeString("");
 			out.writeString("");		
-			out.writeInt(0);
+			out.writeInt(romavail);
 			
 		}
 		public Game(Parcel in){
@@ -141,7 +141,7 @@ public class Game implements Parcelable{
 			sound2 = in.readString();
 			sound3 = in.readString();
 			sound4 = in.readString();
-			listavail = in.readInt();			
+			romavail = in.readInt();			
 		}
 		public static final Parcelable.Creator<Game>CREATOR = new
 		        Parcelable.Creator<Game>(){

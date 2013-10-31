@@ -17,7 +17,7 @@ public class GameListOpenHelper {
 	public static final String KEY_SOUND3 = "sound3";
 	public static final String KEY_SOUND4 = "sound4";
 	public static final String KEY_SOUND5 = "sound5";
-	public static final String KEY_LISTAVAIL = "sound5";
+	public static final String KEY_ROMAVAIL = "romavail";
 
 	private static final int DATABASE_VERSION = 1;
     private static final String GAMELIST_TABLE_NAME = "gamelist";
@@ -35,7 +35,7 @@ public class GameListOpenHelper {
                 KEY_SOUND3 + " TEXT, " +
                 KEY_SOUND4 + " TEXT, " +
                 //"sound5" + " TEXT, " +
-                KEY_LISTAVAIL + " INTEGER);";
+                KEY_ROMAVAIL + " INTEGER);";
     
         
     public static void onCreate(SQLiteDatabase db) {    	
@@ -77,7 +77,7 @@ public class GameListOpenHelper {
 	    values.put(KEY_SOUND2, game.getTitle()); 
 	    values.put(KEY_SOUND3, game.getTitle()); 
 	    values.put(KEY_SOUND4, game.getTitle()); 	   
-	    values.put(KEY_LISTAVAIL, game.getListavail()); 
+	    values.put(KEY_ROMAVAIL, game.getromavail()); 
 	 
 	    
 	    // Inserting Row

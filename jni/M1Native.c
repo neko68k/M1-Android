@@ -356,6 +356,8 @@ jobject Java_com_neko68k_M1_NDKBridge_queryRom(JNIEnv* env, jobject thiz, int ga
 	jmethodID constructor = (*env)->GetMethodID(env, Game, "<init>", "()V"); //The name of constructor method is "<init>"
 	jobject instance = (*env)->NewObject(env, Game, constructor);
 
+
+	//jint audit =;
 	__android_log_print(ANDROID_LOG_INFO, "M1Android", "%i: %s\n", game, m1snd_get_info_str(M1_SINF_VISNAME, game));
 
 	(*env)->SetObjectField(env, instance, (*env)->GetFieldID(env, Game, "title", "Ljava/lang/String;"),
@@ -370,6 +372,8 @@ jobject Java_com_neko68k_M1_NDKBridge_queryRom(JNIEnv* env, jobject thiz, int ga
 				(*env)->NewStringUTF(env, (char*)m1snd_get_info_str(M1_SINF_YEAR, game)));
 	(*env)->SetObjectField(env, instance, (*env)->GetFieldID(env, Game, "cpu", "Ljava/lang/String;"),
 				(*env)->NewStringUTF(env, (char*)m1snd_get_info_str(M1_SINF_BHARDWARE, m1snd_get_info_int(M1_IINF_BRDDRV, game))));
+	//(*env)->SetIntField(env, instance, (*env)->GetFieldID(env, Game, "romavail", "I"),
+		//	 1);
 	/*(*env)->SetObjectField(env, instance, (*env)->GetFieldID(env, complexClass, "title", "Ljava/lang/String;"),
 				(*env)->NewStringUTF(env, (char*)m1snd_get_info_str(M1_SINF_VISNAME, game)));
 	(*env)->SetObjectField(env, instance, (*env)->GetFieldID(env, complexClass, "title", "Ljava/lang/String;"),
@@ -579,6 +583,21 @@ int Java_com_neko68k_M1_NDKBridge_getNumSongs( JNIEnv*  env, jobject thiz, int i
 	return(m1snd_get_info_int(M1_IINF_TRACKS, i));
 }
 
+int simpleAudit(int i){
+	char *zipName = m1snd_get_info_str(M1_SINF_ROMNAME, i);
+
+	char *fullZipName = (char*)malloc(strlen(zipName)+5);
+	sprintf(fullZipName, "%s.zip", zipName);
+	chdir(rompath);
+	FILE *testFile = fopen(fullZipName, "r");
+	if(testFile!=NULL){
+		fclose(testFile);
+		//free(fullZipName);
+		return 1;
+	}
+	return 0;
+}
+
 // just check zip names to see if they exist, nothing fancy
 //jstring Java_com_neko68k_M1_NDKBridge_simpleAudit( JNIEnv*  env, jobject thiz, int i){
 jstring Java_com_neko68k_M1_NDKBridge_simpleAudit( JNIEnv*  env, jobject thiz, int i){
@@ -605,6 +624,7 @@ jstring Java_com_neko68k_M1_NDKBridge_simpleAudit( JNIEnv*  env, jobject thiz, i
 
 		//return((*env)->NewStringUTF(env, m1snd_get_info_str(M1_SINF_VISNAME, i)));
 	}
+	return(NULL);
 	//__android_log_print(ANDROID_LOG_INFO, "M1Android", "ROM not found...%s", fullZipName);
 	//return(NULL);
 }

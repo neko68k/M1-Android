@@ -91,7 +91,10 @@ public class InitM1Task extends AsyncTask<Void, Void, Void>{
 			
 			
 			game = NDKBridge.queryRom(i);
-			
+			if(NDKBridge.simpleAudit(i)!=null)
+				game.romavail=1;
+			else
+				game.romavail=0;
 			game.setIndex(i);
 			/*game.setTitle(NDKBridge.getInfoStr(NDKBridge.M1_SINF_VISNAME, i));
 			game.setYear(NDKBridge.getInfoStr(NDKBridge.M1_SINF_YEAR, i)); 
@@ -116,8 +119,9 @@ public class InitM1Task extends AsyncTask<Void, Void, Void>{
 			case 0:
 				break;
 			}*/			
-		
-			//GameListOpenHelper.addGame(db, game);
+			if(game.romavail==1){
+				GameListOpenHelper.addGame(db, game);
+			}
 		}
 		db.close();
 		return(null);
