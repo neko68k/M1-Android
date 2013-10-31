@@ -238,7 +238,7 @@ public class NDKBridge {
     //public static native void initCallbacks();
     public static native void nativeClose();
     
-    public static native String simpleAudit(int i);
+    public static native int simpleAudit(int i);
     
     public static native Integer getInfoInt(int cmd, int parm);
     public static native String getInfoStr(int cmd, int parm);

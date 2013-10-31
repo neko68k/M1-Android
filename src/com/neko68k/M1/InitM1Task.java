@@ -93,10 +93,7 @@ public class InitM1Task extends AsyncTask<Void, Void, Void>{
 			
 			
 			game = NDKBridge.queryRom(i);
-			if(NDKBridge.simpleAudit(i)!=null)
-				game.romavail=1;
-			else
-				game.romavail=0;
+			game.romavail = NDKBridge.simpleAudit(i);			
 			game.index=i;
 			/*game.setTitle(NDKBridge.getInfoStr(NDKBridge.M1_SINF_VISNAME, i));
 			game.setYear(NDKBridge.getInfoStr(NDKBridge.M1_SINF_YEAR, i)); 

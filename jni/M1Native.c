@@ -65,6 +65,7 @@ static int find_rompath(char *fn)
 }
 
 static jclass NDKBridge;
+static jclass Game;
 static jmethodID callbackSilence;
 static jmethodID callbackLoadError;
 static jmethodID callbackGenericError;
@@ -88,7 +89,11 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved){
 	callbackGenericError = (*env)->GetStaticMethodID(env, NDKBridge, "GenericError", "(Ljava/lang/String;)V");
 	callbackSilence = (*env)->GetStaticMethodID(env, NDKBridge, "Silence", "()V");
 	callbackROM = (*env)->GetStaticMethodID(env, NDKBridge, "addROM", "(Ljava/lang/String;Ljava/lang/Integer;)V");
-    return JNI_VERSION_1_4;
+
+	jclass tmp = (*env)->FindClass(env, "com/neko68k/M1/Game");
+	Game = (jclass)(*env)->NewGlobalRef(env, tmp);
+
+    return JNI_VERSION_1_6;
 }
 
 // Public functions
@@ -100,7 +105,7 @@ static int m1ui_message(void *this, int message, char *txt, int iparm)
 {
 	JNIEnv *env;
 	int curgame;
-	(*VM)->GetEnv(VM, (void**) &env, JNI_VERSION_1_4);
+	(*VM)->GetEnv(VM, (void**) &env, JNI_VERSION_1_6);
 	switch (message)
 	{
 		// called when switching to a new game
@@ -208,13 +213,13 @@ jstring Java_com_neko68k_M1_NDKBridge_getInfoStr(JNIEnv* env, jobject thiz, int 
 	return((*env)->NewStringUTF(env, m1snd_get_info_str_ex(cmd, parm)));
 }*/
 jobject Java_com_neko68k_M1_NDKBridge_queryRom(JNIEnv* env, jobject thiz, int game){
-	jclass Game = (*env)->FindClass(env, "com/neko68k/M1/Game");
+	__android_log_print(ANDROID_LOG_INFO, "M1Android", "Getting 'Game' class in native...");
 	jmethodID constructor = (*env)->GetMethodID(env, Game, "<init>", "()V"); //The name of constructor method is "<init>"
 	jobject instance = (*env)->NewObject(env, Game, constructor);
 
 
 	//jint audit =;
-	//__android_log_print(ANDROID_LOG_INFO, "M1Android", "%i: %s\n", game, m1snd_get_info_str(M1_SINF_VISNAME, game));
+	__android_log_print(ANDROID_LOG_INFO, "M1Android", "Reading %i: %s\n", game, m1snd_get_info_str(M1_SINF_VISNAME, game));
 
 	(*env)->SetObjectField(env, instance, (*env)->GetFieldID(env, Game, "title", "Ljava/lang/String;"),
 				(*env)->NewStringUTF(env, (char*)m1snd_get_info_str(M1_SINF_VISNAME, game)));
@@ -228,6 +233,7 @@ jobject Java_com_neko68k_M1_NDKBridge_queryRom(JNIEnv* env, jobject thiz, int ga
 				(*env)->NewStringUTF(env, (char*)m1snd_get_info_str(M1_SINF_YEAR, game)));
 	(*env)->SetObjectField(env, instance, (*env)->GetFieldID(env, Game, "cpu", "Ljava/lang/String;"),
 				(*env)->NewStringUTF(env, (char*)m1snd_get_info_str(M1_SINF_BHARDWARE, m1snd_get_info_int(M1_IINF_BRDDRV, game))));
+	__android_log_print(ANDROID_LOG_INFO, "M1Android", "Added %i: %s\n", game, m1snd_get_info_str(M1_SINF_VISNAME, game));
 	//(*env)->SetIntField(env, instance, (*env)->GetFieldID(env, Game, "romavail", "I"),
 		//	 1);
 	/*(*env)->SetObjectField(env, instance, (*env)->GetFieldID(env, complexClass, "title", "Ljava/lang/String;"),
@@ -303,6 +309,7 @@ jbyteArray Java_com_neko68k_M1_NDKBridge_m1sdrGenerationCallback(JNIEnv *env, jo
 	return(m1sdrGenerationCallback(env));
 }
 jint Java_com_neko68k_M1_NDKBridge_getBootState(JNIEnv *env, jobject thiz){
+	__android_log_print(ANDROID_LOG_INFO, "M1Android", "Booted.");
 	return booted;
 }
 
@@ -321,22 +328,6 @@ void Java_com_neko68k_M1_NDKBridge_nativeClose(JNIEnv* env){
 	free(wavpath);
 }
 
-void Java_com_neko68k_M1_M1Native_getPlayInfo(JNIEnv* env){
-	/*int curgame = m1snd_get_info_int(M1_IINF_CURGAME, 0);
-
-	current = m1snd_get_info_int(M1_IINF_CURCMD, 0);
-
-	if (m1snd_get_info_int(M1_IINF_TRKLENGTH, (current<<16) | curgame) != -1)
-	{
-//				printf("time %d / %d\n", m1snd_get_info_int(M1_IINF_TRKLENGTH, (current<<16) | curgame), m1snd_get_info_int(M1_IINF_CURTIME, 0));
-		if (m1snd_get_info_int(M1_IINF_CURTIME, 0) >= m1snd_get_info_int(M1_IINF_TRKLENGTH, (current<<16) | curgame))
-		{
-			ch = '+';	// cheat!
-//					printf("next! %d %d\n", m1snd_get_info_int(M1_IINF_TRKLENGTH, (current<<16) | curgame), m1snd_get_info_int(M1_IINF_CURTIME, 0));
-		}
-	}*/
-}
-
 void Java_com_neko68k_M1_NDKBridge_jumpSong(JNIEnv* env, jobject thiz, int tracknum){
 	m1snd_run(M1_CMD_SONGJMP, tracknum);
 }
@@ -347,10 +338,13 @@ void Java_com_neko68k_M1_NDKBridge_restSong(JNIEnv* env, jobject thiz){
 }
 
 int Java_com_neko68k_M1_NDKBridge_getNumSongs( JNIEnv*  env, jobject thiz, int i){
-	return(m1snd_get_info_int(M1_IINF_TRACKS, i));
+	int numsongs = m1snd_get_info_int(M1_IINF_TRACKS, i);
+	__android_log_print(ANDROID_LOG_INFO, "M1Android", "Num songs: %i\n", numsongs);
+	return(numsongs);
 }
 
-int simpleAudit(int i){
+int Java_com_neko68k_M1_NDKBridge_simpleAudit(JNIEnv* env, jobject thiz, int i){
+	__android_log_print(ANDROID_LOG_INFO, "M1Android", "Auditing %i.\n", i);
 	char *zipName = m1snd_get_info_str(M1_SINF_ROMNAME, i);
 
 	char *fullZipName = (char*)malloc(strlen(zipName)+5);
@@ -359,15 +353,18 @@ int simpleAudit(int i){
 	FILE *testFile = fopen(fullZipName, "r");
 	if(testFile!=NULL){
 		fclose(testFile);
-		//free(fullZipName);
+		free(fullZipName);
+		__android_log_print(ANDROID_LOG_INFO, "M1Android", "%s OK!\n", zipName);
 		return 1;
 	}
+	__android_log_print(ANDROID_LOG_INFO, "M1Android", "%s NOT-OK!\n", zipName);
 	return 0;
 }
 
 void Java_com_neko68k_M1_NDKBridge_SetOption( JNIEnv*  env, jobject thiz, int opt, int val){
 	int vali = val;
 	m1snd_setoption(opt, vali);
+	__android_log_print(ANDROID_LOG_INFO, "M1Android", "Setting options...\n");
 }
 
 // TODO: fix this shit up to take a jstring arg that is the rompath
@@ -396,9 +393,9 @@ void Java_com_neko68k_M1_NDKBridge_nativeInit( JNIEnv*  env, jobject thiz, jstri
 		/*cnf = fopen("/sdcard/m1/m1.ini", "rt");
 		if (!cnf)
 		{*/
-			__android_log_print(ANDROID_LOG_INFO, "M1Android", "Setting basepath...\n");
 			
 			
+
 
 			// use your string
 
@@ -411,6 +408,7 @@ void Java_com_neko68k_M1_NDKBridge_nativeInit( JNIEnv*  env, jobject thiz, jstri
 			sprintf(wavpath, "%s/m1/wave;", nbasepath);
 			//strcpy(wavpath, "/sdcard/m1/wave;");	// default wavepath
 			(*env)->ReleaseStringUTFChars(env, basepath, nbasepath);
+			__android_log_print(ANDROID_LOG_INFO, "M1Android", "Init done.\n");
 		/*}
 		else
 		{
