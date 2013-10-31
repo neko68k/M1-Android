@@ -325,13 +325,27 @@ public class M1Android extends Activity {
     		  				   }
     		  				   int minutes=seconds/60;
     		  				   seconds -= minutes*60;
-    		  				   
-    		  				   trackNum.setText("Command: "+(NDKBridge.getCurrentCmd()+1));
+    		  				 Integer cursong = NDKBridge.getInfoInt(NDKBridge.M1_IINF_CURSONG, 0)+1;//M1_IINF_CURSONG;
+    		  				 trackNum.setText("Command: "+cursong);    		  				 
     		  				   if(seconds<10)
     		  					 playTime.setText("Time: "+minutes+":0"+seconds);
     		  				   else
     		  					   playTime.setText("Time: "+minutes+":"+seconds);
-    		  				   song.setText("Song: "+NDKBridge.getSong(NDKBridge.getCurrentCmd()));
+    		  				   
+    		  				   
+    		  				 //int game =  m1snd_get_info_int(M1_IINF_CURGAME, 0);
+
+    		  				//jstring track;
+
+
+    		  					//cmdNum = m1snd_get_info_int(M1_IINF_TRACKCMD,(song<<16|game));
+    		  					//__android_log_print(ANDROID_LOG_INFO, "M1Android", "Cmd: %i", cmdNum);
+
+    		  					String track = NDKBridge.getInfoStr(NDKBridge.M1_SINF_TRKNAME, 
+    		  							(NDKBridge.getInfoInt(NDKBridge.M1_IINF_TRACKCMD, 
+    		  									cursong)<<16|NDKBridge.curGame));
+    		  				   
+    		  				   song.setText("Song: "+track);
     		  				   
     		  			   }
     		  		   }
@@ -388,27 +402,35 @@ public class M1Android extends Activity {
 	        	}
 	        	//int gameid = data.getIntExtra("com.neko68k.M1.position", 0);
 	        	//NDKBridge.loadROM(NDKBridge.globalGLA.get(gameid));
-	        	Game game = data.getParcelableExtra("com.neko68k.M1.game");
-	        	NDKBridge.nativeLoadROM(game.index);
+	        	NDKBridge.game = data.getParcelableExtra("com.neko68k.M1.game");
+	        	NDKBridge.nativeLoadROM(NDKBridge.game.index);
 	    		
 	    		if(NDKBridge.loadError==false){
 		    		NDKBridge.playtime = 0;
 		    		//Game game = NDKBridge.queryRom(NDKBridge.curGame);
 		    		
 		    		mHandler.post(mUpdateTimeTask);
-		    		title.setText(game.title);
-		    		board.setText("Board: "+game.sys);
-					mfg.setText("Maker: "+game.mfg);
-					hardware.setText("Hardware: "+game.cpu);
+		    		title.setText(NDKBridge.game.title);
+		    		board.setText("Board: "+NDKBridge.game.sys);
+					mfg.setText("Maker: "+NDKBridge.game.mfg);
+					hardware.setText("Hardware: "+NDKBridge.game.cpu);
 					
 		    		playButton.setText("Pause");
-		    		numSongs = NDKBridge.getNumSongs(game.index);
+		    		//m1snd_get_info_int(M1_IINF_TRACKS, i)
+		    		numSongs = NDKBridge.getInfoInt(NDKBridge.game.index, 0);
+		    		//numSongs = NDKBridge.getNumSongs(NDKBridge.game.index);
 		    		//numSongs=0;
 		    		if(numSongs>0){
 		    			
 		    			listItems.clear();
 		    			for(int i = 0; i<numSongs;i++){
-		    				String song = NDKBridge.getSong(i);
+		    				//track = (*env)->NewStringUTF(env, (char*)m1snd_get_info_str(M1_SINF_TRKNAME, 
+		    				//		(cmdNum<<16|m1snd_get_info_int(M1_IINF_CURGAME, 0))));
+		    				
+		    				String song = NDKBridge.getInfoStr(NDKBridge.M1_SINF_TRKNAME, 
+		    						(i<<16|NDKBridge.getInfoInt(NDKBridge.M1_IINF_CURGAME, 0)));
+		    				
+		    				//String song = NDKBridge.getSong(i);
 		    				if(song!=null){
 		    					listItems.add((i+1)+". "+song);
 		    				}

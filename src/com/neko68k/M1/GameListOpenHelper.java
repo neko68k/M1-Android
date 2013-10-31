@@ -60,6 +60,7 @@ public class GameListOpenHelper {
 		
 		
 		return(db.query(GAMELIST_TABLE_NAME, null, KEY_ROMAVAIL+"=1 ", null, null, null, null));
+		//return(db.query(GAMELIST_TABLE_NAME, null, null, null, null, null, null));
 	}
 	
 	public static void addGame(SQLiteDatabase db, Game game) {

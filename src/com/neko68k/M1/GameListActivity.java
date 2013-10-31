@@ -53,7 +53,7 @@ public class GameListActivity extends ListActivity{
             }
         });                
         
-        max_games = NDKBridge.getMaxGames();
+        //max_games = NDKBridge.getMaxGames();
         
         this.setListAdapter(adapter);
         db.close();        
@@ -65,9 +65,10 @@ public class GameListActivity extends ListActivity{
             int selectionRowID = (int)position;
             
             Game game = NDKBridge.queryRom(position);
+
             //LoadROMTask loadTask = new LoadROMTask(this);
             //loadTask.execute(new Integer(selectionRowID));
-            
+            game.index= position;
             Intent i = new Intent();
             String title = "";//NDKBridge.getGameList(selectionRowID);
         	i.putExtra("com.neko68k.M1.title", title);

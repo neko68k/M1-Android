@@ -76,14 +76,42 @@ public class NDKBridge {
 
 	
 	// types for m1_set_info_int
-
-	static final int M1_SIINF_CHANLEVEL=0;	// set the level of a mixer channel (parm1 = stream, parm2 = channel, parm3 = volume)
-	static final int M1_SIINF_CHANPAN=1;	// set the pan of a mixer channel (parm1 = stream, parm2 = channel, parm3 = pan (0=center, 1=left, 2=right)
+	
+	static final int M1_IINF_HASPARENT=0;	// returns 0 if no parent romset, 1 otherwise
+	static final int M1_IINF_TOTALGAMES=1;	// returns the total # of supported games
+	static final int M1_IINF_CURSONG=2;	// returns the current song # (may not be command # in album mode!)
+	static final int M1_IINF_CURCMD=3;		// returns the current command #
+	static final int M1_IINF_CURGAME=4;	// returns the current game #
+	static final int M1_IINF_MINSONG=5;	// returns the lowest song # the current game supports
+	static final int M1_IINF_MAXSONG=6;	// returns the highest song # the current game supports
+	static final int M1_IINF_DEFSONG=7;	// returns the default song # for a game (parm = game number)
+	static final int M1_IINF_MAXDRVS=8;	// returns the total # of drivers
+	static final int M1_IINF_BRDDRV=9;		// returns the board number for a driver
+	static final int M1_IINF_ROMSIZE=10;	// returns the expected size of a ROM.  for "parm"
+				// the low 16 bits is the game #, the top is the ROM #
+	static final int M1_IINF_ROMCRC=11;		// returns the expected CRC of a ROM.  parm is the
+				// same as for M1_IINF_ROMSIZE.
+	static final int M1_IINF_ROMNUM=12;		// returns the number of ROMs for a game.  game # in parm.
+	static final int M1_IINF_TRACKS=13;		// returns the number of tracks (named songs) for a game.
+	static final int M1_IINF_TRKLENGTH=14;	// returns the length of time to play a track in 1/60 second units.
+	                        // the low 16 bits is the game #, the top is the command number.
+				// -1 is returned if no length is set in the .lst file.
+	static final int M1_IINF_TRACKCMD=15;	// returns the command number for a given track
+	                        // the low 16 bits is the game #, the top is the track number.
+	static final int M1_IINF_CURTIME=16;	// returns the current time in the song, in 1/60th of a second units.
+	static final int M1_IINF_NUMEXTRAS=16;	// returns the number of extra text lines for a song.  param is the same
+				// as for M1_IINF_TRKLENGTH, and -1 is returned if the game or song is not found.
+	static final int M1_IINF_NORMVOL=17;	// returns the current volume the normalization code has calculated (0-500+, where 100 = no amplify)
+	static final int M1_IINF_NUMSTREAMS=18;	// returns the current number of mixer streams (each stream has 1 or more channels)
+	static final int M1_IINF_NUMCHANS=19;	// returns the current number of mixer channels for a stream
+	static final int M1_IINF_CHANLEVEL=20;	// returns the level of a mixer channel (high 16 bits = stream #, low 16 bits = chan #)
+	static final int M1_IINF_CHANPAN=21;	// returns the pan setting of a mixer channel (high 16 bits = stream #, low 16 bits = chan #, result: 0 = center, 1 = left, 2 = right)
+	
 
 	//////////////////////////// END ENUMS
 	
 	static GameDatabaseHelper m1db;
-	
+	static Game game;
 	static int defLen;
 	static int songLen;
 	static boolean inited = false;
@@ -118,11 +146,6 @@ public class NDKBridge {
 		Title = tv;
 	}
 
-	public static void SetGameName(String name){
-		//Title.setText(name);
-	}
-	
-	 
 
 	public static void addROM(String name, Integer id){
 		if(name!=null){
@@ -159,45 +182,14 @@ public class NDKBridge {
 	public static void initM1(){
     	nativeInit(basepath);		      	
 	}		
-	//jobject Java_com_neko68k_M1_NDKBridge_queryRom(JNIEnv* env, jobject thiz, int game);
-	public static native Game queryRom(int game);
-	/*public static Game queryROM(int i){
-		Game game = new Game();
-		String bhardware;
-		game.setIndex(i);
-		game.setTitle(getInfoStr(M1_SINF_VISNAME, i));
-		game.setYear(getInfoStr(M1_SINF_YEAR, i));
-		game.setRomname(getInfoStr(M1_SINF_ROMFNAME, i));
-		game.setMfg(getInfoStr(M1_SINF_MAKER, i));
-		game.setSys(getInfoStr(M1_SINF_BNAME, i));
-		bhardware = getInfoStr(M1_SINF_BHARDWARE, i);
-		List<String> hardwareitems = Arrays.asList(bhardware.split("\\s*,\\s*"));
-		switch(hardwareitems.size()){
-		case 4:
-			game.setSound4(hardwareitems.get(4));
-		case 3:
-			game.setSound3(hardwareitems.get(3));
-		case 2:
-			game.setSound2(hardwareitems.get(2));
-		case 1:
-			game.setSound1(hardwareitems.get(1));
-		case 0:
-			game.setCpu(hardwareitems.get(0));
-			break;
-		}
-		game.setListavail(0);
-		return game;
-	}*/
-	public static void queryROM(Game game, String name){
 		
-	}
 	public static void loadROM(String name){
 		
 		//curGame = getROMID(name);
 		curGame =(Integer)lookup.get(name);
-		board = getBoard(curGame);
-		hdw = getHardware(curGame);
-		mfg = getMaker(curGame);
+		//board = getBoard(curGame);
+		//hdw = getHardware(curGame);
+		//mfg = getMaker(curGame);
 		nativeLoadROM(curGame);
 	}
 	public static Bitmap getIcon(){
@@ -240,33 +232,20 @@ public class NDKBridge {
 		
 		return(Bitmap.createScaledBitmap(bm, 128, 128, false));
 	}
-	public static GameList getGameTitle(int i){
-		GameList entry = new GameList(getGameList(i));		
-		return(entry);
-	}
-	public static native int getMaxGames();
-    public static native String getGameList(int i);
+	
     
     public static native void nativeInit(String basepath);
     //public static native void initCallbacks();
     public static native void nativeClose();
-    public static String auditROM(int i){
-    	return(simpleAudit(i));
-    }
+    
     public static native String simpleAudit(int i);
     
     public static native Integer getInfoInt(int cmd, int parm);
     public static native String getInfoStr(int cmd, int parm);
     public static native String getInfoStringEx(int cmd, int parm);
     
-    public static native int getCurrentCmd();
-    public static native int getNumSongs(int gameNum);
-    public static native int getMaxSongs();
-    public static native String getSongs(int song);    
-    public static String getSong(int i){
-    	return(getSongs(i));
-    }
-    
+    public static native Game queryRom(int i);
+    public static native int getMaxGames();
     public static native int nextSong();
     public static native int prevSong();
     public static native void stop();
@@ -275,9 +254,6 @@ public class NDKBridge {
     public static native void restSong();
     
     public static native int getCurTime();
-    public static native String getMaker(int parm);
-    public static native String getBoard(int parm);
-    public static native String getHardware(int parm);
     
     public static native int nativeLoadROM(int i);
     public static native int getROMID(String name);

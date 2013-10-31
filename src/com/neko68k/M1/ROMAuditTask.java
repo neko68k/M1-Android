@@ -34,7 +34,7 @@ public class ROMAuditTask extends AsyncTask<Void, Void, Void>{
 		
 		//List<GameList> mItems = new ArrayList<GameList>();
 		for(i = 0; i<numGames;i++){
-			NDKBridge.auditROM(i);			
+			//NDKBridge.auditROM(i);			
 		}
 		
 		return(null);

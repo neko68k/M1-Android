@@ -73,7 +73,8 @@ public class InitM1Task extends AsyncTask<Void, Void, Void>{
 		
 				
 		NDKBridge.initM1();
-		int numGames = NDKBridge.getMaxGames();
+		//int numGames = NDKBridge.getMaxGames();
+		
 		int i =0;		
 		NDKBridge.m1db = new GameDatabaseHelper(context);
 		SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
@@ -82,7 +83,8 @@ public class InitM1Task extends AsyncTask<Void, Void, Void>{
 		game = new Game();
 		//m1snd_get_info_int(M1_IINF_MAXDRVS);
 		//int numdrvs = NDKBridge.getInfoInt(8,0);
-		for(i = 0; i<numGames;i++){		
+		
+		for(i = 0; i<NDKBridge.getMaxGames();i++){		
 			NDKBridge.cur = i;
 			// simple zipname audit, need to add a full audit procedure...
 			//String title = NDKBridge.auditROM(i);	

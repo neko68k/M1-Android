@@ -126,7 +126,7 @@ public class Game implements Parcelable{
 			out.writeString("");
 			out.writeString("");
 			out.writeString("");		
-			//out.writeInt(1);
+			//out.writeInt(romavail);
 			
 		}
 		public Game(Parcel in){

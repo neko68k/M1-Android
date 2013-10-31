@@ -76,12 +76,12 @@ public class PlayerService extends Service{
 		
 		notification.contentView = contentView;
 		
-		
-		text = NDKBridge.getSong(NDKBridge.getCurrentCmd());
-		text=null;
+		text = NDKBridge.getInfoStr(NDKBridge.M1_IINF_CURSONG, 0);
+		//text = NDKBridge.getSong(NDKBridge.getCurrentCmd());
+		//text=null;
 		if(text!=null){
 			contentView.setTextViewText(R.id.text, text);
-			contentView.setTextViewText(R.id.text2, NDKBridge.getGameTitle(NDKBridge.curGame).getText());
+			contentView.setTextViewText(R.id.text2, NDKBridge.game.title);
 		}
 		if(text==null){
 			contentView.setTextViewText(R.id.text, "No track list");
