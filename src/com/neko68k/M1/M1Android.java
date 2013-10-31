@@ -411,7 +411,8 @@ public class M1Android extends Activity {
 
 		    		
 		    		mHandler.post(mUpdateTimeTask);
-		    		title.setText(NDKBridge.game.title);
+		    		title.setText(NDKBridge.getInfoStr(NDKBridge.M1_SINF_VISNAME, 
+							NDKBridge.getInfoInt(NDKBridge.M1_IINF_CURGAME,0)));
 		    		board.setText("Board: "+NDKBridge.game.sys);
 					mfg.setText("Maker: "+NDKBridge.game.mfg);
 					hardware.setText("Hardware: "+NDKBridge.game.cpu);
