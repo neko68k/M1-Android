@@ -443,9 +443,14 @@ public class M1Android extends Activity {
 		    				String song = NDKBridge.getInfoStr(NDKBridge.M1_SINF_TRKNAME, (cmdNum<<16|game)); 
 		    				
 		    				
-		    				
+		    				int songlen = NDKBridge.getInfoInt(NDKBridge.M1_IINF_TRKLENGTH, (cmdNum<<16|game));
 		    				if(song!=null){
-		    					listItems.add((i+1)+". "+song);
+		    					String tmp;
+			  					   if(songlen/60%60<10)
+			  						   tmp=":0"; 
+			  					   else
+			  						   tmp=":";
+		    					listItems.add((i+1)+". "+song+"   "+(songlen/60/60)+tmp+(songlen/60%60));
 		    				}
 		    			}     
 		    			

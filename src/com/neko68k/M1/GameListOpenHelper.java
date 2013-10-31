@@ -39,12 +39,27 @@ public class GameListOpenHelper {
     
         
     public static void onCreate(SQLiteDatabase db) {    	
-    	
-        db.execSQL(GAMELIST_TABLE_CREATE);
+    	if(!checkTable())
+    		db.execSQL(GAMELIST_TABLE_CREATE);
+    }
+    
+    public static Boolean checkTable(){
+    	SQLiteDatabase db = NDKBridge.m1db.getReadableDatabase();
+    	Cursor cursor =db.rawQuery("select DISTINCT tbl_name from sqlite_master where tbl_name = '"+GAMELIST_TABLE_NAME+"'", null);
+        if(cursor!=null) {
+            if(cursor.getCount()>0) {
+               cursor.close();
+               db.close();
+                return(true);
+            }
+               cursor.close();
+               db.close();
+        }
+        return(false);
     }
     
     public static void dropTable(SQLiteDatabase db) {
-    	//db.execSQL("DROP TABLE IF EXISTS " + GAMELIST_TABLE_NAME);
+    	db.execSQL("DROP TABLE IF EXISTS " + GAMELIST_TABLE_NAME);
     }
 
 	
