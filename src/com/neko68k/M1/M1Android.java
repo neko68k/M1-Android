@@ -416,7 +416,7 @@ public class M1Android extends Activity {
 					
 		    		playButton.setText("Pause");
 		    		//m1snd_get_info_int(M1_IINF_TRACKS, i)
-		    		numSongs = NDKBridge.getInfoInt(NDKBridge.game.index, 0);
+		    		numSongs = NDKBridge.getInfoInt(NDKBridge.M1_IINF_TRACKS, NDKBridge.getInfoInt(NDKBridge.M1_IINF_CURGAME,0));
 		    		//numSongs = NDKBridge.getNumSongs(NDKBridge.game.index);
 		    		//numSongs=0;
 		    		if(numSongs>0){
@@ -425,13 +425,13 @@ public class M1Android extends Activity {
 		    			for(int i = 0; i<numSongs;i++){
 		    				//track = (*env)->NewStringUTF(env, (char*)m1snd_get_info_str(M1_SINF_TRKNAME, 
 		    				//		(cmdNum<<16|m1snd_get_info_int(M1_IINF_CURGAME, 0))));
+		    	
 		    				
-		    				String song = NDKBridge.getInfoStr(NDKBridge.M1_SINF_TRKNAME, 
-		    						(i<<16|NDKBridge.getInfoInt(NDKBridge.M1_IINF_CURGAME, 0)));
+		    				String song = NDKBridge.getInfoStr(NDKBridge.M1_SINF_TRKNAME, (i<<16|NDKBridge.getInfoInt(NDKBridge.M1_IINF_CURGAME, 0)));
 		    				
 		    				//String song = NDKBridge.getSong(i);
 		    				if(song!=null){
-		    					listItems.add((i+1)+". "+song);
+		    					listItems.add(i+". "+song);
 		    				}
 		    			}     
 		    			
