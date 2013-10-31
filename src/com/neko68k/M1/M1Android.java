@@ -428,12 +428,16 @@ public class M1Android extends Activity {
 		    				//track = (*env)->NewStringUTF(env, (char*)m1snd_get_info_str(M1_SINF_TRKNAME, 
 		    				//		(cmdNum<<16|m1snd_get_info_int(M1_IINF_CURGAME, 0))));
 		    	
+		    				int game = NDKBridge.getInfoInt(NDKBridge.M1_IINF_CURGAME, 0);
+		    				int cmdNum = NDKBridge.getInfoInt(NDKBridge.M1_IINF_TRACKCMD, (i<<16|game));
+		    				String song = NDKBridge.getInfoStr(NDKBridge.M1_SINF_TRKNAME, (cmdNum<<16|game)); 
 		    				
-		    				String song = NDKBridge.getInfoStr(NDKBridge.M1_SINF_TRKNAME, (i<<16|NDKBridge.getInfoInt(NDKBridge.M1_IINF_CURGAME, 0)));
+		    				
+		    				//String song = NDKBridge.getInfoStr(NDKBridge.M1_SINF_TRKNAME, (i<<16|NDKBridge.getInfoInt(NDKBridge.M1_IINF_CURGAME, 0)));
 		    				
 		    				//String song = NDKBridge.getSong(i);
 		    				if(song!=null){
-		    					listItems.add(i+". "+song);
+		    					listItems.add((i+1)+". "+song);
 		    				}
 		    			}     
 		    			
