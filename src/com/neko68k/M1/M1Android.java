@@ -343,8 +343,10 @@ public class M1Android extends Activity {
     		  					//__android_log_print(ANDROID_LOG_INFO, "M1Android", "Cmd: %i", cmdNum);
 
 //    		 String track = NDKBridge.getInfoStr(NDKBridge.M1_SINF_TRKNAME, cursong<<16|NDKBridge.curGame);
-    		  				   
-    		  				   song.setText("Song: ");//+track);
+    		  				 int cmdNum = NDKBridge.getInfoInt(NDKBridge.M1_IINF_TRACKCMD, 
+    		  						(NDKBridge.getInfoInt(NDKBridge.M1_IINF_CURSONG,0)<<16|NDKBridge.getInfoInt(NDKBridge.M1_IINF_CURGAME,0)));
+    		  				String text = NDKBridge.getInfoStr(NDKBridge.M1_SINF_TRKNAME, cmdNum<<16|NDKBridge.getInfoInt(NDKBridge.M1_IINF_CURGAME,0));
+    		  				   song.setText("Song: "+text);//+track);
     		  				   
     		  			   }
     		  		   }
