@@ -187,7 +187,7 @@ public class NDKBridge {
 	public static Bitmap getIcon(){
 		Bitmap bm=null;
 	    //v = params[0];
-	    File file = new File(NDKBridge.basepath+"/m1/icons/"+NDKBridge.getInfoStr(cur,0)+".ico");
+	    File file = new File(NDKBridge.basepath+"/m1/icons/"+NDKBridge.getInfoStr(NDKBridge.M1_SINF_ROMNAME,NDKBridge.getInfoInt(M1_IINF_CURGAME, 0))+".ico");
 		FileInputStream inputStream;					
 		try{
 	        inputStream = new FileInputStream(file);

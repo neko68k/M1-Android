@@ -27,6 +27,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -44,7 +45,8 @@ public class M1Android extends Activity {
 	TextView mfg;
 	TextView song;
 	TextView title;
-	Timer updateTimer;   
+	Timer updateTimer;  
+	ImageView icon;
 	
 	ArrayList<String> listItems=new ArrayList<String>();
 	ArrayAdapter<String> adapter;
@@ -94,6 +96,7 @@ public class M1Android extends Activity {
         mfg = (TextView)findViewById(R.id.mfg);
         song = (TextView)findViewById(R.id.song);
         title = (TextView)findViewById(R.id.title);
+        icon = (ImageView)findViewById(R.id.icon);
         NDKBridge.setTitleView(title);  
         
         NDKBridge.ctx = this;
@@ -411,6 +414,7 @@ public class M1Android extends Activity {
 
 		    		
 		    		mHandler.post(mUpdateTimeTask);
+		    		icon.setImageBitmap(NDKBridge.getIcon());
 		    		title.setText(NDKBridge.getInfoStr(NDKBridge.M1_SINF_VISNAME, 
 							NDKBridge.getInfoInt(NDKBridge.M1_IINF_CURGAME,0)));
 		    		board.setText("Board: "+NDKBridge.game.sys);
