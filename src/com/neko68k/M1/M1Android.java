@@ -450,7 +450,7 @@ public class M1Android extends Activity {
 			  						   tmp=":0"; 
 			  					   else
 			  						   tmp=":";
-		    					listItems.add((i+1)+". "+song+"   "+(songlen/60/60)+tmp+(songlen/60%60));
+		    					listItems.add((i+1)+". "+song+" - "+(songlen/60/60)+tmp+(songlen/60%60));
 		    				}
 		    			}     
 		    			
@@ -488,7 +488,7 @@ public class M1Android extends Activity {
 	    			hardware.setText("");
 	    			song.setText("");
 	    			playTime.setText("Time:");
-	    			trackNum.setText("Command:");
+	    			trackNum.setText("Track:");
 	    			
 	    			title.setText("No game loaded");
 	    			playButton.setText("Play");

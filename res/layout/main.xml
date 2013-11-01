@@ -52,7 +52,7 @@
 	<!-- linearlayout for horizontal placement of player buttons -->
 	<LinearLayout android:layout_width="fill_parent"
 		android:layout_height="wrap_content" android:orientation="horizontal"
-		android:layout_weight="0.025">
+		android:layout_weight=".025">
 		<Button android:id="@+id/prev" android:text="Prev"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:textSize="18sp" android:layout_gravity="bottom"
