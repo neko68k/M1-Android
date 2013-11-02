@@ -100,10 +100,10 @@ public class InitM1Task extends AsyncTask<Void, Void, Void>{
 			game.setRomname(NDKBridge.getInfoStr(NDKBridge.M1_SINF_ROMNAME, i));
 			game.setMfg(NDKBridge.getInfoStr(NDKBridge.M1_SINF_MAKER, i));
 			//game.setSys(NDKBridge.getInfoStr(NDKBridge.M1_SINF_BNAME, i));
-			game.setListavail(0);			
+			game.setListavail(0);		*/	
 			
-			String sound = NDKBridge.getInfoStr(NDKBridge.M1_SINF_BHARDWARE, i);
-			/*String soundary[] = sound.split(", ");
+			//String sound = NDKBridge.getInfoStr(NDKBridge.M1_SINF_BHARDWARE, i);
+			String soundary[] = game.cpu.split(", ");
 			switch(soundary.length){
 			case 5:
 				game.setSound4(soundary[4]);
@@ -117,7 +117,7 @@ public class InitM1Task extends AsyncTask<Void, Void, Void>{
 				game.setCpu(soundary[0]);
 			case 0:
 				break;
-			}	*/	
+			}	
 			//if(game.romavail==1){
 				GameListOpenHelper.addGame(db, game);
 			//}

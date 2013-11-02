@@ -17,31 +17,31 @@ public class Game implements Parcelable{
 		String sound3;
 		String sound4;		
 		Integer romavail;
-		/*public Game(int index, String title, String year, String romname,
-				String mfg, String sys, String cpu, String sound1,
-				String sound2, String sound3, String sound4, 
-				Integer listavail) {
-			this.index = index;
-			this.title = title;
-			this.year = year;
-			this.romname = romname;
-			this.mfg = mfg;
-			this.sys = sys;
-			this.cpu = cpu;
-			this.sound1 = sound1;
-			this.sound2 = sound2;
-			this.sound3 = sound3;
-			this.sound4 = sound4;		
-			this.listavail = listavail;
-		}*/
+
 		public Game() {
-			
+			this.index = 0;
+			this.title="";
+			this.year="";
+			this.romname="";
+			this.mfg="";
+			this.sys="";
+			this.cpu="";
+			this.sound1="";
+			this.sound2="";
+			this.sound3="";
+			this.sound4="";
+			this.sound5="";
+			this.listavail=0;
 		}
 		public Game(Cursor cursor){
 			int tblYear = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_YEAR);
             int tblMfg = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_MFG);
             int tblBoard = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_SYS);
             int tblHardware = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_CPU);
+            int tblSound1 = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_SOUND1);
+            int tblSound2 = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_SOUND2);
+            int tblSound3 = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_SOUND3);
+            int tblSound4 = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_SOUND4);
             int tblRomname = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_ROMNAME);
             int tblId = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_ID);
 			index = cursor.getInt(tblId);
@@ -49,6 +49,7 @@ public class Game implements Parcelable{
 			mfg = cursor.getString(tblMfg);
 			sys = cursor.getString(tblBoard);
 			cpu = cursor.getString(tblHardware);
+			sound1 = cursor.getString(tblSound1);
 			romname = cursor.getString(tblRomname);
 					
 					
