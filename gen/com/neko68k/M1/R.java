@@ -21,39 +21,53 @@ public final class R {
         public static final int icon=0x7f020002;
     }
     public static final class id {
+        public static final int Board=0x7f0a000f;
+        public static final int CPU=0x7f0a0011;
+        public static final int EnableFilter=0x7f0a000d;
+        public static final int EnableSort=0x7f0a000b;
+        public static final int Mfg=0x7f0a000e;
+        public static final int Sort=0x7f0a000c;
+        public static final int Sound1=0x7f0a0012;
+        public static final int Sound2=0x7f0a0013;
+        public static final int Sound3=0x7f0a0014;
+        public static final int Sound4=0x7f0a0015;
+        public static final int Year=0x7f0a0010;
         public static final int board=0x7f0a0008;
+        public static final int fragment_container=0x7f0a000a;
         public static final int hardware=0x7f0a0009;
-        public static final int hours=0x7f0a0013;
+        public static final int hours=0x7f0a001f;
         public static final int icon=0x7f0a0005;
         public static final int image=0x7f0a0001;
         public static final int layout=0x7f0a0000;
-        public static final int lbl1=0x7f0a0012;
-        public static final int lbl2=0x7f0a0014;
-        public static final int lbl3=0x7f0a0016;
-        public static final int listView1=0x7f0a000d;
+        public static final int lbl1=0x7f0a001e;
+        public static final int lbl2=0x7f0a0020;
+        public static final int lbl3=0x7f0a0022;
+        public static final int listView1=0x7f0a0019;
         public static final int mfg=0x7f0a0007;
-        public static final int minutes=0x7f0a0015;
-        public static final int next=0x7f0a0011;
-        public static final int open=0x7f0a0018;
-        public static final int options=0x7f0a0019;
-        public static final int play=0x7f0a000f;
-        public static final int playTime=0x7f0a000b;
-        public static final int prev=0x7f0a000e;
-        public static final int rest=0x7f0a0010;
-        public static final int seconds=0x7f0a0017;
-        public static final int song=0x7f0a000c;
+        public static final int minutes=0x7f0a0021;
+        public static final int next=0x7f0a001d;
+        public static final int open=0x7f0a0024;
+        public static final int options=0x7f0a0025;
+        public static final int play=0x7f0a001b;
+        public static final int playTime=0x7f0a0017;
+        public static final int prev=0x7f0a001a;
+        public static final int rest=0x7f0a001c;
+        public static final int seconds=0x7f0a0023;
+        public static final int song=0x7f0a0018;
         public static final int text=0x7f0a0003;
         public static final int text2=0x7f0a0004;
         public static final int title=0x7f0a0002;
-        public static final int trackNum=0x7f0a000a;
+        public static final int trackNum=0x7f0a0016;
         public static final int year=0x7f0a0006;
     }
     public static final class layout {
         public static final int custom_notification=0x7f030000;
         public static final int gamelist_detailed=0x7f030001;
-        public static final int main=0x7f030002;
-        public static final int newui=0x7f030003;
-        public static final int timepicker=0x7f030004;
+        public static final int gamelistfraglayout=0x7f030002;
+        public static final int gamelistsortoptions=0x7f030003;
+        public static final int main=0x7f030004;
+        public static final int newui=0x7f030005;
+        public static final int timepicker=0x7f030006;
     }
     public static final class menu {
         public static final int menu=0x7f090000;

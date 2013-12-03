@@ -1,0 +1,2 @@
+#!/bin/bash
+ndk-build TARGET_PLATFORM=android-8 TARGET_ARCH_ABI=armeabi-v7a LOCAL_ARM_MODE=arm LOCAL_NEON_MODE=true clean

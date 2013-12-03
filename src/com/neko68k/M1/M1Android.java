@@ -546,7 +546,7 @@ public class M1Android extends Activity {
         case R.id.open:
 
         	NDKBridge.loadError=false;
-        	intent = new Intent(this, GameListActivity.class);
+        	intent = new Intent(this, GameListFragment.class);
         	startActivityForResult(intent, 1);        	
             return true;
         case R.id.options:

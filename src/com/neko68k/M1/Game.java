@@ -30,8 +30,8 @@ public class Game implements Parcelable{
 			this.sound2="";
 			this.sound3="";
 			this.sound4="";
-			this.sound5="";
-			this.listavail=0;
+			//this.sound5="";
+			//this.listavail=0;
 		}
 		public Game(Cursor cursor){
 			int tblYear = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_YEAR);
@@ -141,10 +141,10 @@ public class Game implements Parcelable{
 			out.writeString(mfg);
 			out.writeString(sys);
 			out.writeString(cpu);
-			out.writeString("");
-			out.writeString("");
-			out.writeString("");
-			out.writeString("");		
+			out.writeString(sound1);
+			out.writeString(sound2);
+			out.writeString(sound3);
+			out.writeString(sound4);		
 			//out.writeInt(romavail);
 			
 		}
