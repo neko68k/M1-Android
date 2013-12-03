@@ -42,7 +42,6 @@ public class GameListCursorAdapter extends SimpleCursorAdapter implements Sectio
 	public GameListCursorAdapter(Context context, int layout, Cursor cursor,
 			String[] from, int[] to) {
 		super(context, layout, cursor, from, to);
-		//tblIcon = cursor.getColumnIndexOrThrow("icon");
 		tblYear = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_YEAR);
 		tblMfg = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_MFG);
 		tblBoard = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_SYS);

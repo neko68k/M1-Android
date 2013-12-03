@@ -215,13 +215,17 @@ public class M1Android extends Activity {
             public void onClick(View v) {
             	if(playing==true){
 	            	if(paused==false){
-	            		trackNum.setText("Track: "+(NDKBridge.next()));	
+	            		int i =NDKBridge.next();
+	            		trackNum.setText("Track: "+(i));	
+	            		
 	            		NDKBridge.playerService.setNoteText();
 	            		NDKBridge.playtime = 0;
 	            		if(listLen)
 	            			NDKBridge.getSongLen();
+	            		trackList.smoothScrollToPosition(i);
 	            	}
             	}
+            	
             }
         });
         // PREV
@@ -230,11 +234,13 @@ public class M1Android extends Activity {
             public void onClick(View v) {
             	if(playing==true){
 	            	if(paused==false){
-	            		trackNum.setText("Track: "+(NDKBridge.prevSong()));
+	            		int i = NDKBridge.prevSong();
+	            		trackNum.setText("Track: "+(i));
 	            		NDKBridge.playerService.setNoteText();
 	            		NDKBridge.playtime = 0;
 	            		if(listLen)
 	            			NDKBridge.getSongLen();
+	            		trackList.smoothScrollToPosition(i);
 	            	}
             	}
             }
@@ -322,8 +328,8 @@ public class M1Android extends Activity {
     		  		   if(playing==true){
     		  			   if(paused==false){
     		  				   int seconds=NDKBridge.getCurTime()/60;
-    		  				   if(seconds>NDKBridge.songLen){
-    		  					   NDKBridge.next();
+    		  				   if(seconds>NDKBridge.songLen){    		  					   
+    		  					 trackList.smoothScrollToPosition(NDKBridge.next());
     		  					   if(listLen)
     		  						 NDKBridge.getSongLen();
     		  				   }
