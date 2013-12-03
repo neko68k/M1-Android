@@ -11,11 +11,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.view.View;
+import android.widget.AlphabetIndexer;
 import android.widget.ImageView;
+import android.widget.SectionIndexer;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
-public class GameListCursorAdapter extends SimpleCursorAdapter{
+public class GameListCursorAdapter extends SimpleCursorAdapter implements SectionIndexer{
 	//final int tblIcon;
 	final int tblYear;
 	final int tblMfg;
@@ -23,6 +25,8 @@ public class GameListCursorAdapter extends SimpleCursorAdapter{
 	final int tblHardware;
 	final int tblRomname;
 	final int tblId;
+	
+	AlphabetIndexer mAlphabetIndexer;
 	
 	static class ViewHolder{
 		ImageView icon;
@@ -46,8 +50,41 @@ public class GameListCursorAdapter extends SimpleCursorAdapter{
 		tblRomname = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_ROMNAME);
 		tblId = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_ID);
 		
+		
+		mAlphabetIndexer = new AlphabetIndexer(cursor,
+                cursor.getColumnIndex(GameListOpenHelper.KEY_TITLE),
+                " ABCDEFGHIJKLMNOPQRTSUVWXYZ");
+        mAlphabetIndexer.setCursor(cursor);//Sets a new cursor as the data set and resets the cache of indices.
 		// TODO Auto-generated constructor stub
 	}
+	
+	/**
+     * Performs a binary search or cache lookup to find the first row that matches a given section's starting letter.
+     */
+    
+    public int getPositionForSection(int sectionIndex)
+    {
+        return mAlphabetIndexer.getPositionForSection(sectionIndex);
+    }
+
+    /**
+     * Returns the section index for a given position in the list by querying the item and comparing it with all items
+     * in the section array.
+     */
+    
+    public int getSectionForPosition(int position)
+    {
+        return mAlphabetIndexer.getSectionForPosition(position);
+    }
+
+    /**
+     * Returns the section array constructed from the alphabet provided in the constructor.
+     */
+    
+    public Object[] getSections()
+    {
+        return mAlphabetIndexer.getSections();
+    }
 	
 	
 	@Override

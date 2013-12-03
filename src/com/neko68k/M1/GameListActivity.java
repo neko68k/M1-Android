@@ -12,9 +12,9 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 public class GameListActivity extends ListFragment{
-	GameListAdapter gla;
 	int isRunning = 0;
 	int max_games;
+	private int defaultSelector = 0;
 	
 	@Override
 	public void onPause(){
@@ -34,40 +34,25 @@ public class GameListActivity extends ListFragment{
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState){
 		SQLiteDatabase db = NDKBridge.m1db.getReadableDatabase();
-		//Cursor cursor;
-		
-		/*SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, 
-		        R.layout.gamelist_detailed, 
-		        GameListOpenHelper.getAllTitles(db), 
-		        new String[] { "title", "year", "mfg", "sys", "cpu" }, 
-		        new int[] { R.id.title, R.id.year, R.id.mfg, R.id.board, R.id.hardware });
-		*/
-		//Context cxt = null;
-		//while(cxt!=null)
-			Context cxt = getActivity();
+
+		Context cxt = getActivity();
 		GameListCursorAdapter adapter = new GameListCursorAdapter(cxt, 
 		        R.layout.gamelist_detailed, 
 		        GameListOpenHelper.getAllTitles(db), 
 		        new String[] { "title", "year", "mfg", "sys", "cpu" }, 
 		        new int[] { R.id.title, R.id.year, R.id.mfg, R.id.board, R.id.hardware });
 		
-		//gla=null;
-		//String fn = new String();
-		//Intent intent = getIntent();
-		//fn = intent.getStringExtra("com.tutorials.hellotabwidget.FN");		
-               
         final ListView lv = getListView();
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
         	public void onItemClick(AdapterView<?> av, View v, int pos, long id) {
                 onListItemClick(lv, v,pos,id);
             }
-        });                
-        
-        //max_games = NDKBridge.getMaxGames();
-        
+        });                        
+        lv.setFastScrollEnabled(true);
         this.setListAdapter(adapter);
         db.close();        
-	}
+        
+        }
 
 	@Override
     public void onListItemClick(ListView l, View v, int position, long id) {
