@@ -41,13 +41,11 @@ public class GameListFragment extends FragmentActivity implements GameListActivi
     }
     
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-    	Intent intent;
+    public boolean onOptionsItemSelected(MenuItem item) {    	
         // Handle item selection
         switch (item.getItemId()) {
         case R.id.sortOptions:
-        	GameListOptionsActivity newFragment = new GameListOptionsActivity();
-        	Bundle args = new Bundle();
+        	GameListOptionsActivity newFragment = new GameListOptionsActivity();        	
         	//args.putInt(GameListOptionsActivity.ARG_POSITION, position);
         	//newFragment.setArguments(args);
 

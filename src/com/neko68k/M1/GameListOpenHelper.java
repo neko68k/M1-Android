@@ -44,8 +44,9 @@ public class GameListOpenHelper {
     }
     
     public static Boolean checkTable(){
-    	SQLiteDatabase db = NDKBridge.m1db.getReadableDatabase();
-    	Cursor cursor =db.rawQuery("select DISTINCT tbl_name from sqlite_master where tbl_name = '"+GAMELIST_TABLE_NAME+"'", null);
+    	/*SQLiteDatabase db = NDKBridge.m1db.getReadableDatabase();
+    	Cursor cursor =null;
+    	cursor=db.rawQuery("select DISTINCT tbl_name from sqlite_master where tbl_name = '"+GAMELIST_TABLE_NAME+"'", null);
         if(cursor!=null) {
             if(cursor.getCount()>0) {
                cursor.close();
@@ -54,7 +55,7 @@ public class GameListOpenHelper {
             }
                cursor.close();
                db.close();
-        }
+        }*/
         return(false);
     }
     
@@ -78,8 +79,8 @@ public class GameListOpenHelper {
 		//return(db.query(GAMELIST_TABLE_NAME, null, null, null, null, null, null));
 	}
 	
-	public static void addGame(SQLiteDatabase db, Game game) {
-	    //SQLiteDatabase db = this.getWritableDatabase();
+	public static void addGame(Game game) {
+		SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
 	 
 	    ContentValues values = new ContentValues();
 	    values.put(KEY_ID, game.getIndex()); 
@@ -98,6 +99,6 @@ public class GameListOpenHelper {
 	    
 	    // Inserting Row
 	    db.insert(GAMELIST_TABLE_NAME, null, values);
-	    //db.close(); // Closing database connection
+	    db.close(); // Closing database connection
 	}
 }

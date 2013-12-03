@@ -116,7 +116,7 @@ public class NDKBridge {
 	static int songLen;
 	static boolean inited = false;
 	static int playtime;
-	static Integer curGame = 0;
+	static Integer curGame;
 	static String board;
 	static String hdw;
 	static String mfg;

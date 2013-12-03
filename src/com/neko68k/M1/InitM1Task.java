@@ -75,9 +75,9 @@ public class InitM1Task extends AsyncTask<Void, Void, Void>{
 		NDKBridge.initM1();
 		//int numGames = NDKBridge.getMaxGames();
 		
-		int i =0;		
+		int i =0;				
 		NDKBridge.m1db = new GameDatabaseHelper(context);
-		SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
+		//SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
 		
 		
 		game = new Game();
@@ -86,30 +86,43 @@ public class InitM1Task extends AsyncTask<Void, Void, Void>{
 		
 		for(i = 0; i<NDKBridge.getMaxGames();i++){		
 			NDKBridge.cur = i;
-
+			// simple zipname audit, need to add a full audit procedure...
+			//String title = NDKBridge.auditROM(i);	
+			//NDKBridge.addROM(title, i);
+			
+			
+			
 			game = NDKBridge.queryRom(i);
 			game.romavail = NDKBridge.simpleAudit(i);			
 			game.index=i;
+			/*game.setTitle(NDKBridge.getInfoStr(NDKBridge.M1_SINF_VISNAME, i));
+			game.setYear(NDKBridge.getInfoStr(NDKBridge.M1_SINF_YEAR, i)); 
+			game.setRomname(NDKBridge.getInfoStr(NDKBridge.M1_SINF_ROMNAME, i));
+			game.setMfg(NDKBridge.getInfoStr(NDKBridge.M1_SINF_MAKER, i));
+			//game.setSys(NDKBridge.getInfoStr(NDKBridge.M1_SINF_BNAME, i));
+			game.setListavail(0);		*/	
+			
+			//String sound = NDKBridge.getInfoStr(NDKBridge.M1_SINF_BHARDWARE, i);
 			String soundary[] = game.cpu.split(", ");
 			switch(soundary.length){
-			case 5:
-				game.setSound4(soundary[4]);
-			case 4:
-				game.setSound3(soundary[3]);
-			case 3:
-				game.setSound2(soundary[2]);
-			case 2:
-				game.setSound1(soundary[1]);
-			case 1:
-				game.setCpu(soundary[0]);
-			case 0:
-				break;
+				case 5:
+					game.setSound4(soundary[4]);
+				case 4:
+					game.setSound3(soundary[3]);
+				case 3:
+					game.setSound2(soundary[2]);
+				case 2:
+					game.setSound1(soundary[1]);
+				case 1:
+					game.setCpu(soundary[0]);
+				case 0:
+					break;
 			}	
 			//if(game.romavail==1){
-				GameListOpenHelper.addGame(db, game);
+				GameListOpenHelper.addGame(game);
 			//}
 		}
-		db.close();
+		//db.close();
 		return(null);
 	}
 	
