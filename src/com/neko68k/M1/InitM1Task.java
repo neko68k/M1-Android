@@ -86,23 +86,10 @@ public class InitM1Task extends AsyncTask<Void, Void, Void>{
 		
 		for(i = 0; i<NDKBridge.getMaxGames();i++){		
 			NDKBridge.cur = i;
-			// simple zipname audit, need to add a full audit procedure...
-			//String title = NDKBridge.auditROM(i);	
-			//NDKBridge.addROM(title, i);
-			
-			
-			
-			/*game = NDKBridge.queryRom(i);
+
+			game = NDKBridge.queryRom(i);
 			game.romavail = NDKBridge.simpleAudit(i);			
 			game.index=i;
-			/*game.setTitle(NDKBridge.getInfoStr(NDKBridge.M1_SINF_VISNAME, i));
-			game.setYear(NDKBridge.getInfoStr(NDKBridge.M1_SINF_YEAR, i)); 
-			game.setRomname(NDKBridge.getInfoStr(NDKBridge.M1_SINF_ROMNAME, i));
-			game.setMfg(NDKBridge.getInfoStr(NDKBridge.M1_SINF_MAKER, i));
-			//game.setSys(NDKBridge.getInfoStr(NDKBridge.M1_SINF_BNAME, i));
-			game.setListavail(0);		
-			
-			//String sound = NDKBridge.getInfoStr(NDKBridge.M1_SINF_BHARDWARE, i);
 			String soundary[] = game.cpu.split(", ");
 			switch(soundary.length){
 			case 5:
@@ -119,7 +106,7 @@ public class InitM1Task extends AsyncTask<Void, Void, Void>{
 				break;
 			}	
 			//if(game.romavail==1){
-				GameListOpenHelper.addGame(db, game);*/
+				GameListOpenHelper.addGame(db, game);
 			//}
 		}
 		db.close();
