@@ -3,6 +3,10 @@ package com.neko68k.M1;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 public class GameListFragment extends FragmentActivity implements GameListActivity.OnItemSelectedListener{
 	
@@ -10,7 +14,7 @@ public class GameListFragment extends FragmentActivity implements GameListActivi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.gamelistfraglayout);
-
+        
         // Check that the activity is using the layout version with
         // the fragment_container FrameLayout
         if (findViewById(R.id.fragment_container) != null) {
@@ -32,6 +36,35 @@ public class GameListFragment extends FragmentActivity implements GameListActivi
             // Add the fragment to the 'fragment_container' FrameLayout
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragment_container, firstFragment).commit();
+        }
+        
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+    	Intent intent;
+        // Handle item selection
+        switch (item.getItemId()) {
+        case R.id.sortOptions:
+        	GameListOptionsActivity newFragment = new GameListOptionsActivity();
+        	Bundle args = new Bundle();
+        	//args.putInt(GameListOptionsActivity.ARG_POSITION, position);
+        	//newFragment.setArguments(args);
+
+        	FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+        	// Replace whatever is in the fragment_container view with this fragment,
+        	// and add the transaction to the back stack so the user can navigate back
+        	transaction.replace(R.id.fragment_container, newFragment);
+        	transaction.addToBackStack(null);
+
+        	// Commit the transaction
+        	transaction.commit();
+        	
+
+        default:
+               	        	
+            return super.onOptionsItemSelected(item);
         }
     }
     

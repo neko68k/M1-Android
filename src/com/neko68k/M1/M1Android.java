@@ -240,7 +240,7 @@ public class M1Android extends Activity {
 	            		NDKBridge.playtime = 0;
 	            		if(listLen)
 	            			NDKBridge.getSongLen();
-	            		trackList.smoothScrollToPosition(i);
+	            		trackList.smoothScrollToPosition(i);	            		
 	            	}
             	}
             }

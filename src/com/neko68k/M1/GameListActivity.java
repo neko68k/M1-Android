@@ -6,7 +6,11 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -26,10 +30,15 @@ public class GameListActivity extends ListFragment{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		 super.onCreate(savedInstanceState);
-		
+		 setHasOptionsMenu(true);
 		
         
 	}
+	@Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.gamelistmenu, menu);
+    }
 	
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState){
@@ -83,4 +92,6 @@ public class GameListActivity extends ListFragment{
                     + " must implement OnItemSelectedListener");
         }
     }
+    
+    
 }

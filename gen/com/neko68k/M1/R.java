@@ -46,14 +46,15 @@ public final class R {
         public static final int mfg=0x7f0a0007;
         public static final int minutes=0x7f0a0021;
         public static final int next=0x7f0a001d;
-        public static final int open=0x7f0a0024;
-        public static final int options=0x7f0a0025;
+        public static final int open=0x7f0a0025;
+        public static final int options=0x7f0a0026;
         public static final int play=0x7f0a001b;
         public static final int playTime=0x7f0a0017;
         public static final int prev=0x7f0a001a;
         public static final int rest=0x7f0a001c;
         public static final int seconds=0x7f0a0023;
         public static final int song=0x7f0a0018;
+        public static final int sortOptions=0x7f0a0024;
         public static final int text=0x7f0a0003;
         public static final int text2=0x7f0a0004;
         public static final int title=0x7f0a0002;
@@ -70,7 +71,8 @@ public final class R {
         public static final int timepicker=0x7f030006;
     }
     public static final class menu {
-        public static final int menu=0x7f090000;
+        public static final int gamelistmenu=0x7f090000;
+        public static final int menu=0x7f090001;
     }
     public static final class raw {
         public static final int lists=0x7f050000;
