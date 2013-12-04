@@ -20,11 +20,11 @@ public class InitM1Task extends AsyncTask<Void, Void, Void>{
 	
 	private Context context;
 	
-	private HashSet<String> cpuHashSet;
-	private HashSet<String> sound1HashSet;
-	private HashSet<String> sound2HashSet;
-	private HashSet<String> sound3HashSet;
-	private HashSet<String> sound4HashSet;
+	private HashSet<String> cpuHashSet = new HashSet<String>();
+	private HashSet<String> sound1HashSet = new HashSet<String>();
+	private HashSet<String> sound2HashSet = new HashSet<String>();
+	private HashSet<String> sound3HashSet = new HashSet<String>();
+	private HashSet<String> sound4HashSet = new HashSet<String>();
 
     public InitM1Task (Context c)  //pass the context in the constructor
 	{
@@ -85,6 +85,7 @@ public class InitM1Task extends AsyncTask<Void, Void, Void>{
 		NDKBridge.m1db = new GameDatabaseHelper(context);
 		//SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
 		
+		//FIXME: for ! for debugging only
 		if(GameListOpenHelper.checkTable()){
 			game = new Game();
 	
@@ -103,19 +104,19 @@ public class InitM1Task extends AsyncTask<Void, Void, Void>{
 				switch(soundary.length){
 					case 5:
 						game.setSound4(soundary[4]);
-						//sound4HashSet.add(soundary[4]);
+						sound4HashSet.add(soundary[4]);
 					case 4:
 						game.setSound3(soundary[3]);
-						//sound3HashSet.add(soundary[3]);
+						sound3HashSet.add(soundary[3]);
 					case 3:
 						game.setSound2(soundary[2]);
-						//sound2HashSet.add(soundary[2]);
+						sound2HashSet.add(soundary[2]);
 					case 2:
 						game.setSound1(soundary[1]);
-						//sound1HashSet.add(soundary[1]);
+						sound1HashSet.add(soundary[1]);
 					case 1:
 						game.setCpu(soundary[0]);
-						//cpuHashSet.add(soundary[0]);
+						cpuHashSet.add(soundary[0]);
 					case 0:
 						break;
 				}	
