@@ -14,6 +14,7 @@ public class Game implements Parcelable {
 	Integer intmfg;
 	String sys;
 	Integer intsys;
+	String soundhw;
 	String cpu;
 	Integer intcpu;
 	String sound1;
@@ -38,6 +39,7 @@ public class Game implements Parcelable {
 		this.sound2 = "";
 		this.sound3 = "";
 		this.sound4 = "";
+		this.soundhw = "";
 		this.intmfg=0;
 		this.intyear=0;
 		this.intsys=0;
@@ -67,6 +69,7 @@ public class Game implements Parcelable {
 		int tblRomname = cursor
 				.getColumnIndexOrThrow(GameListOpenHelper.KEY_ROMNAME);
 		int tblId = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_ID);
+		int tblSoundhw = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_SOUNDHW);
 		index = cursor.getInt(tblId);
 		year = cursor.getString(tblYear);
 		mfg = cursor.getString(tblMfg);
@@ -74,6 +77,7 @@ public class Game implements Parcelable {
 		cpu = cursor.getString(tblHardware);
 		sound1 = cursor.getString(tblSound1);
 		romname = cursor.getString(tblRomname);
+		soundhw = cursor.getString(tblSoundhw);
 		this.intmfg=0;
 		this.intyear=0;
 		this.intsys=0;
@@ -197,6 +201,14 @@ public class Game implements Parcelable {
 		this.intsys = intsys;
 	}
 
+	public String getSoundhw() {
+		return soundhw;
+	}
+
+	public void setSoundhw(String soundhw) {
+		this.soundhw = soundhw;
+	}
+
 	public Integer getIntcpu() {
 		return intcpu;
 	}
@@ -272,6 +284,7 @@ public class Game implements Parcelable {
 		out.writeInt(intsound2);
 		out.writeInt(intsound3);
 		out.writeInt(intsound4);
+		out.writeString(soundhw);
 		// out.writeInt(romavail);
 
 	}
@@ -296,6 +309,7 @@ public class Game implements Parcelable {
 		intsound2 = in.readInt();
 		intsound3 = in.readInt();
 		intsound4 = in.readInt();
+		soundhw = in.readString();
 		// romavail = in.readInt();
 	}
 

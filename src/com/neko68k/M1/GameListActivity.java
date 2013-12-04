@@ -47,7 +47,7 @@ public class GameListActivity extends ListFragment {
 		GameListCursorAdapter adapter = new GameListCursorAdapter(cxt,
 				R.layout.gamelist_detailed,
 				GameListOpenHelper.getAllTitles(db), new String[] { "title",
-						"year", "mfg", "sys", "cpu" }, new int[] { R.id.title,
+						"year", "mfg", "sys", "soundhw" }, new int[] { R.id.title,
 						R.id.year, R.id.mfg, R.id.board, R.id.hardware });
 
 		final ListView lv = getListView();

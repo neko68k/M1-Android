@@ -18,6 +18,7 @@ public class GameListOpenHelper {
 	public static final String KEY_SOUND4 = "sound4";
 	public static final String KEY_SOUND5 = "sound5";
 	public static final String KEY_ROMAVAIL = "romavail";
+	public static final String KEY_SOUNDHW = "soundhw";
 
 	private static final int DATABASE_VERSION = 2;
 	private static final String GAMELIST_TABLE_NAME = "gamelist";
@@ -27,7 +28,7 @@ public class GameListOpenHelper {
 			+ " TEXT, " + KEY_MFG + " TEXT, " + KEY_SYS + " TEXT, " + KEY_CPU
 			+ " TEXT, " + KEY_SOUND1 + " TEXT, " + KEY_SOUND2 + " TEXT, "
 			+ KEY_SOUND3 + " TEXT, " + KEY_SOUND4 + " TEXT, " +
-			// "sound5" + " TEXT, " +
+			 KEY_SOUNDHW + " TEXT, " +
 			KEY_ROMAVAIL + " INTEGER);";
 
 	private static final String CPU_TABLE = "cputable";
@@ -268,6 +269,7 @@ public class GameListOpenHelper {
 		values.put(KEY_SOUND3, game.getTitle());
 		values.put(KEY_SOUND4, game.getTitle());
 		values.put(KEY_ROMAVAIL, game.getromavail());
+		values.put(KEY_SOUNDHW, game.getSoundhw());
 
 		// Inserting Row
 		db.insert(GAMELIST_TABLE_NAME, null, values);

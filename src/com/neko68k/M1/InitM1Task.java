@@ -123,7 +123,7 @@ public class InitM1Task extends AsyncTask<Void, Void, Void> {
 				}
 				yearHashSet.add(year);
 				
-
+				game.soundhw = game.cpu;
 				String soundary[] = game.cpu.split(", ");
 				switch (soundary.length) {
 				case 5:

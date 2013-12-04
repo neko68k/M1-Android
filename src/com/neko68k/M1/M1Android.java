@@ -441,7 +441,8 @@ public class M1Android extends Activity {
 							NDKBridge.getInfoInt(NDKBridge.M1_IINF_CURGAME, 0)));
 					board.setText("Board: " + NDKBridge.game.sys);
 					mfg.setText("Maker: " + NDKBridge.game.mfg);
-					hardware.setText("Hardware: " + NDKBridge.game.cpu);
+					hardware.setText("Hardware: " + NDKBridge.game.soundhw);// + ", "+ NDKBridge.game.sound1
+							 //+ ", "+ NDKBridge.game.sound2 + ", "+ NDKBridge.game.sound3 + ", "+ NDKBridge.game.sound4);
 
 					playButton.setText("Pause");
 
