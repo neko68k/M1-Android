@@ -89,7 +89,7 @@ public class InitM1Task extends AsyncTask<Void, Void, Void>{
 		//SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
 		
 		//FIXME: for ! for debugging only
-		if(!GameListOpenHelper.checkTable()){
+		if(GameListOpenHelper.checkTable()){
 			game = new Game();
 			CRC32 crc = new CRC32();
 			int maxGames = NDKBridge.getMaxGames();
@@ -138,8 +138,14 @@ public class InitM1Task extends AsyncTask<Void, Void, Void>{
 				//}
 			}
 			
-			Iterator it = cpuHashSet.entrySet().iterator();
 			
+			GameListOpenHelper.addCPU("--CPU--", Long.valueOf(0));
+			GameListOpenHelper.addSound1("--Sound Chip 1-- ", Long.valueOf(0));
+			GameListOpenHelper.addSound2("--Sound Chip 2-- ", Long.valueOf(0));
+			GameListOpenHelper.addSound3("--Sound Chip 3-- ", Long.valueOf(0));
+			GameListOpenHelper.addSound4("--Sound Chip 4-- ",Long.valueOf(0));
+			
+			Iterator it = cpuHashSet.entrySet().iterator();
 			while(it.hasNext()){
 				Map.Entry pairs = (Map.Entry)it.next();
 				GameListOpenHelper.addCPU((String)pairs.getValue(), (Long) pairs.getKey());
