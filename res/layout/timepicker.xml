@@ -1,45 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
- android:layout_width="wrap_content" android:layout_height="wrap_content">
- 	<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" >
+
+    <TextView
         android:id="@+id/lbl1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hours:"/>
-	 <com.neko68k.M1.NumberPicker
-	   android:id="@+id/hours"
-	   android:orientation="vertical"
-	   android:layout_width="wrap_content"
-	   android:layout_height="wrap_content"
-	   android:layout_toRightOf="@id/lbl1">
-	</com.neko68k.M1.NumberPicker>
-	
-	<TextView
+        android:text="Hours:" />
+
+    <com.neko68k.M1.NumberPicker
+        android:id="@+id/hours"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/lbl1"
+        android:orientation="vertical" >
+    </com.neko68k.M1.NumberPicker>
+
+    <TextView
         android:id="@+id/lbl2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Minutes:"
-        android:layout_toRightOf="@id/hours"/>
-	<com.neko68k.M1.NumberPicker
-	   android:id="@+id/minutes"
-	   android:orientation="vertical"
-	   android:layout_width="wrap_content"
-	   android:layout_height="wrap_content"
-	   android:layout_toRightOf="@id/lbl2">
-	</com.neko68k.M1.NumberPicker>
-	
-	<TextView
+        android:layout_toRightOf="@id/hours"
+        android:text="Minutes:" />
+
+    <com.neko68k.M1.NumberPicker
+        android:id="@+id/minutes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/lbl2"
+        android:orientation="vertical" >
+    </com.neko68k.M1.NumberPicker>
+
+    <TextView
         android:id="@+id/lbl3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Seconds:"
-		android:layout_toRightOf="@id/minutes"/>
-	<com.neko68k.M1.NumberPicker
-	   android:id="@+id/seconds"
-	   android:orientation="vertical"
-	   android:layout_width="wrap_content"
-	   android:layout_height="wrap_content"
-	   android:layout_toRightOf="@id/lbl3">
-	</com.neko68k.M1.NumberPicker>
-    
+        android:layout_toRightOf="@id/minutes"
+        android:text="Seconds:" />
+
+    <com.neko68k.M1.NumberPicker
+        android:id="@+id/seconds"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/lbl3"
+        android:orientation="vertical" >
+    </com.neko68k.M1.NumberPicker>
+
 </RelativeLayout>

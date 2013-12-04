@@ -4,25 +4,24 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" 
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
         <CheckBox
-	        android:id="@+id/EnableSort"
-	        android:layout_width="0dip"
-	        android:layout_height="wrap_content"
-	        android:text="Enable Sort" 
-	        android:layout_weight=".5"/>
+            android:id="@+id/EnableSort"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:text="Enable Sort" />
 
         <Spinner
-	        android:id="@+id/Sort"
-	        android:layout_width="0dip"
-	        android:layout_height="wrap_content" 
-	        android:layout_weight=".5"
-	        />
-    </LinearLayout>	 
+            android:id="@+id/Sort"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5" />
+    </LinearLayout>
 
     <CheckBox
         android:id="@+id/EnableFilter"
@@ -32,77 +31,74 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" 
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
         <Spinner
-	        android:id="@+id/Mfg"
-	        android:layout_width="0dip"
-	        android:layout_height="wrap_content" 
-	        android:layout_weight=".5"
-	        />
+            android:id="@+id/Mfg"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5" />
 
         <Spinner
             android:id="@+id/Board"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_weight=".5" />
+    </LinearLayout>
 
-    </LinearLayout>	 
-    
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" 
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
         <Spinner
-	        android:id="@+id/Year"
-	        android:layout_width="0dip"
-	        android:layout_height="wrap_content" 
-	        android:layout_weight=".5"
-	        />
+            android:id="@+id/Year"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5" />
 
         <Spinner
             android:id="@+id/CPU"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_weight=".5" />
+    </LinearLayout>
 
-    </LinearLayout>	  
-    
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" 
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
         <Spinner
-	        android:id="@+id/Sound1"
-	        android:layout_width="0dip"
-	        android:layout_height="wrap_content" 
-	        android:layout_weight=".5"
-	        />
+            android:id="@+id/Sound1"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5" />
 
         <Spinner
             android:id="@+id/Sound2"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_weight=".5" />
+    </LinearLayout>
 
-    </LinearLayout>	  
-    
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" 
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
         <Spinner
-	        android:id="@+id/Sound3"
-	        android:layout_width="0dip"
-	        android:layout_height="wrap_content" 
-	        android:layout_weight=".5"
-	        />
+            android:id="@+id/Sound3"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5" />
 
         <Spinner
             android:id="@+id/Sound4"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_weight=".5" />
-
     </LinearLayout>
+
 </LinearLayout>

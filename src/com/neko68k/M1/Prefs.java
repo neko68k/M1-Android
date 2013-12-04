@@ -5,22 +5,21 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
 
-public class Prefs extends PreferenceActivity implements Preference.OnPreferenceChangeListener{
+public class Prefs extends PreferenceActivity implements
+		Preference.OnPreferenceChangeListener {
 	@Override
-    protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.preferences);            
-                        
-            setResult(RESULT_OK);
-            
-    }
-	
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		addPreferencesFromResource(R.xml.preferences);
+
+		setResult(RESULT_OK);
+
+	}
+
 	@Override
-    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
-		
-		
-		
-		
+	public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen,
+			Preference preference) {
+
 		return true;
 	}
 

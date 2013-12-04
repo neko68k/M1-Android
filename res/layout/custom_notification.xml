@@ -2,34 +2,41 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/layout"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    >
-    <ImageView android:id="@+id/image"
+    android:layout_height="fill_parent" >
+
+    <ImageView
+        android:id="@+id/image"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:layout_alignParentLeft="true"
         android:layout_marginRight="10dp" />
-    <TextView android:id="@+id/title"
+
+    <TextView
+        android:id="@+id/title"
+        style="@style/NotificationTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/image"
-        style="@style/NotificationTitle" />
-    <TextView android:id="@+id/text"
+        android:layout_toRightOf="@id/image" />
+
+    <TextView
+        android:id="@+id/text"
+        style="@style/NotificationText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/image"
         android:layout_below="@id/title"
-        android:singleLine="true"
-        style="@style/NotificationText" />
-    <TextView android:id="@+id/text2"
-        android:focusable="true"
+        android:layout_toRightOf="@id/image"
+        android:singleLine="true" />
+
+    <TextView
+        android:id="@+id/text2"
+        style="@style/NotificationSubText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/image"
         android:layout_below="@id/text"
-        android:singleLine="true"
+        android:layout_toRightOf="@id/image"
         android:ellipsize="marquee"
+        android:focusable="true"
         android:marqueeRepeatLimit="-1"
-        style="@style/NotificationSubText" />
-    
+        android:singleLine="true" />
+
 </RelativeLayout>
