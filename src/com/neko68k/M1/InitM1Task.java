@@ -5,6 +5,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
@@ -28,6 +29,10 @@ public class InitM1Task extends AsyncTask<Void, Void, Void> {
 	private Hashtable<Long, String> sound2HashSet = new Hashtable<Long, String>();
 	private Hashtable<Long, String> sound3HashSet = new Hashtable<Long, String>();
 	private Hashtable<Long, String> sound4HashSet = new Hashtable<Long, String>();
+	
+	private Hashtable<Long, String> boardHashSet = new Hashtable<Long, String>();
+	private Hashtable<Long, String> mfgHashSet = new Hashtable<Long, String>();
+	private HashSet<Integer> yearHashSet = new HashSet<Integer>();
 
 	public InitM1Task(Context c) // pass the context in the constructor
 	{
@@ -84,7 +89,7 @@ public class InitM1Task extends AsyncTask<Void, Void, Void> {
 		// int numGames = NDKBridge.getMaxGames();
 
 		int i = 0;
-		NDKBridge.m1db = new GameDatabaseHelper(context);
+		NDKBridge.m1db = new GameDatabaseHelper(context);		
 		// SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
 
 		// FIXME: for ! for debugging only
@@ -98,6 +103,24 @@ public class InitM1Task extends AsyncTask<Void, Void, Void> {
 				game = NDKBridge.queryRom(i);
 				game.romavail = NDKBridge.simpleAudit(i);
 				game.index = i;
+				
+				
+				
+				crc.update(game.mfg.getBytes());
+				mfgHashSet.put(crc.getValue(), game.mfg);
+				crc.reset();
+				
+				crc.update(game.sys.getBytes());
+				boardHashSet.put(crc.getValue(), game.sys);
+				crc.reset();
+				Integer year;
+				try{
+				year = new Integer(game.year);
+				} catch(java.lang.NumberFormatException e){
+					year = -1;
+				}
+				yearHashSet.add(year);
+				
 
 				String soundary[] = game.cpu.split(", ");
 				switch (soundary.length) {
@@ -139,6 +162,10 @@ public class InitM1Task extends AsyncTask<Void, Void, Void> {
 			GameListOpenHelper.addSound2("--Sound Chip 2-- ", Long.valueOf(0));
 			GameListOpenHelper.addSound3("--Sound Chip 3-- ", Long.valueOf(0));
 			GameListOpenHelper.addSound4("--Sound Chip 4-- ", Long.valueOf(0));
+			
+			GameListOpenHelper.addMfg("--Manufacturer--", Long.valueOf(0));
+			GameListOpenHelper.addBoard("--Board--", Long.valueOf(0));
+			GameListOpenHelper.addYear(0000);
 
 			Iterator it = cpuHashSet.entrySet().iterator();
 			while (it.hasNext()) {
@@ -177,6 +204,31 @@ public class InitM1Task extends AsyncTask<Void, Void, Void> {
 				Map.Entry pairs = (Map.Entry) it.next();
 				GameListOpenHelper.addSound4((String) pairs.getValue(),
 						(Long) pairs.getKey());
+
+			}
+			
+			it = mfgHashSet.entrySet().iterator();
+
+			while (it.hasNext()) {
+				Map.Entry pairs = (Map.Entry) it.next();
+				GameListOpenHelper.addMfg((String) pairs.getValue(),
+						(Long) pairs.getKey());
+
+			}
+			
+			it = boardHashSet.entrySet().iterator();
+
+			while (it.hasNext()) {
+				Map.Entry pairs = (Map.Entry) it.next();
+				GameListOpenHelper.addBoard((String) pairs.getValue(),
+						(Long) pairs.getKey());
+
+			}
+						
+			it = yearHashSet.iterator();
+			while (it.hasNext()) {
+				//Map.Entry pairs = (Map.Entry) it.next();
+				GameListOpenHelper.addYear((Integer)it.next());
 
 			}
 			// db.close();

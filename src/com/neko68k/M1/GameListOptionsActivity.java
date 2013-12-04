@@ -67,6 +67,25 @@ public class GameListOptionsActivity extends Fragment {
 				android.R.layout.simple_spinner_item, sound4Cursor,
 				new String[] { "sound4" }, new int[] { android.R.id.text1 }, 0);
 		sound4list.setAdapter(sca);
+		
+		Cursor mfgCursor = GameListOpenHelper.getAllMfg(db);
+		sca = new SimpleCursorAdapter(this.getActivity(),
+				android.R.layout.simple_spinner_item, mfgCursor,
+				new String[] { "mfg" }, new int[] { android.R.id.text1 }, 0);
+		mfglist.setAdapter(sca);
+		
+		Cursor boardCursor = GameListOpenHelper.getAllBoard(db);
+		sca = new SimpleCursorAdapter(this.getActivity(),
+				android.R.layout.simple_spinner_item, boardCursor,
+				new String[] { "sys" }, new int[] { android.R.id.text1 }, 0);
+		boardlist.setAdapter(sca);
+		
+		Cursor yearCursor = GameListOpenHelper.getAllYear(db);
+		sca = new SimpleCursorAdapter(this.getActivity(),
+				android.R.layout.simple_spinner_item, yearCursor,
+				new String[] { "year" }, new int[] { android.R.id.text1 }, 0);
+		yearlist.setAdapter(sca);
+		
 		db.close();
 		return view;
 	}

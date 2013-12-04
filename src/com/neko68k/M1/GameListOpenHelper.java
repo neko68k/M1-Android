@@ -53,6 +53,21 @@ public class GameListOpenHelper {
 	private static final String SOUND4_TABLE_CREATE = "CREATE TABLE "
 			+ SOUND4_TABLE + " (" + KEY_ID + " INTEGER PRIMARY KEY, "
 			+ KEY_SOUND4 + " TEXT);";
+	
+	private static final String MFG_TABLE = "mfg";
+	private static final String MFG_TABLE_CREATE = "CREATE TABLE "
+			+ MFG_TABLE + " (" + KEY_ID + " INTEGER PRIMARY KEY, "
+			+ KEY_MFG + " TEXT);";
+	
+	private static final String BOARD_TABLE = "board";
+	private static final String BOARD_TABLE_CREATE = "CREATE TABLE "
+			+ BOARD_TABLE + " (" + KEY_ID + " INTEGER PRIMARY KEY, "
+			+ KEY_SYS + " TEXT);";
+	
+	private static final String YEAR_TABLE = "year";
+	private static final String YEAR_TABLE_CREATE = "CREATE TABLE "
+			+ YEAR_TABLE + " (" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+			+ KEY_YEAR + " INTEGER);";
 
 	public static void onCreate(SQLiteDatabase db) {
 		// if(!checkTable()){
@@ -62,6 +77,9 @@ public class GameListOpenHelper {
 		db.execSQL(SOUND2_TABLE_CREATE);
 		db.execSQL(SOUND3_TABLE_CREATE);
 		db.execSQL(SOUND4_TABLE_CREATE);
+		db.execSQL(MFG_TABLE_CREATE);
+		db.execSQL(BOARD_TABLE_CREATE);
+		db.execSQL(YEAR_TABLE_CREATE);
 		// }
 	}
 
@@ -90,6 +108,9 @@ public class GameListOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS " + SOUND2_TABLE);
 		db.execSQL("DROP TABLE IF EXISTS " + SOUND3_TABLE);
 		db.execSQL("DROP TABLE IF EXISTS " + SOUND4_TABLE);
+		db.execSQL(MFG_TABLE_CREATE);
+		db.execSQL(BOARD_TABLE_CREATE);
+		db.execSQL(YEAR_TABLE_CREATE);
 
 	}
 
@@ -102,6 +123,9 @@ public class GameListOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS " + SOUND2_TABLE);
 		db.execSQL("DROP TABLE IF EXISTS " + SOUND3_TABLE);
 		db.execSQL("DROP TABLE IF EXISTS " + SOUND4_TABLE);
+		db.execSQL(MFG_TABLE_CREATE);
+		db.execSQL(BOARD_TABLE_CREATE);
+		db.execSQL(YEAR_TABLE_CREATE);
 		// Create tables again
 		onCreate(db);
 	}
@@ -135,6 +159,18 @@ public class GameListOpenHelper {
 	public static Cursor getAllSound4(SQLiteDatabase db) {
 		return (db
 				.query(SOUND4_TABLE, null, null, null, null, null, KEY_SOUND4));
+	}
+	
+	public static Cursor getAllMfg(SQLiteDatabase db) {
+		return (db.query(MFG_TABLE, null, null, null, null, null, KEY_MFG));
+	}
+	
+	public static Cursor getAllBoard(SQLiteDatabase db) {
+		return (db.query(BOARD_TABLE, null, null, null, null, null, KEY_SYS));
+	}
+	
+	public static Cursor getAllYear(SQLiteDatabase db) {
+		return (db.query(YEAR_TABLE, null, null, null, null, null, KEY_YEAR));
 	}
 
 	public static void addCPU(String cpu, Long long1) {
@@ -184,6 +220,36 @@ public class GameListOpenHelper {
 		values.put(KEY_ID, long1);
 		values.put(KEY_SOUND4, sound4);
 		db.insert(SOUND4_TABLE, null, values);
+		db.close(); // Closing database connection
+	}
+	
+	public static void addMfg(String mfg, Long long1) {
+		SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
+
+		ContentValues values = new ContentValues();
+		values.put(KEY_ID, long1);
+		values.put(KEY_MFG, mfg);
+		db.insert(MFG_TABLE, null, values);
+		db.close(); // Closing database connection
+	}
+	
+	public static void addBoard(String board, Long long1) {
+		SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
+
+		ContentValues values = new ContentValues();
+		values.put(KEY_ID, long1);
+		values.put(KEY_SYS, board);
+		db.insert(BOARD_TABLE, null, values);
+		db.close(); // Closing database connection
+	}
+	
+	public static void addYear(Integer year) {
+		SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
+
+		ContentValues values = new ContentValues();
+		//values.put(KEY_ID, long1);
+		values.put(KEY_YEAR, year);
+		db.insert(YEAR_TABLE, null, values);
 		db.close(); // Closing database connection
 	}
 
