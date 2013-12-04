@@ -70,17 +70,18 @@ public class GameListOpenHelper {
     
         
     public static void onCreate(SQLiteDatabase db) {    	
-    	//if(!checkTable())
-    	db.execSQL(GAMELIST_TABLE_CREATE);
-    	db.execSQL(CPU_TABLE_CREATE);
-    	db.execSQL(SOUND1_TABLE_CREATE);
-    	db.execSQL(SOUND2_TABLE_CREATE);
-    	db.execSQL(SOUND3_TABLE_CREATE);
-    	db.execSQL(SOUND4_TABLE_CREATE);
+    	if(!checkTable()){
+	    	db.execSQL(GAMELIST_TABLE_CREATE);
+	    	db.execSQL(CPU_TABLE_CREATE);
+	    	db.execSQL(SOUND1_TABLE_CREATE);
+	    	db.execSQL(SOUND2_TABLE_CREATE);
+	    	db.execSQL(SOUND3_TABLE_CREATE);
+	    	db.execSQL(SOUND4_TABLE_CREATE);
+    	}
     }
     
     public static Boolean checkTable(){
-    	/*SQLiteDatabase db = NDKBridge.m1db.getReadableDatabase();
+    	SQLiteDatabase db = NDKBridge.m1db.getReadableDatabase();
     	Cursor cursor =null;
     	cursor=db.rawQuery("select DISTINCT tbl_name from sqlite_master where tbl_name = '"+GAMELIST_TABLE_NAME+"'", null);
         if(cursor!=null) {
@@ -91,7 +92,7 @@ public class GameListOpenHelper {
             }
                cursor.close();
                db.close();
-        }*/
+        }
         return(false);
     }
     

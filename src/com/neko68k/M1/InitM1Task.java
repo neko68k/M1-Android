@@ -85,45 +85,46 @@ public class InitM1Task extends AsyncTask<Void, Void, Void>{
 		NDKBridge.m1db = new GameDatabaseHelper(context);
 		//SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
 		
-		
-		game = new Game();
-
-		int maxGames = NDKBridge.getMaxGames();
-		for(i = 0; i<maxGames;i++){		
-			NDKBridge.cur = i;
-
-			
-			
-			
-			game = NDKBridge.queryRom(i);
-			game.romavail = NDKBridge.simpleAudit(i);			
-			game.index=i;
-			
-			String soundary[] = game.cpu.split(", ");
-			switch(soundary.length){
-				case 5:
-					game.setSound4(soundary[4]);
-					sound4HashSet.add(soundary[4]);
-				case 4:
-					game.setSound3(soundary[3]);
-					sound3HashSet.add(soundary[3]);
-				case 3:
-					game.setSound2(soundary[2]);
-					sound2HashSet.add(soundary[2]);
-				case 2:
-					game.setSound1(soundary[1]);
-					sound1HashSet.add(soundary[1]);
-				case 1:
-					game.setCpu(soundary[0]);
-					cpuHashSet.add(soundary[0]);
-				case 0:
-					break;
-			}	
-			//if(game.romavail==1){
-				GameListOpenHelper.addGame(game);
-			//}
-		}
+		if(GameListOpenHelper.checkTable()){
+			game = new Game();
+	
+			int maxGames = NDKBridge.getMaxGames();
+			for(i = 0; i<maxGames;i++){		
+				NDKBridge.cur = i;
+	
+				
+				
+				
+				game = NDKBridge.queryRom(i);
+				game.romavail = NDKBridge.simpleAudit(i);			
+				game.index=i;
+				
+				String soundary[] = game.cpu.split(", ");
+				switch(soundary.length){
+					case 5:
+						game.setSound4(soundary[4]);
+						//sound4HashSet.add(soundary[4]);
+					case 4:
+						game.setSound3(soundary[3]);
+						//sound3HashSet.add(soundary[3]);
+					case 3:
+						game.setSound2(soundary[2]);
+						//sound2HashSet.add(soundary[2]);
+					case 2:
+						game.setSound1(soundary[1]);
+						//sound1HashSet.add(soundary[1]);
+					case 1:
+						game.setCpu(soundary[0]);
+						//cpuHashSet.add(soundary[0]);
+					case 0:
+						break;
+				}	
+				//if(game.romavail==1){
+					GameListOpenHelper.addGame(game);
+				//}
+			}
 		//db.close();
+		}
 		return(null);
 	}
 	
