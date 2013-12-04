@@ -20,7 +20,7 @@ public class GameListOpenHelper {
 	public static final String KEY_ROMAVAIL = "romavail";
 	
 	
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 2;
     private static final String GAMELIST_TABLE_NAME = "gamelist";
     private static final String GAMELIST_TABLE_CREATE =
                 "CREATE TABLE " + GAMELIST_TABLE_NAME + " (" +
@@ -46,38 +46,38 @@ public class GameListOpenHelper {
     
     private static final String SOUND1_TABLE = "sound1";
     private static final String SOUND1_TABLE_CREATE = 
-    		"CREATE TABLE " + CPU_TABLE + " (" +
+    		"CREATE TABLE " + SOUND1_TABLE + " (" +
     		KEY_ID + " INTEGER PRIMARY KEY, " +
     		KEY_SOUND1 + " TEXT);";
     
     private static final String SOUND2_TABLE = "sound2";
     private static final String SOUND2_TABLE_CREATE = 
-    		"CREATE TABLE " + CPU_TABLE + " (" +
+    		"CREATE TABLE " + SOUND2_TABLE + " (" +
     		KEY_ID + " INTEGER PRIMARY KEY, " +
     		KEY_SOUND2 + " TEXT);";
     
     private static final String SOUND3_TABLE = "sound3";
     private static final String SOUND3_TABLE_CREATE = 
-    		"CREATE TABLE " + CPU_TABLE + " (" +
+    		"CREATE TABLE " + SOUND3_TABLE + " (" +
     		KEY_ID + " INTEGER PRIMARY KEY, " +
     		KEY_SOUND3 + " TEXT);";
     
     private static final String SOUND4_TABLE = "sound4";
     private static final String SOUND4_TABLE_CREATE = 
-    		"CREATE TABLE " + CPU_TABLE + " (" +
+    		"CREATE TABLE " + SOUND4_TABLE + " (" +
     		KEY_ID + " INTEGER PRIMARY KEY, " +
     		KEY_SOUND4 + " TEXT);";
     
         
     public static void onCreate(SQLiteDatabase db) {    	
-    	if(!checkTable()){
+    	//if(!checkTable()){
 	    	db.execSQL(GAMELIST_TABLE_CREATE);
 	    	db.execSQL(CPU_TABLE_CREATE);
 	    	db.execSQL(SOUND1_TABLE_CREATE);
 	    	db.execSQL(SOUND2_TABLE_CREATE);
 	    	db.execSQL(SOUND3_TABLE_CREATE);
 	    	db.execSQL(SOUND4_TABLE_CREATE);
-    	}
+    	//}
     }
     
     public static Boolean checkTable(){
@@ -120,10 +120,79 @@ public class GameListOpenHelper {
 	}
 	
 	public static Cursor getAllTitles(SQLiteDatabase db){
-		
-		
 		return(db.query(GAMELIST_TABLE_NAME, null, KEY_ROMAVAIL+"=1 ", null, null, null, KEY_TITLE));
 		//return(db.query(GAMELIST_TABLE_NAME, null, null, null, null, null, null));
+	}
+	
+	public static Cursor getAllCPU(SQLiteDatabase db){
+		return(db.query(CPU_TABLE, null, null, null, null, null, KEY_CPU));
+	}
+	
+	public static Cursor getAllSound1(SQLiteDatabase db){
+		return(db.query(SOUND1_TABLE, null, null, null, null, null, KEY_SOUND1));
+	}
+	
+	public static Cursor getAllSound2(SQLiteDatabase db){
+		return(db.query(SOUND2_TABLE, null, null, null, null, null, KEY_SOUND2));
+	}
+	
+	public static Cursor getAllSound3(SQLiteDatabase db){
+		return(db.query(SOUND3_TABLE, null, null, null, null, null, KEY_SOUND3));
+	}
+	
+	public static Cursor getAllSound4(SQLiteDatabase db){
+		return(db.query(SOUND4_TABLE, null, null, null, null, null, KEY_SOUND4));
+	}
+	
+	public static void addCPU(String cpu, Long long1){
+		SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
+		 
+	    ContentValues values = new ContentValues();
+	    values.put(KEY_ID, long1); 
+	    values.put(KEY_CPU, cpu); 
+	    db.insert(CPU_TABLE, null, values);
+	    db.close(); // Closing database connection
+	}
+	
+	
+	public static void addSound1(String sound1, Long long1){
+		SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
+		 
+	    ContentValues values = new ContentValues();
+	    values.put(KEY_ID, long1); 
+	    values.put(KEY_SOUND1, sound1); 
+	    db.insert(SOUND1_TABLE, null, values);
+	    db.close(); // Closing database connection
+	}
+	
+	public static void addSound2(String sound2, Long long1){
+		SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
+		 
+	    ContentValues values = new ContentValues();
+	    values.put(KEY_ID, long1); 
+	    values.put(KEY_SOUND2, sound2); 
+	    db.insert(SOUND2_TABLE, null, values);
+	    db.close(); // Closing database connection
+	}
+	
+	public static void addSound3(String sound3, Long long1){
+		SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
+		 
+	    ContentValues values = new ContentValues();
+	    values.put(KEY_ID, long1); 
+	    values.put(KEY_SOUND3, sound3); 
+	    db.insert(SOUND3_TABLE, null, values);
+	    db.close(); // Closing database connection
+	}
+	
+	public static void addSound4(String sound4, Long long1){
+		SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
+		 
+	    ContentValues values = new ContentValues();
+	    values.put(KEY_ID, long1); 
+	    values.put(KEY_SOUND4, sound4); 
+	    db.insert(SOUND4_TABLE, null, values);
+	    db.close(); // Closing database connection
 	}
 	
 	public static void addGame(Game game) {

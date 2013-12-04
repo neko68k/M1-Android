@@ -5,7 +5,10 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.zip.CRC32;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -20,11 +23,11 @@ public class InitM1Task extends AsyncTask<Void, Void, Void>{
 	
 	private Context context;
 	
-	private HashSet<String> cpuHashSet = new HashSet<String>();
-	private HashSet<String> sound1HashSet = new HashSet<String>();
-	private HashSet<String> sound2HashSet = new HashSet<String>();
-	private HashSet<String> sound3HashSet = new HashSet<String>();
-	private HashSet<String> sound4HashSet = new HashSet<String>();
+	private Hashtable<Long, String> cpuHashSet = new Hashtable<Long, String>();
+	private Hashtable<Long, String> sound1HashSet = new Hashtable<Long, String>();
+	private Hashtable<Long, String> sound2HashSet = new Hashtable<Long, String>();
+	private Hashtable<Long, String> sound3HashSet = new Hashtable<Long, String>();
+	private Hashtable<Long, String> sound4HashSet = new Hashtable<Long, String>();
 
     public InitM1Task (Context c)  //pass the context in the constructor
 	{
@@ -86,9 +89,9 @@ public class InitM1Task extends AsyncTask<Void, Void, Void>{
 		//SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
 		
 		//FIXME: for ! for debugging only
-		if(GameListOpenHelper.checkTable()){
+		if(!GameListOpenHelper.checkTable()){
 			game = new Game();
-	
+			CRC32 crc = new CRC32();
 			int maxGames = NDKBridge.getMaxGames();
 			for(i = 0; i<maxGames;i++){		
 				NDKBridge.cur = i;
@@ -104,25 +107,71 @@ public class InitM1Task extends AsyncTask<Void, Void, Void>{
 				switch(soundary.length){
 					case 5:
 						game.setSound4(soundary[4]);
-						sound4HashSet.add(soundary[4]);
+						crc.update(soundary[4].getBytes());
+						sound4HashSet.put(crc.getValue(),soundary[4]);
+						crc.reset();
 					case 4:
 						game.setSound3(soundary[3]);
-						sound3HashSet.add(soundary[3]);
+						crc.update(soundary[3].getBytes());
+						sound3HashSet.put(crc.getValue(),soundary[3]);
+						crc.reset();
 					case 3:
 						game.setSound2(soundary[2]);
-						sound2HashSet.add(soundary[2]);
+						crc.update(soundary[2].getBytes());
+						sound2HashSet.put(crc.getValue(),soundary[2]);
+						crc.reset();
 					case 2:
 						game.setSound1(soundary[1]);
-						sound1HashSet.add(soundary[1]);
+						crc.update(soundary[1].getBytes());
+						sound1HashSet.put(crc.getValue(),soundary[1]);
+						crc.reset();
 					case 1:
 						game.setCpu(soundary[0]);
-						cpuHashSet.add(soundary[0]);
+						crc.update(soundary[0].getBytes());						
+						cpuHashSet.put(crc.getValue(),soundary[0]);
+						crc.reset();
 					case 0:
 						break;
 				}	
 				//if(game.romavail==1){
 					GameListOpenHelper.addGame(game);
 				//}
+			}
+			
+			Iterator it = cpuHashSet.entrySet().iterator();
+			
+			while(it.hasNext()){
+				Map.Entry pairs = (Map.Entry)it.next();
+				GameListOpenHelper.addCPU((String)pairs.getValue(), (Long) pairs.getKey());
+				
+			}
+			it = sound1HashSet.entrySet().iterator();
+			
+			while(it.hasNext()){
+				Map.Entry pairs = (Map.Entry)it.next();
+				GameListOpenHelper.addSound1((String)pairs.getValue(), (Long) pairs.getKey());
+				
+			}
+			it = sound2HashSet.entrySet().iterator();
+			
+			while(it.hasNext()){
+				Map.Entry pairs = (Map.Entry)it.next();
+				GameListOpenHelper.addSound2((String)pairs.getValue(), (Long) pairs.getKey());
+				
+			}
+			it = sound3HashSet.entrySet().iterator();
+			
+			while(it.hasNext()){
+				Map.Entry pairs = (Map.Entry)it.next();
+				GameListOpenHelper.addSound3((String)pairs.getValue(), (Long) pairs.getKey());
+				
+			}
+			it = sound4HashSet.entrySet().iterator();
+			
+			while(it.hasNext()){
+				Map.Entry pairs = (Map.Entry)it.next();
+				GameListOpenHelper.addSound4((String)pairs.getValue(), (Long) pairs.getKey());
+				
 			}
 		//db.close();
 		}
