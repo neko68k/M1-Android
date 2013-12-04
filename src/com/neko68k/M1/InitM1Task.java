@@ -5,12 +5,12 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.HashSet;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
@@ -19,6 +19,12 @@ public class InitM1Task extends AsyncTask<Void, Void, Void>{
 	ProgressDialog dialog;
 	
 	private Context context;
+	
+	private HashSet<String> cpuHashSet;
+	private HashSet<String> sound1HashSet;
+	private HashSet<String> sound2HashSet;
+	private HashSet<String> sound3HashSet;
+	private HashSet<String> sound4HashSet;
 
     public InitM1Task (Context c)  //pass the context in the constructor
 	{
@@ -81,40 +87,35 @@ public class InitM1Task extends AsyncTask<Void, Void, Void>{
 		
 		
 		game = new Game();
-		//m1snd_get_info_int(M1_IINF_MAXDRVS);
-		//int numdrvs = NDKBridge.getInfoInt(8,0);
-		
-		for(i = 0; i<NDKBridge.getMaxGames();i++){		
+
+		int maxGames = NDKBridge.getMaxGames();
+		for(i = 0; i<maxGames;i++){		
 			NDKBridge.cur = i;
-			// simple zipname audit, need to add a full audit procedure...
-			//String title = NDKBridge.auditROM(i);	
-			//NDKBridge.addROM(title, i);
+
 			
 			
 			
 			game = NDKBridge.queryRom(i);
 			game.romavail = NDKBridge.simpleAudit(i);			
 			game.index=i;
-			/*game.setTitle(NDKBridge.getInfoStr(NDKBridge.M1_SINF_VISNAME, i));
-			game.setYear(NDKBridge.getInfoStr(NDKBridge.M1_SINF_YEAR, i)); 
-			game.setRomname(NDKBridge.getInfoStr(NDKBridge.M1_SINF_ROMNAME, i));
-			game.setMfg(NDKBridge.getInfoStr(NDKBridge.M1_SINF_MAKER, i));
-			//game.setSys(NDKBridge.getInfoStr(NDKBridge.M1_SINF_BNAME, i));
-			game.setListavail(0);		*/	
 			
-			//String sound = NDKBridge.getInfoStr(NDKBridge.M1_SINF_BHARDWARE, i);
 			String soundary[] = game.cpu.split(", ");
 			switch(soundary.length){
 				case 5:
 					game.setSound4(soundary[4]);
+					sound4HashSet.add(soundary[4]);
 				case 4:
 					game.setSound3(soundary[3]);
+					sound3HashSet.add(soundary[3]);
 				case 3:
 					game.setSound2(soundary[2]);
+					sound2HashSet.add(soundary[2]);
 				case 2:
 					game.setSound1(soundary[1]);
+					sound1HashSet.add(soundary[1]);
 				case 1:
 					game.setCpu(soundary[0]);
+					cpuHashSet.add(soundary[0]);
 				case 0:
 					break;
 			}	

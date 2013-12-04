@@ -18,7 +18,8 @@ public class GameListOpenHelper {
 	public static final String KEY_SOUND4 = "sound4";
 	public static final String KEY_SOUND5 = "sound5";
 	public static final String KEY_ROMAVAIL = "romavail";
-
+	
+	
 	private static final int DATABASE_VERSION = 1;
     private static final String GAMELIST_TABLE_NAME = "gamelist";
     private static final String GAMELIST_TABLE_CREATE =
@@ -37,10 +38,45 @@ public class GameListOpenHelper {
                 //"sound5" + " TEXT, " +
                 KEY_ROMAVAIL + " INTEGER);";
     
+    private static final String CPU_TABLE = "cputable";
+    private static final String CPU_TABLE_CREATE = 
+    		"CREATE TABLE " + CPU_TABLE + " (" +
+    		KEY_ID + " INTEGER PRIMARY KEY, " +
+    		KEY_CPU + " TEXT);";
+    
+    private static final String SOUND1_TABLE = "sound1";
+    private static final String SOUND1_TABLE_CREATE = 
+    		"CREATE TABLE " + CPU_TABLE + " (" +
+    		KEY_ID + " INTEGER PRIMARY KEY, " +
+    		KEY_SOUND1 + " TEXT);";
+    
+    private static final String SOUND2_TABLE = "sound2";
+    private static final String SOUND2_TABLE_CREATE = 
+    		"CREATE TABLE " + CPU_TABLE + " (" +
+    		KEY_ID + " INTEGER PRIMARY KEY, " +
+    		KEY_SOUND2 + " TEXT);";
+    
+    private static final String SOUND3_TABLE = "sound3";
+    private static final String SOUND3_TABLE_CREATE = 
+    		"CREATE TABLE " + CPU_TABLE + " (" +
+    		KEY_ID + " INTEGER PRIMARY KEY, " +
+    		KEY_SOUND3 + " TEXT);";
+    
+    private static final String SOUND4_TABLE = "sound4";
+    private static final String SOUND4_TABLE_CREATE = 
+    		"CREATE TABLE " + CPU_TABLE + " (" +
+    		KEY_ID + " INTEGER PRIMARY KEY, " +
+    		KEY_SOUND4 + " TEXT);";
+    
         
     public static void onCreate(SQLiteDatabase db) {    	
-    	if(!checkTable())
-    		db.execSQL(GAMELIST_TABLE_CREATE);
+    	//if(!checkTable())
+    	db.execSQL(GAMELIST_TABLE_CREATE);
+    	db.execSQL(CPU_TABLE_CREATE);
+    	db.execSQL(SOUND1_TABLE_CREATE);
+    	db.execSQL(SOUND2_TABLE_CREATE);
+    	db.execSQL(SOUND3_TABLE_CREATE);
+    	db.execSQL(SOUND4_TABLE_CREATE);
     }
     
     public static Boolean checkTable(){
@@ -61,13 +97,23 @@ public class GameListOpenHelper {
     
     public static void dropTable(SQLiteDatabase db) {
     	db.execSQL("DROP TABLE IF EXISTS " + GAMELIST_TABLE_NAME);
+    	db.execSQL("DROP TABLE IF EXISTS " + CPU_TABLE);
+    	db.execSQL("DROP TABLE IF EXISTS " + SOUND1_TABLE);
+    	db.execSQL("DROP TABLE IF EXISTS " + SOUND2_TABLE);
+    	db.execSQL("DROP TABLE IF EXISTS " + SOUND3_TABLE);
+    	db.execSQL("DROP TABLE IF EXISTS " + SOUND4_TABLE);
+    	
     }
 
 	
 	public static void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		// // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS " + GAMELIST_TABLE_NAME);
- 
+        db.execSQL("DROP TABLE IF EXISTS " + CPU_TABLE);
+    	db.execSQL("DROP TABLE IF EXISTS " + SOUND1_TABLE);
+    	db.execSQL("DROP TABLE IF EXISTS " + SOUND2_TABLE);
+    	db.execSQL("DROP TABLE IF EXISTS " + SOUND3_TABLE);
+    	db.execSQL("DROP TABLE IF EXISTS " + SOUND4_TABLE);
         // Create tables again
         onCreate(db);
 	}
