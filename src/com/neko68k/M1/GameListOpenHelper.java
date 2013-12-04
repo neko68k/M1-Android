@@ -70,7 +70,7 @@ public class GameListOpenHelper {
 			+ KEY_YEAR + " INTEGER);";
 
 	public static void onCreate(SQLiteDatabase db) {
-		// if(!checkTable()){
+		//if(checkTable()==false){
 		db.execSQL(GAMELIST_TABLE_CREATE);
 		db.execSQL(CPU_TABLE_CREATE);
 		db.execSQL(SOUND1_TABLE_CREATE);
@@ -80,7 +80,7 @@ public class GameListOpenHelper {
 		db.execSQL(MFG_TABLE_CREATE);
 		db.execSQL(BOARD_TABLE_CREATE);
 		db.execSQL(YEAR_TABLE_CREATE);
-		// }
+		//}
 	}
 
 	public static Boolean checkTable() {
@@ -90,13 +90,14 @@ public class GameListOpenHelper {
 				"select DISTINCT tbl_name from sqlite_master where tbl_name = '"
 						+ GAMELIST_TABLE_NAME + "'", null);
 		if (cursor != null) {
-			if (cursor.getCount() > 0) {
+			/*if (cursor.getCount() > 0) {
 				cursor.close();
 				db.close();
 				return (true);
-			}
+			}*/
 			cursor.close();
 			db.close();
+			return(true);
 		}
 		return (false);
 	}

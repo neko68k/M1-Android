@@ -38,6 +38,14 @@ public class Game implements Parcelable {
 		this.sound2 = "";
 		this.sound3 = "";
 		this.sound4 = "";
+		this.intmfg=0;
+		this.intyear=0;
+		this.intsys=0;
+		this.intcpu=0;
+		this.intsound1=0;
+		this.intsound2=0;
+		this.intsound3=0;
+		this.intsound4=0;
 		// this.sound5="";
 		// this.listavail=0;
 	}
@@ -66,7 +74,14 @@ public class Game implements Parcelable {
 		cpu = cursor.getString(tblHardware);
 		sound1 = cursor.getString(tblSound1);
 		romname = cursor.getString(tblRomname);
-
+		this.intmfg=0;
+		this.intyear=0;
+		this.intsys=0;
+		this.intcpu=0;
+		this.intsound1=0;
+		this.intsound2=0;
+		this.intsound3=0;
+		this.intsound4=0;
 		return;
 	}
 
