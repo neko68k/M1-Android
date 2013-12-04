@@ -15,6 +15,8 @@ import java.util.zip.ZipInputStream;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
@@ -117,7 +119,7 @@ public class InitM1Task extends AsyncTask<Void, Void, Void> {
 				try{
 				year = new Integer(game.year);
 				} catch(java.lang.NumberFormatException e){
-					year = -1;
+					year = 1;
 				}
 				yearHashSet.add(year);
 				
@@ -157,14 +159,14 @@ public class InitM1Task extends AsyncTask<Void, Void, Void> {
 				// }
 			}
 
-			GameListOpenHelper.addCPU("--CPU--", Long.valueOf(0));
-			GameListOpenHelper.addSound1("--Sound Chip 1-- ", Long.valueOf(0));
-			GameListOpenHelper.addSound2("--Sound Chip 2-- ", Long.valueOf(0));
-			GameListOpenHelper.addSound3("--Sound Chip 3-- ", Long.valueOf(0));
-			GameListOpenHelper.addSound4("--Sound Chip 4-- ", Long.valueOf(0));
+			GameListOpenHelper.addCPU("!--CPU--!", Long.valueOf(0));
+			GameListOpenHelper.addSound1("!--Sound Chip 1--! ", Long.valueOf(0));
+			GameListOpenHelper.addSound2("!--Sound Chip 2--! ", Long.valueOf(0));
+			GameListOpenHelper.addSound3("!--Sound Chip 3--! ", Long.valueOf(0));
+			GameListOpenHelper.addSound4("!--Sound Chip 4--! ", Long.valueOf(0));
 			
-			GameListOpenHelper.addMfg("--Manufacturer--", Long.valueOf(0));
-			GameListOpenHelper.addBoard("--Board--", Long.valueOf(0));
+			GameListOpenHelper.addMfg("!--Manufacturer--!");
+			GameListOpenHelper.addBoard("!--Board--!");
 			GameListOpenHelper.addYear(0000);
 
 			Iterator it = cpuHashSet.entrySet().iterator();
@@ -211,8 +213,7 @@ public class InitM1Task extends AsyncTask<Void, Void, Void> {
 
 			while (it.hasNext()) {
 				Map.Entry pairs = (Map.Entry) it.next();
-				GameListOpenHelper.addMfg((String) pairs.getValue(),
-						(Long) pairs.getKey());
+				GameListOpenHelper.addMfg((String) pairs.getValue());
 
 			}
 			
@@ -220,8 +221,7 @@ public class InitM1Task extends AsyncTask<Void, Void, Void> {
 
 			while (it.hasNext()) {
 				Map.Entry pairs = (Map.Entry) it.next();
-				GameListOpenHelper.addBoard((String) pairs.getValue(),
-						(Long) pairs.getKey());
+				GameListOpenHelper.addBoard((String) pairs.getValue());
 
 			}
 						
@@ -231,7 +231,9 @@ public class InitM1Task extends AsyncTask<Void, Void, Void> {
 				GameListOpenHelper.addYear((Integer)it.next());
 
 			}
-			// db.close();
+			
+
+			//db.close();
 		}
 		return (null);
 	}

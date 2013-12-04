@@ -40,50 +40,50 @@ public class GameListOptionsActivity extends Fragment {
 		SQLiteDatabase db = NDKBridge.m1db.getReadableDatabase();
 		Cursor cpuCursor = GameListOpenHelper.getAllCPU(db);
 		SimpleCursorAdapter sca = new SimpleCursorAdapter(this.getActivity(),
-				android.R.layout.simple_spinner_item, cpuCursor,
-				new String[] { "cpu" }, new int[] { android.R.id.text1 }, 0);
+				R.layout.option_spinner_layout, cpuCursor,
+				new String[] { "_id","cpu" }, new int[] { R.id.text_id, R.id.text_opt }, 0);
 		cpulist.setAdapter(sca);
 
 		Cursor sound1Cursor = GameListOpenHelper.getAllSound1(db);
 		sca = new SimpleCursorAdapter(this.getActivity(),
-				android.R.layout.simple_spinner_item, sound1Cursor,
-				new String[] { "sound1" }, new int[] { android.R.id.text1 }, 0);
+				R.layout.option_spinner_layout, sound1Cursor,
+				new String[] { "_id","sound1" }, new int[] { R.id.text_id, R.id.text_opt }, 0);
 		sound1list.setAdapter(sca);
 
 		Cursor sound2Cursor = GameListOpenHelper.getAllSound2(db);
 		sca = new SimpleCursorAdapter(this.getActivity(),
-				android.R.layout.simple_spinner_item, sound2Cursor,
-				new String[] { "sound2" }, new int[] { android.R.id.text1 }, 0);
+				R.layout.option_spinner_layout, sound2Cursor,
+				new String[] { "_id","sound2" }, new int[] { R.id.text_id, R.id.text_opt }, 0);
 		sound2list.setAdapter(sca);
 
 		Cursor sound3Cursor = GameListOpenHelper.getAllSound3(db);
 		sca = new SimpleCursorAdapter(this.getActivity(),
-				android.R.layout.simple_spinner_item, sound3Cursor,
-				new String[] { "sound3" }, new int[] { android.R.id.text1 }, 0);
+				R.layout.option_spinner_layout, sound3Cursor,
+				new String[] { "_id", "sound3" }, new int[] { R.id.text_id, R.id.text_opt }, 0);
 		sound3list.setAdapter(sca);
 
 		Cursor sound4Cursor = GameListOpenHelper.getAllSound4(db);
 		sca = new SimpleCursorAdapter(this.getActivity(),
-				android.R.layout.simple_spinner_item, sound4Cursor,
-				new String[] { "sound4" }, new int[] { android.R.id.text1 }, 0);
+				R.layout.option_spinner_layout, sound4Cursor,
+				new String[] { "_id","sound4" }, new int[] { R.id.text_id, R.id.text_opt }, 0);
 		sound4list.setAdapter(sca);
 		
 		Cursor mfgCursor = GameListOpenHelper.getAllMfg(db);
 		sca = new SimpleCursorAdapter(this.getActivity(),
-				android.R.layout.simple_spinner_item, mfgCursor,
-				new String[] { "mfg" }, new int[] { android.R.id.text1 }, 0);
+				R.layout.option_spinner_layout, mfgCursor,
+				new String[] { "_id","mfg" }, new int[] { R.id.text_id, R.id.text_opt }, 0);
 		mfglist.setAdapter(sca);
 		
 		Cursor boardCursor = GameListOpenHelper.getAllBoard(db);
 		sca = new SimpleCursorAdapter(this.getActivity(),
-				android.R.layout.simple_spinner_item, boardCursor,
-				new String[] { "sys" }, new int[] { android.R.id.text1 }, 0);
+				R.layout.option_spinner_layout, boardCursor,
+				new String[] { "_id","sys" }, new int[] { R.id.text_id, R.id.text_opt }, 0);
 		boardlist.setAdapter(sca);
 		
 		Cursor yearCursor = GameListOpenHelper.getAllYear(db);
 		sca = new SimpleCursorAdapter(this.getActivity(),
-				android.R.layout.simple_spinner_item, yearCursor,
-				new String[] { "year" }, new int[] { android.R.id.text1 }, 0);
+				R.layout.option_spinner_layout, yearCursor,
+				new String[] { "_id","year" }, new int[] { R.id.text_id, R.id.text_opt }, 0);
 		yearlist.setAdapter(sca);
 		
 		db.close();

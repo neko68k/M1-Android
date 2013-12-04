@@ -56,12 +56,12 @@ public class GameListOpenHelper {
 	
 	private static final String MFG_TABLE = "mfg";
 	private static final String MFG_TABLE_CREATE = "CREATE TABLE "
-			+ MFG_TABLE + " (" + KEY_ID + " INTEGER PRIMARY KEY, "
+			+ MFG_TABLE + " (" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
 			+ KEY_MFG + " TEXT);";
 	
 	private static final String BOARD_TABLE = "board";
 	private static final String BOARD_TABLE_CREATE = "CREATE TABLE "
-			+ BOARD_TABLE + " (" + KEY_ID + " INTEGER PRIMARY KEY, "
+			+ BOARD_TABLE + " (" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
 			+ KEY_SYS + " TEXT);";
 	
 	private static final String YEAR_TABLE = "year";
@@ -223,21 +223,19 @@ public class GameListOpenHelper {
 		db.close(); // Closing database connection
 	}
 	
-	public static void addMfg(String mfg, Long long1) {
+	public static void addMfg(String mfg) {
 		SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
 
-		ContentValues values = new ContentValues();
-		values.put(KEY_ID, long1);
+		ContentValues values = new ContentValues();		
 		values.put(KEY_MFG, mfg);
 		db.insert(MFG_TABLE, null, values);
 		db.close(); // Closing database connection
 	}
 	
-	public static void addBoard(String board, Long long1) {
+	public static void addBoard(String board) {
 		SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
 
-		ContentValues values = new ContentValues();
-		values.put(KEY_ID, long1);
+		ContentValues values = new ContentValues();		
 		values.put(KEY_SYS, board);
 		db.insert(BOARD_TABLE, null, values);
 		db.close(); // Closing database connection
