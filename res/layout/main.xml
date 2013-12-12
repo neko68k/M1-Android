@@ -100,43 +100,43 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_weight=".025"
+        android:layout_weight=".005"
         android:orientation="horizontal" >
 
-        <Button
+        <ImageButton
             android:id="@+id/prev"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_weight="0.025"
-            android:text="Prev"
+            android:src="@drawable/ic_action_previous"
             android:textSize="18sp" />
 
-        <Button
+        <ImageButton
             android:id="@+id/play"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_weight="0.025"
-            android:text="Play"
+            android:src="@drawable/ic_action_play"
             android:textSize="18sp" />
 
-        <Button
+        <ImageButton
             android:id="@+id/rest"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_weight="0.025"
-            android:text="Rest"
+            android:src="@drawable/ic_action_replay"
             android:textSize="18sp" />
 
-        <Button
+        <ImageButton
             android:id="@+id/next"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_weight="0.025"
-            android:text="Next"
+            android:src="@drawable/ic_action_next"
             android:textSize="18sp" />
     </LinearLayout>
 

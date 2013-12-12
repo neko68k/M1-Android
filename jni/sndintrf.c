@@ -172,8 +172,8 @@ int saa1099_num(const struct MachineSound *msound) { return ((struct SAA1099_int
 int iremga20_clock(const struct MachineSound *msound) { return ((struct IremGA20_interface*)msound->sound_interface)->clock; }
 #endif
 #if (HAS_ES5505)
-int ES5505_clock(const struct MachineSound *msound) { return ((struct ES5505interface*)msound->sound_interface)->baseclock[0]; }
-int ES5505_num(const struct MachineSound *msound) { return ((struct ES5505interface*)msound->sound_interface)->num; }
+int ES5505_clock(const struct MachineSound *msound) { return ((struct es5505_interface*)msound->sound_interface)->baseclock[0]; }
+int ES5505_num(const struct MachineSound *msound) { return ((struct es5505_interface*)msound->sound_interface)->num; }
 #endif
 #if (HAS_ES5506)
 int ES5506_clock(const struct MachineSound *msound) { return ((struct ES5506interface*)msound->sound_interface)->baseclock[0]; }

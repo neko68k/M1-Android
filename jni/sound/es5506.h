@@ -21,6 +21,17 @@ struct ES5505interface
 	UINT16 (*read_port[MAX_ES5505])(void);			/* input port read */
 };
 
+struct es5505_interface
+{
+	int num;                  						/* total number of chips */
+	int baseclock[MAX_ES5505];						/* input clock */
+	int region0[MAX_ES5505];						/* memory region where the sample ROM lives */
+	int region1[MAX_ES5505];						/* memory region where the sample ROM lives */
+	int mixing_level[MAX_ES5505];					/* master volume */
+	void (*irq_callback[MAX_ES5505])(int state);	/* irq callback */
+	UINT16 (*read_port[MAX_ES5505])(void);			/* input port read */
+};
+
 int ES5505_sh_start(const struct MachineSound *msound);
 void ES5505_sh_stop(void);
 
@@ -35,6 +46,19 @@ WRITE16_HANDLER( ES5505_data_1_w );
 #define MAX_ES5506 			2
 
 struct ES5506interface
+{
+	int num;                  						/* total number of chips */
+	int baseclock[MAX_ES5506];						/* input clock */
+	int region0[MAX_ES5506];						/* memory region where the sample ROM lives */
+	int region1[MAX_ES5506];						/* memory region where the sample ROM lives */
+	int region2[MAX_ES5506];						/* memory region where the sample ROM lives */
+	int region3[MAX_ES5506];						/* memory region where the sample ROM lives */
+	int mixing_level[MAX_ES5506];					/* master volume */
+	void (*irq_callback[MAX_ES5506])(int state);	/* irq callback */
+	UINT16 (*read_port[MAX_ES5506])(void);			/* input port read */
+};
+
+struct es5506_interface
 {
 	int num;                  						/* total number of chips */
 	int baseclock[MAX_ES5506];						/* input clock */

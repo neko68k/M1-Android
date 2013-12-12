@@ -25,16 +25,17 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 public class M1Android extends Activity {
 	ListView trackList;
-	Button nextButton;
-	Button prevButton;
-	Button restButton;
-	Button playButton;
+	ImageButton nextButton;
+	ImageButton prevButton;
+	ImageButton restButton;
+	ImageButton playButton;
 	TextView trackNum;
 	TextView playTime;
 	TextView board;
@@ -81,10 +82,10 @@ public class M1Android extends Activity {
 
 		// get our widget id's
 		trackList = (ListView) findViewById(R.id.listView1);
-		nextButton = (Button) findViewById(R.id.next);
-		prevButton = (Button) findViewById(R.id.prev);
-		restButton = (Button) findViewById(R.id.rest);
-		playButton = (Button) findViewById(R.id.play);
+		nextButton = (ImageButton) findViewById(R.id.next);
+		prevButton = (ImageButton) findViewById(R.id.prev);
+		restButton = (ImageButton) findViewById(R.id.rest);
+		playButton = (ImageButton) findViewById(R.id.play);
 		trackNum = (TextView) findViewById(R.id.trackNum);
 		playTime = (TextView) findViewById(R.id.playTime);
 		board = (TextView) findViewById(R.id.board);
@@ -265,14 +266,16 @@ public class M1Android extends Activity {
 			public void onClick(View v) {
 				if (playing == true) {
 					if (paused == true) {
-						playButton.setText("Pause");
+						//playButton.setText("Pause");
+						playButton.setImageResource(R.drawable.ic_action_pause);
 						NDKBridge.unPause();
 						// ad.UnPause();
 						NDKBridge.playerService.unpause();
 						paused = false;
 					} else if (paused == false) {
 						NDKBridge.pause();
-						playButton.setText("Play");
+						//playButton.setText("Play");
+						playButton.setImageResource(R.drawable.ic_action_play);
 						// ad.PlayPause();
 						NDKBridge.playerService.pause();
 						paused = true;
@@ -444,7 +447,8 @@ public class M1Android extends Activity {
 					hardware.setText("Hardware: " + NDKBridge.game.soundhw);// + ", "+ NDKBridge.game.sound1
 							 //+ ", "+ NDKBridge.game.sound2 + ", "+ NDKBridge.game.sound3 + ", "+ NDKBridge.game.sound4);
 
-					playButton.setText("Pause");
+					//playButton.setText("Pause");
+					playButton.setImageResource(R.drawable.ic_action_pause);
 
 					numSongs = NDKBridge.getInfoInt(NDKBridge.M1_IINF_TRACKS,
 							NDKBridge.getInfoInt(NDKBridge.M1_IINF_CURGAME, 0));
@@ -512,7 +516,8 @@ public class M1Android extends Activity {
 					trackNum.setText("Track:");
 
 					title.setText("No game loaded");
-					playButton.setText("Play");
+					//playButton.setText("Play");
+					playButton.setImageResource(R.drawable.ic_action_play);
 					// Toast.makeText(this, NDKBridge.m1error,
 					// Toast.LENGTH_SHORT).show();
 				}
