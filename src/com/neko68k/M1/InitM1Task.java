@@ -34,7 +34,7 @@ public class InitM1Task extends AsyncTask<Void, Void, Void> {
 	
 	private Hashtable<Long, String> boardHashSet = new Hashtable<Long, String>();
 	private Hashtable<Long, String> mfgHashSet = new Hashtable<Long, String>();
-	private HashSet<Integer> yearHashSet = new HashSet<Integer>();
+	private Hashtable<Long, String> yearHashSet = new Hashtable<Long, String>();
 
 	public InitM1Task(Context c) // pass the context in the constructor
 	{
@@ -95,7 +95,7 @@ public class InitM1Task extends AsyncTask<Void, Void, Void> {
 		// SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
 
 		// FIXME: for ! for debugging only
-		if (!GameListOpenHelper.checkTable()) {
+		if (GameListOpenHelper.checkTable()) {
 			game = new Game();
 			CRC32 crc = new CRC32();
 			int maxGames = NDKBridge.getMaxGames();
@@ -115,13 +115,9 @@ public class InitM1Task extends AsyncTask<Void, Void, Void> {
 				crc.update(game.sys.getBytes());
 				boardHashSet.put(crc.getValue(), game.sys);
 				crc.reset();
-				Integer year;
-				try{
-				year = new Integer(game.year);
-				} catch(java.lang.NumberFormatException e){
-					year = 1;
-				}
-				yearHashSet.add(year);
+				
+				crc.update(game.year.getBytes());
+				yearHashSet.put(crc.getValue(), game.year);
 				
 				game.soundhw = game.cpu;
 				String soundary[] = game.cpu.split(", ");
@@ -167,7 +163,7 @@ public class InitM1Task extends AsyncTask<Void, Void, Void> {
 			
 			GameListOpenHelper.addMfg("!--Manufacturer--!");
 			GameListOpenHelper.addBoard("!--Board--!");
-			GameListOpenHelper.addYear(0000);
+			GameListOpenHelper.addYear("!--Year--!");
 
 			Iterator it = cpuHashSet.entrySet().iterator();
 			while (it.hasNext()) {
@@ -225,10 +221,10 @@ public class InitM1Task extends AsyncTask<Void, Void, Void> {
 
 			}
 						
-			it = yearHashSet.iterator();
+			it = yearHashSet.entrySet().iterator();
 			while (it.hasNext()) {
-				//Map.Entry pairs = (Map.Entry) it.next();
-				GameListOpenHelper.addYear((Integer)it.next());
+				Map.Entry pairs = (Map.Entry) it.next();
+				GameListOpenHelper.addYear((String) pairs.getValue());
 
 			}
 			

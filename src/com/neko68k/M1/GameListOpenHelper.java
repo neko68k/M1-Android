@@ -19,6 +19,7 @@ public class GameListOpenHelper {
 	public static final String KEY_SOUND5 = "sound5";
 	public static final String KEY_ROMAVAIL = "romavail";
 	public static final String KEY_SOUNDHW = "soundhw";
+	public static final String KEY_FILTERED = "filtered";
 
 	private static final int DATABASE_VERSION = 2;
 	private static final String GAMELIST_TABLE_NAME = "gamelist";
@@ -33,42 +34,50 @@ public class GameListOpenHelper {
 
 	private static final String CPU_TABLE = "cputable";
 	private static final String CPU_TABLE_CREATE = "CREATE TABLE " + CPU_TABLE
-			+ " (" + KEY_ID + " INTEGER PRIMARY KEY, " + KEY_CPU + " TEXT);";
+			+ " (" + KEY_ID + " INTEGER PRIMARY KEY, " + KEY_CPU + " TEXT, " 
+			+ KEY_FILTERED+ " INTEGER);";
 
 	private static final String SOUND1_TABLE = "sound1";
 	private static final String SOUND1_TABLE_CREATE = "CREATE TABLE "
 			+ SOUND1_TABLE + " (" + KEY_ID + " INTEGER PRIMARY KEY, "
-			+ KEY_SOUND1 + " TEXT);";
+			+ KEY_SOUND1 + " TEXT, " 
+					+ KEY_FILTERED+ " INTEGER);";
 
 	private static final String SOUND2_TABLE = "sound2";
 	private static final String SOUND2_TABLE_CREATE = "CREATE TABLE "
 			+ SOUND2_TABLE + " (" + KEY_ID + " INTEGER PRIMARY KEY, "
-			+ KEY_SOUND2 + " TEXT);";
+			+ KEY_SOUND2 + " TEXT, " 
+					+ KEY_FILTERED+ " INTEGER);";
 
 	private static final String SOUND3_TABLE = "sound3";
 	private static final String SOUND3_TABLE_CREATE = "CREATE TABLE "
 			+ SOUND3_TABLE + " (" + KEY_ID + " INTEGER PRIMARY KEY, "
-			+ KEY_SOUND3 + " TEXT);";
+			+ KEY_SOUND3 + " TEXT, " 
+					+ KEY_FILTERED+ " INTEGER);";
 
 	private static final String SOUND4_TABLE = "sound4";
 	private static final String SOUND4_TABLE_CREATE = "CREATE TABLE "
 			+ SOUND4_TABLE + " (" + KEY_ID + " INTEGER PRIMARY KEY, "
-			+ KEY_SOUND4 + " TEXT);";
+			+ KEY_SOUND4 + " TEXT, " 
+					+ KEY_FILTERED+ " INTEGER);";
 	
 	private static final String MFG_TABLE = "mfg";
 	private static final String MFG_TABLE_CREATE = "CREATE TABLE "
 			+ MFG_TABLE + " (" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-			+ KEY_MFG + " TEXT);";
+			+ KEY_MFG + " TEXT, " 
+					+ KEY_FILTERED+ " INTEGER);";
 	
 	private static final String BOARD_TABLE = "board";
 	private static final String BOARD_TABLE_CREATE = "CREATE TABLE "
 			+ BOARD_TABLE + " (" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-			+ KEY_SYS + " TEXT);";
+			+ KEY_SYS + " TEXT, " 
+					+ KEY_FILTERED+ " INTEGER);";
 	
 	private static final String YEAR_TABLE = "year";
 	private static final String YEAR_TABLE_CREATE = "CREATE TABLE "
 			+ YEAR_TABLE + " (" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-			+ KEY_YEAR + " INTEGER);";
+			+ KEY_YEAR + " TEXT, " 
+					+ KEY_FILTERED+ " INTEGER);";
 
 	public static void onCreate(SQLiteDatabase db) {
 		//if(checkTable()==false){
@@ -243,7 +252,7 @@ public class GameListOpenHelper {
 		db.close(); // Closing database connection
 	}
 	
-	public static void addYear(Integer year) {
+	public static void addYear(String year) {
 		SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
 
 		ContentValues values = new ContentValues();

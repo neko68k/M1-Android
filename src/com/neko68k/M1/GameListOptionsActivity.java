@@ -1,9 +1,5 @@
 package com.neko68k.M1;
 
-import java.util.List;
-
-import com.neko68k.M1.GameListActivity.OnItemSelectedListener;
-
 import android.app.Activity;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -27,10 +23,8 @@ public class GameListOptionsActivity extends Fragment{
 	
 	@Override
 	public void onPause(){
-		
-		
 		super.onPause();
-		listClosed("");
+		listClosed();
 		return;
 	}
 
@@ -109,7 +103,7 @@ public class GameListOptionsActivity extends Fragment{
 		}
 	}
 
-	public void listClosed(String key) {
+	public void listClosed() {
 		Bundle b = new Bundle();
 		b.putBooleanArray("cpu", cpulist.getSelectedIndicies());
 		b.putBooleanArray("sound1", sound1list.getSelectedIndicies());
