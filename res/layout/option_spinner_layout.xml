@@ -4,22 +4,12 @@
     android:layout_height="match_parent"
     android:orientation="horizontal" >
     
-    <TextView
+    <CheckedTextView
         android:id="@+id/text_opt"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
         android:layout_weight=".5"/>
-    <TextView
-        android:id="@+id/text_id"
-        android:layout_width="0dip"
-        android:layout_height="0dip"
-        
-        android:visible="false"
-        />
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/chkbox"
-        />
+
+
 
 </LinearLayout>
