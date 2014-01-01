@@ -1,5 +1,10 @@
 package com.neko68k.M1;
 
+import java.util.List;
+
+import com.neko68k.M1.GameListActivity.OnItemSelectedListener;
+
+import android.app.Activity;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -7,10 +12,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 
-public class GameListOptionsActivity extends Fragment implements OnItemSelectedListener{
+public class GameListOptionsActivity extends Fragment{
 	private MultiSelectSpinner cpulist;
 	private MultiSelectSpinner sound1list;
 	private MultiSelectSpinner sound2list;
@@ -20,13 +23,15 @@ public class GameListOptionsActivity extends Fragment implements OnItemSelectedL
 	private MultiSelectSpinner boardlist;
 	private MultiSelectSpinner mfglist;
 	
-	public void onItemSelected(AdapterView<?> a, View v, int i, long l){
-		//CheckBox chk = (CheckBox)v.findViewById(R.id.chkbox);
-		//boolean test = chk.isChecked();
-		return;
-	}
-	public void onNothingSelected(AdapterView<?> a){
+	
+	
+	@Override
+	public void onPause(){
 		
+		
+		super.onPause();
+		listClosed("");
+		return;
 	}
 
 	@Override
@@ -77,7 +82,45 @@ public class GameListOptionsActivity extends Fragment implements OnItemSelectedL
 		yearlist.setItems(yearCursor, GameListOpenHelper.KEY_YEAR);
 		
 		
+		
 		db.close();
+		
+		
 		return view;
+	}
+	
+	OnOptionsChanged mCallback;
+	
+	public interface OnOptionsChanged {
+		public void onOptionsChanged(Bundle b);
+	}
+	
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+
+		// This makes sure that the container activity has implemented
+		// the callback interface. If not, it throws an exception
+		try {
+			mCallback = (OnOptionsChanged) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString()
+					+ " must implement OnOptionsChanged");
+		}
+	}
+
+	public void listClosed(String key) {
+		Bundle b = new Bundle();
+		b.putBooleanArray("cpu", cpulist.getSelectedIndicies());
+		b.putBooleanArray("sound1", sound1list.getSelectedIndicies());
+		b.putBooleanArray("sound2", sound2list.getSelectedIndicies());
+		b.putBooleanArray("sound3", sound3list.getSelectedIndicies());
+		b.putBooleanArray("sound4", sound4list.getSelectedIndicies());
+		b.putBooleanArray("mfg", mfglist.getSelectedIndicies());
+		b.putBooleanArray("board", boardlist.getSelectedIndicies());
+		b.putBooleanArray("year", yearlist.getSelectedIndicies());
+		mCallback.onOptionsChanged(b);
+		// TODO Auto-generated method stub
+		return;
 	}
 }

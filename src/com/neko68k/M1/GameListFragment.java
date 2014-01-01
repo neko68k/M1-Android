@@ -9,7 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 public class GameListFragment extends FragmentActivity implements
-		GameListActivity.OnItemSelectedListener {
+		GameListActivity.OnItemSelectedListener, GameListOptionsActivity.OnOptionsChanged {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -68,6 +68,19 @@ public class GameListFragment extends FragmentActivity implements
 
 			return super.onOptionsItemSelected(item);
 		}
+	}
+	
+	public void onOptionsChanged(Bundle b){
+		boolean[] cpulist = b.getBooleanArray("cpu");
+		boolean[] sound1list = b.getBooleanArray("sound1");
+		boolean[] sound2list = b.getBooleanArray("sound2");
+		boolean[] sound3list = b.getBooleanArray("sound3");
+		boolean[] sound4list = b.getBooleanArray("sound4");
+		boolean[] mfglist = b.getBooleanArray("mfg");
+		boolean[] boardlist = b.getBooleanArray("board");
+		boolean[] yearlist = b.getBooleanArray("year");
+		
+		return;
 	}
 
 	public void onGameSelected(Game game) {

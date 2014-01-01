@@ -20,11 +20,13 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnMultiChoiceClickListener;
 import android.database.Cursor;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -82,11 +84,14 @@ public class MultiSelectSpinner extends Spinner implements OnMultiChoiceClickLis
     /**
      * {@inheritDoc}
      */
-    @Override
+    
+	@Override
     public boolean performClick() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMultiChoiceItems(_items, _selection, this);
         builder.show();
+      
+
         return true;
     }
     
@@ -202,14 +207,14 @@ public class MultiSelectSpinner extends Spinner implements OnMultiChoiceClickLis
      * Returns a list of positions, one for each selected item.
      * @return
      */
-    public List<Integer> getSelectedIndicies() {
+    public boolean[] getSelectedIndicies() {
         List<Integer> selection = new LinkedList<Integer>();
         for (int i = 0; i < _items.length; ++i) {
             if (_selection[i]) {
                 selection.add(i);
             }
         }
-        return selection;
+        return _selection;
     }
     
     /**
