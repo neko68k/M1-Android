@@ -8,23 +8,23 @@ public class Game implements Parcelable {
 	int index;
 	String title;
 	String year;
-	Integer intyear;
+	long intyear;
 	String romname;
 	String mfg;
-	Integer intmfg;
+	long intmfg;
 	String sys;
-	Integer intsys;
+	long intsys;
 	String soundhw;
 	String cpu;
-	Integer intcpu;
+	long intcpu;
 	String sound1;
-	Integer intsound1;
+	long intsound1;
 	String sound2;
-	Integer intsound2;
+	long intsound2;
 	String sound3;
-	Integer intsound3;
+	long intsound3;
 	String sound4;
-	Integer intsound4;
+	long intsound4;
 	Integer romavail;
 
 	public Game() {
@@ -177,27 +177,27 @@ public class Game implements Parcelable {
 		this.sound4 = sound4;
 	}
 
-	public Integer getIntyear() {
+	public long getIntyear() {
 		return intyear;
 	}
 
-	public void setIntyear(Integer intyear) {
+	public void setIntyear(long intyear) {
 		this.intyear = intyear;
 	}
 
-	public Integer getIntmfg() {
+	public long getIntmfg() {
 		return intmfg;
 	}
 
-	public void setIntmfg(Integer intmfg) {
+	public void setIntmfg(long intmfg) {
 		this.intmfg = intmfg;
 	}
 
-	public Integer getIntsys() {
+	public long getIntsys() {
 		return intsys;
 	}
 
-	public void setIntsys(Integer intsys) {
+	public void setIntsys(long intsys) {
 		this.intsys = intsys;
 	}
 
@@ -209,47 +209,47 @@ public class Game implements Parcelable {
 		this.soundhw = soundhw;
 	}
 
-	public Integer getIntcpu() {
+	public long getIntcpu() {
 		return intcpu;
 	}
 
-	public void setIntcpu(Integer intcpu) {
+	public void setIntcpu(long intcpu) {
 		this.intcpu = intcpu;
 	}
 
-	public Integer getIntsound1() {
+	public long getIntsound1() {
 		return intsound1;
 	}
 
-	public void setIntsound1(Integer intsound1) {
+	public void setIntsound1(long intsound1) {
 		this.intsound1 = intsound1;
 	}
 
-	public Integer getIntsound2() {
+	public long getIntsound2() {
 		return intsound2;
 	}
 
-	public void setIntsound2(Integer intsound2) {
+	public void setIntsound2(long intsound2) {
 		this.intsound2 = intsound2;
 	}
 
-	public Integer getIntsound3() {
+	public long getIntsound3() {
 		return intsound3;
 	}
 
-	public void setIntsound3(Integer intsound3) {
+	public void setIntsound3(long intsound3) {
 		this.intsound3 = intsound3;
 	}
 
-	public Integer getIntsound4() {
+	public long getIntsound4() {
 		return intsound4;
 	}
 
-	public void setIntsound4(Integer intsound4) {
+	public void setIntsound4(long intsound4) {
 		this.intsound4 = intsound4;
 	}
 
-	public Integer getromavail() {
+	public long getromavail() {
 		return romavail;
 	}
 
@@ -276,14 +276,14 @@ public class Game implements Parcelable {
 		out.writeString(sound2);
 		out.writeString(sound3);
 		out.writeString(sound4);
-		out.writeInt(intyear);
-		out.writeInt(intmfg);
-		out.writeInt(intsys);
-		out.writeInt(intcpu);
-		out.writeInt(intsound1);
-		out.writeInt(intsound2);
-		out.writeInt(intsound3);
-		out.writeInt(intsound4);
+		out.writeLong(intyear);
+		out.writeLong(intmfg);
+		out.writeLong(intsys);
+		out.writeLong(intcpu);
+		out.writeLong(intsound1);
+		out.writeLong(intsound2);
+		out.writeLong(intsound3);
+		out.writeLong(intsound4);
 		out.writeString(soundhw);
 		// out.writeInt(romavail);
 

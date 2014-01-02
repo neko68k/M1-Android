@@ -3,6 +3,7 @@ package com.neko68k.M1;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQueryBuilder;
 
 public class GameListOpenHelper {
 	public static final String KEY_ID = "_id";
@@ -20,64 +21,115 @@ public class GameListOpenHelper {
 	public static final String KEY_ROMAVAIL = "romavail";
 	public static final String KEY_SOUNDHW = "soundhw";
 	public static final String KEY_FILTERED = "filtered";
+	
+	
 
-	private static final int DATABASE_VERSION = 2;
+
+	public static final String KEY_YEAR_HASH = "yearhash";
+	public static final String KEY_MFG_HASH = "mfghash";
+	public static final String KEY_SYS_HASH = "syshash";
+	public static final String KEY_CPU_HASH = "cpuhash";
+	public static final String KEY_SOUND1_HASH = "sound1hash";
+	public static final String KEY_SOUND2_HASH = "sound2hash";
+	public static final String KEY_SOUND3_HASH = "sound3hash";
+	public static final String KEY_SOUND4_HASH = "sound4hash";
+	public static final String KEY_SOUND5_HASH = "sound5hash";
+
+	
+	
 	private static final String GAMELIST_TABLE_NAME = "gamelist";
+	
+	public static final String dispCols = KEY_TITLE 
+			+ ", " + KEY_YEAR_HASH
+			+ ", " + KEY_MFG_HASH
+			+ ", " + KEY_SYS_HASH  
+			+ ", " + KEY_ID 
+			+ ", " + KEY_ROMNAME 
+			+ ", " + KEY_SOUNDHW;
+	
+	
+
+	public static final int DATABASE_VERSION = 2;
+	
 	private static final String GAMELIST_TABLE_CREATE = "CREATE TABLE "
 			+ GAMELIST_TABLE_NAME + " (" + KEY_ID + " INTEGER PRIMARY KEY, "
-			+ KEY_TITLE + " TEXT, " + KEY_YEAR + " TEXT, " + KEY_ROMNAME
-			+ " TEXT, " + KEY_MFG + " TEXT, " + KEY_SYS + " TEXT, " + KEY_CPU
-			+ " TEXT, " + KEY_SOUND1 + " TEXT, " + KEY_SOUND2 + " TEXT, "
-			+ KEY_SOUND3 + " TEXT, " + KEY_SOUND4 + " TEXT, " +
+			+ KEY_TITLE + " TEXT, " + KEY_YEAR_HASH + " INTEGER, " + KEY_ROMNAME
+			+ " TEXT, " + KEY_MFG_HASH + " INTEGER, " + KEY_SYS_HASH + " INTEGER, " + KEY_CPU_HASH
+			+ " INTEGER, " + KEY_SOUND1_HASH + " INTEGER, " + KEY_SOUND2_HASH + " INTEGER, "
+			+ KEY_SOUND3_HASH + " INTEGER, " + KEY_SOUND4_HASH + " INTEGER, " +
 			 KEY_SOUNDHW + " TEXT, " +
 			KEY_ROMAVAIL + " INTEGER);";
 
-	private static final String CPU_TABLE = "cputable";
+	public static final String CPU_TABLE = "cputable";
 	private static final String CPU_TABLE_CREATE = "CREATE TABLE " + CPU_TABLE
-			+ " (" + KEY_ID + " INTEGER PRIMARY KEY, " + KEY_CPU + " TEXT, " 
+			+ " (" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " 
+			+ KEY_CPU_HASH + " INTEGER, "
+			+ KEY_CPU + " TEXT, " 
 			+ KEY_FILTERED+ " INTEGER);";
 
-	private static final String SOUND1_TABLE = "sound1";
+	public static final String SOUND1_TABLE = "sound1";
 	private static final String SOUND1_TABLE_CREATE = "CREATE TABLE "
-			+ SOUND1_TABLE + " (" + KEY_ID + " INTEGER PRIMARY KEY, "
+			+ SOUND1_TABLE + " (" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+			+ KEY_SOUND1_HASH + " INTEGER, "
 			+ KEY_SOUND1 + " TEXT, " 
 					+ KEY_FILTERED+ " INTEGER);";
 
-	private static final String SOUND2_TABLE = "sound2";
+	public static final String SOUND2_TABLE = "sound2";
 	private static final String SOUND2_TABLE_CREATE = "CREATE TABLE "
-			+ SOUND2_TABLE + " (" + KEY_ID + " INTEGER PRIMARY KEY, "
+			+ SOUND2_TABLE + " (" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+			+ KEY_SOUND2_HASH + " INTEGER, "
 			+ KEY_SOUND2 + " TEXT, " 
 					+ KEY_FILTERED+ " INTEGER);";
 
-	private static final String SOUND3_TABLE = "sound3";
+	public static final String SOUND3_TABLE = "sound3";
 	private static final String SOUND3_TABLE_CREATE = "CREATE TABLE "
-			+ SOUND3_TABLE + " (" + KEY_ID + " INTEGER PRIMARY KEY, "
+			+ SOUND3_TABLE + " (" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+			+ KEY_SOUND3_HASH + " INTEGER, "
 			+ KEY_SOUND3 + " TEXT, " 
 					+ KEY_FILTERED+ " INTEGER);";
 
-	private static final String SOUND4_TABLE = "sound4";
+	public static final String SOUND4_TABLE = "sound4";
 	private static final String SOUND4_TABLE_CREATE = "CREATE TABLE "
-			+ SOUND4_TABLE + " (" + KEY_ID + " INTEGER PRIMARY KEY, "
+			+ SOUND4_TABLE + " (" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+			+ KEY_SOUND4_HASH + " INTEGER, "
 			+ KEY_SOUND4 + " TEXT, " 
 					+ KEY_FILTERED+ " INTEGER);";
 	
-	private static final String MFG_TABLE = "mfg";
+	public static final String MFG_TABLE = "mfg";
 	private static final String MFG_TABLE_CREATE = "CREATE TABLE "
 			+ MFG_TABLE + " (" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+			+ KEY_MFG_HASH + " INTEGER, "
 			+ KEY_MFG + " TEXT, " 
 					+ KEY_FILTERED+ " INTEGER);";
 	
-	private static final String BOARD_TABLE = "board";
+	public static final String BOARD_TABLE = "board";
 	private static final String BOARD_TABLE_CREATE = "CREATE TABLE "
 			+ BOARD_TABLE + " (" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+			+ KEY_SYS_HASH + " INTEGER, "
 			+ KEY_SYS + " TEXT, " 
 					+ KEY_FILTERED+ " INTEGER);";
 	
-	private static final String YEAR_TABLE = "year";
+	public static final String YEAR_TABLE = "year";
 	private static final String YEAR_TABLE_CREATE = "CREATE TABLE "
 			+ YEAR_TABLE + " (" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+			+ KEY_YEAR_HASH + " INTEGER, "
 			+ KEY_YEAR + " TEXT, " 
 					+ KEY_FILTERED+ " INTEGER);";
+	
+	
+	// generates a single joined sql query
+	// these must be put in a String[] and passed to buildUnionQuery(...)
+	// to generate the final query
+	private static String genQuery(String table, String key){
+		/*return "SELECT " + dispCols + " FROM " 
+				+ table + " AS R JOIN " + GAMELIST_TABLE_NAME + " AS C ON " 
+				+ "C." + key + "=R._id" + " WHERE R.filtered=0;";*/
+		/*return "SELECT " +dispCols+ " FROM " + GAMELIST_TABLE_NAME + ", " 
+				+ table + " WHERE " + GAMELIST_TABLE_NAME + "." + key 
+				+ " = " + table + "._id AND " + table + "." + "filtered = 1;";*/
+		return "SELECT " +dispCols+ " FROM " + GAMELIST_TABLE_NAME + " NATURAL JOIN " + table;
+	}
+
 
 	public static void onCreate(SQLiteDatabase db) {
 		//if(checkTable()==false){
@@ -141,124 +193,42 @@ public class GameListOpenHelper {
 		onCreate(db);
 	}
 
-	public static Cursor getAllTitles(SQLiteDatabase db) {
-		return (db.query(GAMELIST_TABLE_NAME, null, KEY_ROMAVAIL + "=1 ", null,
-				null, null, KEY_TITLE));
-		// return(db.query(GAMELIST_TABLE_NAME, null, null, null, null, null,
-		// null));
+	public static Cursor getAllTitles(SQLiteDatabase db, boolean filtered) {
+		// default statement
+		//if(filtered){
+			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+			String union;
+			String[] queries = new String[8];
+			queries[0]=genQuery(CPU_TABLE,KEY_CPU_HASH);
+			queries[1]=genQuery(SOUND1_TABLE,KEY_SOUND1_HASH);
+			queries[2]=genQuery(SOUND2_TABLE,KEY_SOUND2_HASH);
+			queries[3]=genQuery(SOUND3_TABLE,KEY_SOUND3_HASH);
+			queries[4]=genQuery(SOUND4_TABLE,KEY_SOUND4_HASH);
+			queries[5]=genQuery(BOARD_TABLE,KEY_SYS_HASH);
+			queries[6]=genQuery(MFG_TABLE,KEY_MFG_HASH);
+			queries[7]=genQuery(YEAR_TABLE,KEY_YEAR_HASH);
+			
+			union = qb.buildUnionQuery(queries, null, null);
+			return db.rawQuery(union, null);
+		//}
+		//return (db.query(GAMELIST_TABLE_NAME, null, KEY_ROMAVAIL + "=1 ", null,
+		//		null, null, KEY_TITLE));
+
 	}
 
-	public static Cursor getAllCPU(SQLiteDatabase db) {
-		return (db.query(CPU_TABLE, null, null, null, null, null, KEY_CPU));
-	}
-
-	public static Cursor getAllSound1(SQLiteDatabase db) {
-		return (db
-				.query(SOUND1_TABLE, null, null, null, null, null, KEY_SOUND1));
-	}
-
-	public static Cursor getAllSound2(SQLiteDatabase db) {
-		return (db
-				.query(SOUND2_TABLE, null, null, null, null, null, KEY_SOUND2));
-	}
-
-	public static Cursor getAllSound3(SQLiteDatabase db) {
-		return (db
-				.query(SOUND3_TABLE, null, null, null, null, null, KEY_SOUND3));
-	}
-
-	public static Cursor getAllSound4(SQLiteDatabase db) {
-		return (db
-				.query(SOUND4_TABLE, null, null, null, null, null, KEY_SOUND4));
-	}
 	
-	public static Cursor getAllMfg(SQLiteDatabase db) {
-		return (db.query(MFG_TABLE, null, null, null, null, null, KEY_MFG));
-	}
-	
-	public static Cursor getAllBoard(SQLiteDatabase db) {
-		return (db.query(BOARD_TABLE, null, null, null, null, null, KEY_SYS));
-	}
-	
-	public static Cursor getAllYear(SQLiteDatabase db) {
-		return (db.query(YEAR_TABLE, null, null, null, null, null, KEY_YEAR));
+	public static Cursor getAllExtra(SQLiteDatabase db, String table, String key) {
+		return (db.query(table, null, null, null, null, null, key));
 	}
 
-	public static void addCPU(String cpu, Long long1) {
+	public static void addExtra(String table, String key, String data, Long id){
 		SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
-		values.put(KEY_ID, long1);
-		values.put(KEY_CPU, cpu);
-		db.insert(CPU_TABLE, null, values);
-		db.close(); // Closing database connection
-	}
-
-	public static void addSound1(String sound1, Long long1) {
-		SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
-
-		ContentValues values = new ContentValues();
-		values.put(KEY_ID, long1);
-		values.put(KEY_SOUND1, sound1);
-		db.insert(SOUND1_TABLE, null, values);
-		db.close(); // Closing database connection
-	}
-
-	public static void addSound2(String sound2, Long long1) {
-		SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
-
-		ContentValues values = new ContentValues();
-		values.put(KEY_ID, long1);
-		values.put(KEY_SOUND2, sound2);
-		db.insert(SOUND2_TABLE, null, values);
-		db.close(); // Closing database connection
-	}
-
-	public static void addSound3(String sound3, Long long1) {
-		SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
-
-		ContentValues values = new ContentValues();
-		values.put(KEY_ID, long1);
-		values.put(KEY_SOUND3, sound3);
-		db.insert(SOUND3_TABLE, null, values);
-		db.close(); // Closing database connection
-	}
-
-	public static void addSound4(String sound4, Long long1) {
-		SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
-
-		ContentValues values = new ContentValues();
-		values.put(KEY_ID, long1);
-		values.put(KEY_SOUND4, sound4);
-		db.insert(SOUND4_TABLE, null, values);
-		db.close(); // Closing database connection
-	}
-	
-	public static void addMfg(String mfg) {
-		SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
-
-		ContentValues values = new ContentValues();		
-		values.put(KEY_MFG, mfg);
-		db.insert(MFG_TABLE, null, values);
-		db.close(); // Closing database connection
-	}
-	
-	public static void addBoard(String board) {
-		SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
-
-		ContentValues values = new ContentValues();		
-		values.put(KEY_SYS, board);
-		db.insert(BOARD_TABLE, null, values);
-		db.close(); // Closing database connection
-	}
-	
-	public static void addYear(String year) {
-		SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
-
-		ContentValues values = new ContentValues();
-		//values.put(KEY_ID, long1);
-		values.put(KEY_YEAR, year);
-		db.insert(YEAR_TABLE, null, values);
+		values.put(key+"hash", id);
+		values.put(key, data);
+		values.put(KEY_FILTERED,  0);
+		db.insert(table, null, values);
 		db.close(); // Closing database connection
 	}
 
@@ -268,15 +238,15 @@ public class GameListOpenHelper {
 		ContentValues values = new ContentValues();
 		values.put(KEY_ID, game.getIndex());
 		values.put(KEY_TITLE, game.getTitle());
-		values.put(KEY_YEAR, game.getYear());
+		values.put(KEY_YEAR_HASH, game.getIntyear());
 		values.put(KEY_ROMNAME, game.getRomname());
-		values.put(KEY_MFG, game.getMfg());
-		values.put(KEY_SYS, game.getSys());
-		values.put(KEY_CPU, game.getCpu());
-		values.put(KEY_SOUND1, game.getTitle());
-		values.put(KEY_SOUND2, game.getTitle());
-		values.put(KEY_SOUND3, game.getTitle());
-		values.put(KEY_SOUND4, game.getTitle());
+		values.put(KEY_MFG_HASH, game.getIntmfg());
+		values.put(KEY_SYS_HASH, game.getIntsys());
+		values.put(KEY_CPU_HASH, game.getIntcpu());
+		values.put(KEY_SOUND1_HASH, game.getIntsound1());
+		values.put(KEY_SOUND2_HASH, game.getIntsound2());
+		values.put(KEY_SOUND3_HASH, game.getIntsound3());
+		values.put(KEY_SOUND4_HASH, game.getIntsound4());
 		values.put(KEY_ROMAVAIL, game.getromavail());
 		values.put(KEY_SOUNDHW, game.getSoundhw());
 

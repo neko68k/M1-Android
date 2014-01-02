@@ -95,7 +95,7 @@ public class InitM1Task extends AsyncTask<Void, Void, Void> {
 		// SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
 
 		// FIXME: for ! for debugging only
-		if (GameListOpenHelper.checkTable()) {
+		if (!GameListOpenHelper.checkTable()) {
 			game = new Game();
 			CRC32 crc = new CRC32();
 			int maxGames = NDKBridge.getMaxGames();
@@ -110,14 +110,18 @@ public class InitM1Task extends AsyncTask<Void, Void, Void> {
 				
 				crc.update(game.mfg.getBytes());
 				mfgHashSet.put(crc.getValue(), game.mfg);
+				game.intmfg = crc.getValue();
 				crc.reset();
 				
 				crc.update(game.sys.getBytes());
 				boardHashSet.put(crc.getValue(), game.sys);
+				game.intsys = crc.getValue();
 				crc.reset();
 				
 				crc.update(game.year.getBytes());
 				yearHashSet.put(crc.getValue(), game.year);
+				game.intyear = crc.getValue();
+				crc.reset();
 				
 				game.soundhw = game.cpu;
 				String soundary[] = game.cpu.split(", ");
@@ -126,26 +130,31 @@ public class InitM1Task extends AsyncTask<Void, Void, Void> {
 					game.setSound4(soundary[4]);
 					crc.update(soundary[4].getBytes());
 					sound4HashSet.put(crc.getValue(), soundary[4]);
+					game.intsound4 = crc.getValue();
 					crc.reset();
 				case 4:
 					game.setSound3(soundary[3]);
 					crc.update(soundary[3].getBytes());
 					sound3HashSet.put(crc.getValue(), soundary[3]);
+					game.intsound3 = crc.getValue();
 					crc.reset();
 				case 3:
 					game.setSound2(soundary[2]);
 					crc.update(soundary[2].getBytes());
 					sound2HashSet.put(crc.getValue(), soundary[2]);
+					game.intsound2 = crc.getValue();
 					crc.reset();
 				case 2:
 					game.setSound1(soundary[1]);
 					crc.update(soundary[1].getBytes());
 					sound1HashSet.put(crc.getValue(), soundary[1]);
+					game.intsound1 = crc.getValue();
 					crc.reset();
 				case 1:
 					game.setCpu(soundary[0]);
 					crc.update(soundary[0].getBytes());
 					cpuHashSet.put(crc.getValue(), soundary[0]);
+					game.intcpu = crc.getValue();
 					crc.reset();
 				case 0:
 					break;
@@ -155,20 +164,29 @@ public class InitM1Task extends AsyncTask<Void, Void, Void> {
 				// }
 			}
 
-			GameListOpenHelper.addCPU("!--CPU--!", Long.valueOf(0));
-			GameListOpenHelper.addSound1("!--Sound Chip 1--! ", Long.valueOf(0));
-			GameListOpenHelper.addSound2("!--Sound Chip 2--! ", Long.valueOf(0));
-			GameListOpenHelper.addSound3("!--Sound Chip 3--! ", Long.valueOf(0));
-			GameListOpenHelper.addSound4("!--Sound Chip 4--! ", Long.valueOf(0));
+			GameListOpenHelper.addExtra(GameListOpenHelper.CPU_TABLE, GameListOpenHelper.KEY_CPU, 
+					"!--CPU--!", Long.valueOf(0));
+			GameListOpenHelper.addExtra(GameListOpenHelper.SOUND1_TABLE, GameListOpenHelper.KEY_SOUND1, 
+					"!--Sound Chip 1--! ", Long.valueOf(0));
+			GameListOpenHelper.addExtra(GameListOpenHelper.SOUND2_TABLE, GameListOpenHelper.KEY_SOUND2, 
+					"!--Sound Chip 2--! ", Long.valueOf(0));
+			GameListOpenHelper.addExtra(GameListOpenHelper.SOUND3_TABLE, GameListOpenHelper.KEY_SOUND3, 
+					"!--Sound Chip 3--! ", Long.valueOf(0));
+			GameListOpenHelper.addExtra(GameListOpenHelper.SOUND4_TABLE, GameListOpenHelper.KEY_SOUND4, 
+					"!--Sound Chip 4--! ", Long.valueOf(0));
 			
-			GameListOpenHelper.addMfg("!--Manufacturer--!");
-			GameListOpenHelper.addBoard("!--Board--!");
-			GameListOpenHelper.addYear("!--Year--!");
+			GameListOpenHelper.addExtra(GameListOpenHelper.MFG_TABLE, GameListOpenHelper.KEY_MFG, 
+					"!--Manufacturer--!", Long.valueOf(0));
+			GameListOpenHelper.addExtra(GameListOpenHelper.BOARD_TABLE, GameListOpenHelper.KEY_SYS, 
+					"!--Board--!", Long.valueOf(0));
+			GameListOpenHelper.addExtra(GameListOpenHelper.YEAR_TABLE, GameListOpenHelper.KEY_YEAR, 
+					"!--Year--!", Long.valueOf(0));
 
 			Iterator it = cpuHashSet.entrySet().iterator();
 			while (it.hasNext()) {
 				Map.Entry pairs = (Map.Entry) it.next();
-				GameListOpenHelper.addCPU((String) pairs.getValue(),
+				GameListOpenHelper.addExtra(GameListOpenHelper.CPU_TABLE, GameListOpenHelper.KEY_CPU,
+						(String) pairs.getValue(),
 						(Long) pairs.getKey());
 
 			}
@@ -176,7 +194,8 @@ public class InitM1Task extends AsyncTask<Void, Void, Void> {
 
 			while (it.hasNext()) {
 				Map.Entry pairs = (Map.Entry) it.next();
-				GameListOpenHelper.addSound1((String) pairs.getValue(),
+				GameListOpenHelper.addExtra(GameListOpenHelper.SOUND1_TABLE, GameListOpenHelper.KEY_SOUND1,
+						(String) pairs.getValue(),
 						(Long) pairs.getKey());
 
 			}
@@ -184,7 +203,8 @@ public class InitM1Task extends AsyncTask<Void, Void, Void> {
 
 			while (it.hasNext()) {
 				Map.Entry pairs = (Map.Entry) it.next();
-				GameListOpenHelper.addSound2((String) pairs.getValue(),
+				GameListOpenHelper.addExtra(GameListOpenHelper.SOUND2_TABLE, GameListOpenHelper.KEY_SOUND2,
+						(String) pairs.getValue(),
 						(Long) pairs.getKey());
 
 			}
@@ -192,7 +212,8 @@ public class InitM1Task extends AsyncTask<Void, Void, Void> {
 
 			while (it.hasNext()) {
 				Map.Entry pairs = (Map.Entry) it.next();
-				GameListOpenHelper.addSound3((String) pairs.getValue(),
+				GameListOpenHelper.addExtra(GameListOpenHelper.SOUND3_TABLE, GameListOpenHelper.KEY_SOUND3,
+						(String) pairs.getValue(),
 						(Long) pairs.getKey());
 
 			}
@@ -200,7 +221,8 @@ public class InitM1Task extends AsyncTask<Void, Void, Void> {
 
 			while (it.hasNext()) {
 				Map.Entry pairs = (Map.Entry) it.next();
-				GameListOpenHelper.addSound4((String) pairs.getValue(),
+				GameListOpenHelper.addExtra(GameListOpenHelper.SOUND4_TABLE, GameListOpenHelper.KEY_SOUND4,
+						(String) pairs.getValue(),
 						(Long) pairs.getKey());
 
 			}
@@ -209,7 +231,9 @@ public class InitM1Task extends AsyncTask<Void, Void, Void> {
 
 			while (it.hasNext()) {
 				Map.Entry pairs = (Map.Entry) it.next();
-				GameListOpenHelper.addMfg((String) pairs.getValue());
+				GameListOpenHelper.addExtra(GameListOpenHelper.MFG_TABLE, GameListOpenHelper.KEY_MFG,
+						(String) pairs.getValue(),
+						(Long) pairs.getKey());
 
 			}
 			
@@ -217,14 +241,18 @@ public class InitM1Task extends AsyncTask<Void, Void, Void> {
 
 			while (it.hasNext()) {
 				Map.Entry pairs = (Map.Entry) it.next();
-				GameListOpenHelper.addBoard((String) pairs.getValue());
+				GameListOpenHelper.addExtra(GameListOpenHelper.BOARD_TABLE, GameListOpenHelper.KEY_SYS,
+						(String) pairs.getValue(),
+						(Long) pairs.getKey());
 
 			}
 						
 			it = yearHashSet.entrySet().iterator();
 			while (it.hasNext()) {
 				Map.Entry pairs = (Map.Entry) it.next();
-				GameListOpenHelper.addYear((String) pairs.getValue());
+				GameListOpenHelper.addExtra(GameListOpenHelper.YEAR_TABLE, GameListOpenHelper.KEY_YEAR,
+						(String) pairs.getValue(),
+						(Long) pairs.getKey());
 
 			}
 			

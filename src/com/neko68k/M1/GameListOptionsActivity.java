@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 
 public class GameListOptionsActivity extends Fragment{
 	private MultiSelectSpinner cpulist;
@@ -18,7 +19,7 @@ public class GameListOptionsActivity extends Fragment{
 	private MultiSelectSpinner yearlist;
 	private MultiSelectSpinner boardlist;
 	private MultiSelectSpinner mfglist;
-	
+	private CheckBox		   filterEnabled;	
 	
 	
 	@Override
@@ -44,35 +45,35 @@ public class GameListOptionsActivity extends Fragment{
 		yearlist = (MultiSelectSpinner) view.findViewById(R.id.Year);
 		mfglist = (MultiSelectSpinner) view.findViewById(R.id.Mfg);
 		boardlist = (MultiSelectSpinner) view.findViewById(R.id.Board);
-		
+		filterEnabled = (CheckBox) view.findViewById(R.id.EnableFilter);
 		
 		//boardlist.getItemIdAtPosition(position);
 		
 		SQLiteDatabase db = NDKBridge.m1db.getReadableDatabase();
-		Cursor cpuCursor = GameListOpenHelper.getAllCPU(db);
+		Cursor cpuCursor = GameListOpenHelper.getAllExtra(db, GameListOpenHelper.CPU_TABLE, GameListOpenHelper.KEY_CPU);
 		cpulist.setItems(cpuCursor, GameListOpenHelper.KEY_CPU);
 
 		//cpulist.setOnItemSelectedListener(this);
 
-		Cursor sound1Cursor = GameListOpenHelper.getAllSound1(db);
+		Cursor sound1Cursor = GameListOpenHelper.getAllExtra(db, GameListOpenHelper.SOUND1_TABLE, GameListOpenHelper.KEY_SOUND1);
 		sound1list.setItems(sound1Cursor, GameListOpenHelper.KEY_SOUND1);
 
-		Cursor sound2Cursor = GameListOpenHelper.getAllSound2(db);
+		Cursor sound2Cursor = GameListOpenHelper.getAllExtra(db, GameListOpenHelper.SOUND2_TABLE, GameListOpenHelper.KEY_SOUND2);
 		sound2list.setItems(sound2Cursor, GameListOpenHelper.KEY_SOUND2);
 
-		Cursor sound3Cursor = GameListOpenHelper.getAllSound3(db);
+		Cursor sound3Cursor = GameListOpenHelper.getAllExtra(db, GameListOpenHelper.SOUND3_TABLE, GameListOpenHelper.KEY_SOUND3);
 		sound3list.setItems(sound3Cursor, GameListOpenHelper.KEY_SOUND3);
 
-		Cursor sound4Cursor = GameListOpenHelper.getAllSound4(db);
+		Cursor sound4Cursor = GameListOpenHelper.getAllExtra(db, GameListOpenHelper.SOUND4_TABLE, GameListOpenHelper.KEY_SOUND4);
 		sound4list.setItems(sound4Cursor, GameListOpenHelper.KEY_SOUND4);
 		
-		Cursor mfgCursor = GameListOpenHelper.getAllMfg(db);
+		Cursor mfgCursor = GameListOpenHelper.getAllExtra(db, GameListOpenHelper.MFG_TABLE, GameListOpenHelper.KEY_MFG);
 		mfglist.setItems(mfgCursor, GameListOpenHelper.KEY_MFG);
 		
-		Cursor boardCursor = GameListOpenHelper.getAllBoard(db);
+		Cursor boardCursor = GameListOpenHelper.getAllExtra(db, GameListOpenHelper.BOARD_TABLE, GameListOpenHelper.KEY_SYS);
 		boardlist.setItems(boardCursor, GameListOpenHelper.KEY_SYS);
 		
-		Cursor yearCursor = GameListOpenHelper.getAllYear(db);
+		Cursor yearCursor = GameListOpenHelper.getAllExtra(db, GameListOpenHelper.YEAR_TABLE, GameListOpenHelper.KEY_YEAR);
 		yearlist.setItems(yearCursor, GameListOpenHelper.KEY_YEAR);
 		
 		

@@ -19,6 +19,7 @@ public class GameListActivity extends ListFragment {
 	int isRunning = 0;
 	int max_games;
 	private int defaultSelector = 0;
+	private boolean filtered = false;
 
 	@Override
 	public void onPause() {
@@ -42,11 +43,11 @@ public class GameListActivity extends ListFragment {
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		SQLiteDatabase db = NDKBridge.m1db.getReadableDatabase();
-
+		Cursor c = GameListOpenHelper.getAllTitles(db, filtered);
 		Context cxt = getActivity();
 		GameListCursorAdapter adapter = new GameListCursorAdapter(cxt,
 				R.layout.gamelist_detailed,
-				GameListOpenHelper.getAllTitles(db), new String[] { "title",
+				c, new String[] { "title",
 						"year", "mfg", "sys", "soundhw" }, new int[] { R.id.title,
 						R.id.year, R.id.mfg, R.id.board, R.id.hardware });
 
