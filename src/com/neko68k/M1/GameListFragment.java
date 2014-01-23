@@ -93,8 +93,9 @@ public class GameListFragment extends FragmentActivity implements
 		String title = "";// NDKBridge.getGameList(selectionRowID);
 		i.putExtra("com.neko68k.M1.title", title);
 		i.putExtra("com.neko68k.M1.position", game.index);
-		i.putExtra("com.neko68k.M1.game", game);
+		//i.putExtra("com.neko68k.M1.game", game);
 		// startActivity(i);
+		NDKBridge.game = game;
 		setResult(RESULT_OK, i);
 		finish();
 

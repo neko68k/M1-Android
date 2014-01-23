@@ -56,7 +56,8 @@ public class Game implements Parcelable {
 		int tblYear = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_YEAR);
 		int tblMfg = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_MFG);
 		int tblBoard = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_SYS);
-		int tblHardware = cursor
+		int tblTitle = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_TITLE);
+		/*int tblHardware = cursor
 				.getColumnIndexOrThrow(GameListOpenHelper.KEY_CPU);
 		int tblSound1 = cursor
 				.getColumnIndexOrThrow(GameListOpenHelper.KEY_SOUND1);
@@ -65,7 +66,7 @@ public class Game implements Parcelable {
 		int tblSound3 = cursor
 				.getColumnIndexOrThrow(GameListOpenHelper.KEY_SOUND3);
 		int tblSound4 = cursor
-				.getColumnIndexOrThrow(GameListOpenHelper.KEY_SOUND4);
+				.getColumnIndexOrThrow(GameListOpenHelper.KEY_SOUND4);*/
 		int tblRomname = cursor
 				.getColumnIndexOrThrow(GameListOpenHelper.KEY_ROMNAME);
 		int tblId = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_ID);
@@ -74,8 +75,9 @@ public class Game implements Parcelable {
 		year = cursor.getString(tblYear);
 		mfg = cursor.getString(tblMfg);
 		sys = cursor.getString(tblBoard);
-		cpu = cursor.getString(tblHardware);
-		sound1 = cursor.getString(tblSound1);
+		title = cursor.getString(tblTitle);
+		//cpu = cursor.getString(tblHardware);
+		//sound1 = cursor.getString(tblSound1);
 		romname = cursor.getString(tblRomname);
 		soundhw = cursor.getString(tblSoundhw);
 		this.intmfg=0;
@@ -264,6 +266,8 @@ public class Game implements Parcelable {
 
 	public void writeToParcel(Parcel out, int flags) {
 		// TODO Auto-generated method stub
+		
+		
 
 		out.writeInt(index);
 		out.writeString(title);

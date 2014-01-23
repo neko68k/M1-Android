@@ -429,9 +429,9 @@ public class M1Android extends Activity {
 					doUnbindService();
 					NDKBridge.playtime = 0;
 				}
-				// int gameid = data.getIntExtra("com.neko68k.M1.position", 0);
+				 //NDKBridge.game.index = data.getIntExtra("com.neko68k.M1.position", 0);
 				// NDKBridge.loadROM(NDKBridge.globalGLA.get(gameid));
-				NDKBridge.game = data.getParcelableExtra("com.neko68k.M1.game");
+				//NDKBridge.game = data.getParcelableExtra("com.neko68k.M1.game");
 				NDKBridge.nativeLoadROM(NDKBridge.game.index);
 
 				if (NDKBridge.loadError == false) {
