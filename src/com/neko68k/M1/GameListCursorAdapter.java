@@ -25,6 +25,7 @@ public class GameListCursorAdapter extends SimpleCursorAdapter implements
 	final int tblBoard;
 	final int tblHardware;
 	final int tblRomname;
+	final int tblTitle;
 	final int tblId;
 
 	AlphabetIndexer mAlphabetIndexer;
@@ -35,6 +36,7 @@ public class GameListCursorAdapter extends SimpleCursorAdapter implements
 		TextView mfg;
 		TextView board;
 		TextView hardware;
+		String title;
 		String romname;
 		int index;
 		int position;
@@ -50,7 +52,8 @@ public class GameListCursorAdapter extends SimpleCursorAdapter implements
 		tblBoard = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_SYS);
 		tblHardware = cursor
 				.getColumnIndexOrThrow(GameListOpenHelper.KEY_SOUNDHW);
-		tblRomname = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_TITLE);
+		tblRomname = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_ROMNAME);
+		tblTitle = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_TITLE);
 		tblId = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_ID);
 
 		mAlphabetIndexer = new AlphabetIndexer(cursor,
@@ -100,7 +103,7 @@ public class GameListCursorAdapter extends SimpleCursorAdapter implements
 			holder.mfg = (TextView) view.findViewById(R.id.mfg);
 			holder.board = (TextView) view.findViewById(R.id.board);
 			holder.hardware = (TextView) view.findViewById(R.id.hardware);
-
+			
 			view.setTag(holder);
 		}
 
@@ -111,6 +114,7 @@ public class GameListCursorAdapter extends SimpleCursorAdapter implements
 		holder.index = cursor.getInt(tblId);
 		// KEY_ROMNAME
 		holder.romname = cursor.getString(tblRomname);
+		holder.title = cursor.getString(tblTitle);
 		new AsyncTask<ViewHolder, Void, Bitmap>() {
 			private ViewHolder v;
 

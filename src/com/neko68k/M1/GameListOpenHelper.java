@@ -117,7 +117,8 @@ public class GameListOpenHelper {
 			+ ", " + BOARD_TABLE+"."+KEY_SYS 
 			+ ", " + GAMELIST_TABLE_NAME+"."+KEY_ID 
 			+ ", " + GAMELIST_TABLE_NAME+"."+KEY_TITLE 
-			+ ", " + GAMELIST_TABLE_NAME+"."+KEY_SOUNDHW;
+			+ ", " + GAMELIST_TABLE_NAME+"."+KEY_SOUNDHW
+			+ ", " + GAMELIST_TABLE_NAME+"."+KEY_ROMNAME;
 	
 
 	
@@ -249,6 +250,20 @@ public class GameListOpenHelper {
 			+" year.yearhash=gamelist.yearhash AND "
 			+" mfg.mfghash=gamelist.mfghash AND "
 			+" board.syshash=gamelist.syshash";
+			if(filtered==true){
+			union = union+	" AND " +
+				"cputable.filtered=1 " +
+				"AND sound1.filtered=1 " +
+				"AND sound2.filtered=1 " +
+				"AND sound3.filtered=1 " +
+				"AND sound4.filtered=1 " +
+				"AND year.filtered=1 " +
+				"AND mfg.filtered=1 " +
+				"AND board.filtered=1";
+			}
+			union = union +   
+					" GROUP BY gamelist.title " +
+					"ORDER BY gamelist.title ASC";
 			return db.rawQuery(union, null);
 			
 						
