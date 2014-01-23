@@ -59,11 +59,10 @@ public class GameListActivity extends ListFragment {
 		});
 		lv.setFastScrollEnabled(true);
 		this.setListAdapter(adapter);
-		db.close();
+		//db.close();
 
 	}
-
-	@Override
+@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		Cursor cursor = (Cursor) l.getItemAtPosition(position);
 

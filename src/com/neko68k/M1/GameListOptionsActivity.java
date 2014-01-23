@@ -78,7 +78,7 @@ public class GameListOptionsActivity extends Fragment{
 		
 		
 		
-		db.close();
+		//db.close();
 		
 		
 		return view;

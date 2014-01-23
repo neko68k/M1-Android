@@ -39,13 +39,9 @@ public class GameListOpenHelper {
 	
 	private static final String GAMELIST_TABLE_NAME = "gamelist";
 	
-	public static final String dispCols = KEY_TITLE 
-			+ ", " + KEY_YEAR_HASH
-			+ ", " + KEY_MFG_HASH
-			+ ", " + KEY_SYS_HASH  
-			+ ", " + KEY_ID 
-			+ ", " + KEY_ROMNAME 
-			+ ", " + KEY_SOUNDHW;
+	
+	
+	
 	
 	
 
@@ -61,73 +57,108 @@ public class GameListOpenHelper {
 			KEY_ROMAVAIL + " INTEGER);";
 
 	public static final String CPU_TABLE = "cputable";
-	private static final String CPU_TABLE_CREATE = "CREATE TABLE " + CPU_TABLE
-			+ " (" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " 
+	private static final String CPU_TABLE_CREATE = "CREATE TABLE " 
+			+ CPU_TABLE	+ " (" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " 
 			+ KEY_CPU_HASH + " INTEGER, "
 			+ KEY_CPU + " TEXT, " 
-			+ KEY_FILTERED+ " INTEGER);";
+			+ KEY_FILTERED+ " INTEGER DEFAULT 0);";
 
 	public static final String SOUND1_TABLE = "sound1";
 	private static final String SOUND1_TABLE_CREATE = "CREATE TABLE "
 			+ SOUND1_TABLE + " (" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-			+ KEY_SOUND1_HASH + " INTEGER, "
+			+ KEY_SOUND1_HASH + " INTEGER , "
 			+ KEY_SOUND1 + " TEXT, " 
-					+ KEY_FILTERED+ " INTEGER);";
+			+ KEY_FILTERED+ " INTEGER DEFAULT 0);";
 
 	public static final String SOUND2_TABLE = "sound2";
 	private static final String SOUND2_TABLE_CREATE = "CREATE TABLE "
 			+ SOUND2_TABLE + " (" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-			+ KEY_SOUND2_HASH + " INTEGER, "
+			+ KEY_SOUND2_HASH + " INTEGER , "
 			+ KEY_SOUND2 + " TEXT, " 
-					+ KEY_FILTERED+ " INTEGER);";
+			+ KEY_FILTERED+ " INTEGER DEFAULT 0);";
 
 	public static final String SOUND3_TABLE = "sound3";
 	private static final String SOUND3_TABLE_CREATE = "CREATE TABLE "
 			+ SOUND3_TABLE + " (" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-			+ KEY_SOUND3_HASH + " INTEGER, "
+			+ KEY_SOUND3_HASH + " INTEGER , "
 			+ KEY_SOUND3 + " TEXT, " 
-					+ KEY_FILTERED+ " INTEGER);";
+			+ KEY_FILTERED+ " INTEGER DEFAULT 0);";
 
 	public static final String SOUND4_TABLE = "sound4";
 	private static final String SOUND4_TABLE_CREATE = "CREATE TABLE "
 			+ SOUND4_TABLE + " (" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-			+ KEY_SOUND4_HASH + " INTEGER, "
+			+ KEY_SOUND4_HASH + " INTEGER , "
 			+ KEY_SOUND4 + " TEXT, " 
-					+ KEY_FILTERED+ " INTEGER);";
+			+ KEY_FILTERED+ " INTEGER DEFAULT 0);";
 	
 	public static final String MFG_TABLE = "mfg";
 	private static final String MFG_TABLE_CREATE = "CREATE TABLE "
 			+ MFG_TABLE + " (" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-			+ KEY_MFG_HASH + " INTEGER, "
+			+ KEY_MFG_HASH + " INTEGER , "
 			+ KEY_MFG + " TEXT, " 
-					+ KEY_FILTERED+ " INTEGER);";
+			+ KEY_FILTERED+ " INTEGER DEFAULT 0);";
 	
 	public static final String BOARD_TABLE = "board";
 	private static final String BOARD_TABLE_CREATE = "CREATE TABLE "
 			+ BOARD_TABLE + " (" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-			+ KEY_SYS_HASH + " INTEGER, "
+			+ KEY_SYS_HASH + " INTEGER , "
 			+ KEY_SYS + " TEXT, " 
-					+ KEY_FILTERED+ " INTEGER);";
+			+ KEY_FILTERED+ " INTEGER DEFAULT 0);";
 	
 	public static final String YEAR_TABLE = "year";
 	private static final String YEAR_TABLE_CREATE = "CREATE TABLE "
 			+ YEAR_TABLE + " (" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-			+ KEY_YEAR_HASH + " INTEGER, "
+			+ KEY_YEAR_HASH + " INTEGER , "
 			+ KEY_YEAR + " TEXT, " 
-					+ KEY_FILTERED+ " INTEGER);";
+			+ KEY_FILTERED+ " INTEGER DEFAULT 0);";
+	
+	public static final String dispCols = YEAR_TABLE+"."+KEY_YEAR
+			+ ", " + MFG_TABLE+"."+KEY_MFG
+			+ ", " + BOARD_TABLE+"."+KEY_SYS 
+			+ ", " + GAMELIST_TABLE_NAME+"."+KEY_ID 
+			+ ", " + GAMELIST_TABLE_NAME+"."+KEY_TITLE 
+			+ ", " + GAMELIST_TABLE_NAME+"."+KEY_SOUNDHW;
+	
+
+	
+	public static final String dispTbls = YEAR_TABLE+","+MFG_TABLE+","+BOARD_TABLE+","+SOUND4_TABLE+","+
+	SOUND3_TABLE+","+SOUND2_TABLE+","+SOUND1_TABLE+","+CPU_TABLE;
 	
 	
 	// generates a single joined sql query
 	// these must be put in a String[] and passed to buildUnionQuery(...)
 	// to generate the final query
-	private static String genQuery(String table, String key){
-		/*return "SELECT " + dispCols + " FROM " 
-				+ table + " AS R JOIN " + GAMELIST_TABLE_NAME + " AS C ON " 
-				+ "C." + key + "=R._id" + " WHERE R.filtered=0;";*/
+	private static String genQuery(String table, String key, String dispCol){
+		/*return "SELECT C._id, C."+KEY_TITLE+", R."+ dispCol + " FROM " 
+				+ table + " AS R INNER JOIN " + GAMELIST_TABLE_NAME + " AS C ON " 
+				+ "C." + key + "=R._id" + " WHERE R.filtered=0";*/
+		
+		String query = 
+				"SELECT " + dispCols + " FROM " 
+				+ dispTbls + " JOIN " + GAMELIST_TABLE_NAME + " ON " 
+				+ GAMELIST_TABLE_NAME+"." + key + "="+table+"."+key + " WHERE "+table+".filtered=0";
+		
+		
+		/*query = "SELECT " + dispCols + " FROM " 
+				+ dispTbls + " LEFT JOIN " + GAMELIST_TABLE_NAME +" USING ("+ key +")";*/
+		
+		
+		//query = "SELECT DISTINCT "+GAMELIST_TABLE_NAME+" FROM (SELECT filtered from "+table+" WHERE "+GAMELIST_TABLE_NAME+"."+key+"="+table+"."+key+")";
+		
+		return query;
+		
+		/*return "SELECT "+GAMELIST_TABLE_NAME+"._id, "+GAMELIST_TABLE_NAME+"."+KEY_TITLE+", "+table+"."+ dispCol +" FROM " 
+		+ table + " JOIN " + GAMELIST_TABLE_NAME + " ON " 
+		+ GAMELIST_TABLE_NAME+"." + key + "="+table+"."+key + " WHERE "+table+".filtered=0";*/
+		
+		
+		
+		
+		
 		/*return "SELECT " +dispCols+ " FROM " + GAMELIST_TABLE_NAME + ", " 
 				+ table + " WHERE " + GAMELIST_TABLE_NAME + "." + key 
 				+ " = " + table + "._id AND " + table + "." + "filtered = 1;";*/
-		return "SELECT " +dispCols+ " FROM " + GAMELIST_TABLE_NAME + " NATURAL JOIN " + table;
+		//return "SELECT " +dispCols+ " FROM " + GAMELIST_TABLE_NAME + " NATURAL JOIN " + table;
 	}
 
 
@@ -158,7 +189,7 @@ public class GameListOpenHelper {
 				return (true);
 			}*/
 			cursor.close();
-			db.close();
+			//db.close();
 			return(true);
 		}
 		return (false);
@@ -199,18 +230,29 @@ public class GameListOpenHelper {
 			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 			String union;
 			String[] queries = new String[8];
-			queries[0]=genQuery(CPU_TABLE,KEY_CPU_HASH);
-			queries[1]=genQuery(SOUND1_TABLE,KEY_SOUND1_HASH);
-			queries[2]=genQuery(SOUND2_TABLE,KEY_SOUND2_HASH);
-			queries[3]=genQuery(SOUND3_TABLE,KEY_SOUND3_HASH);
-			queries[4]=genQuery(SOUND4_TABLE,KEY_SOUND4_HASH);
-			queries[5]=genQuery(BOARD_TABLE,KEY_SYS_HASH);
-			queries[6]=genQuery(MFG_TABLE,KEY_MFG_HASH);
-			queries[7]=genQuery(YEAR_TABLE,KEY_YEAR_HASH);
+			queries[0]=genQuery(CPU_TABLE,KEY_CPU_HASH, KEY_CPU);
+			queries[1]=genQuery(SOUND1_TABLE,KEY_SOUND1_HASH, KEY_SOUND1);
+			queries[2]=genQuery(SOUND2_TABLE,KEY_SOUND2_HASH, KEY_SOUND2);
+			queries[3]=genQuery(SOUND3_TABLE,KEY_SOUND3_HASH, KEY_SOUND3);
+			queries[4]=genQuery(SOUND4_TABLE,KEY_SOUND4_HASH, KEY_SOUND4);
+			queries[5]=genQuery(BOARD_TABLE,KEY_SYS_HASH, KEY_SYS);
+			queries[6]=genQuery(MFG_TABLE,KEY_MFG_HASH, KEY_MFG);
+			queries[7]=genQuery(YEAR_TABLE,KEY_YEAR_HASH, KEY_YEAR);
 			
 			union = qb.buildUnionQuery(queries, null, null);
+			union = "SELECT DISTINCT "+dispCols+" FROM "+dispTbls+" JOIN gamelist"
+			+" ON cputable.cpuhash=gamelist.cpuhash AND "
+			+" sound1.sound1hash=gamelist.sound1hash AND "
+			+" sound2.sound2hash=gamelist.sound2hash AND "
+			+" sound3.sound3hash=gamelist.sound4hash AND "
+			+" sound4.sound4hash=gamelist.sound3hash AND "
+			+" year.yearhash=gamelist.yearhash AND "
+			+" mfg.mfghash=gamelist.mfghash AND "
+			+" board.syshash=gamelist.syshash";
 			return db.rawQuery(union, null);
-		//}
+			
+						
+		//}/
 		//return (db.query(GAMELIST_TABLE_NAME, null, KEY_ROMAVAIL + "=1 ", null,
 		//		null, null, KEY_TITLE));
 
@@ -229,7 +271,7 @@ public class GameListOpenHelper {
 		values.put(key, data);
 		values.put(KEY_FILTERED,  0);
 		db.insert(table, null, values);
-		db.close(); // Closing database connection
+		//db.close(); // Closing database connection
 	}
 
 	public static void addGame(Game game) {
@@ -252,6 +294,6 @@ public class GameListOpenHelper {
 
 		// Inserting Row
 		db.insert(GAMELIST_TABLE_NAME, null, values);
-		db.close(); // Closing database connection
+		//db.close(); // Closing database connection
 	}
 }
