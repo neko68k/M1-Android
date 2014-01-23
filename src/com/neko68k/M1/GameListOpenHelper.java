@@ -229,19 +229,9 @@ public class GameListOpenHelper {
 		// default statement
 		//if(filtered){
 			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-			String union;
-			String[] queries = new String[8];
-			queries[0]=genQuery(CPU_TABLE,KEY_CPU_HASH, KEY_CPU);
-			queries[1]=genQuery(SOUND1_TABLE,KEY_SOUND1_HASH, KEY_SOUND1);
-			queries[2]=genQuery(SOUND2_TABLE,KEY_SOUND2_HASH, KEY_SOUND2);
-			queries[3]=genQuery(SOUND3_TABLE,KEY_SOUND3_HASH, KEY_SOUND3);
-			queries[4]=genQuery(SOUND4_TABLE,KEY_SOUND4_HASH, KEY_SOUND4);
-			queries[5]=genQuery(BOARD_TABLE,KEY_SYS_HASH, KEY_SYS);
-			queries[6]=genQuery(MFG_TABLE,KEY_MFG_HASH, KEY_MFG);
-			queries[7]=genQuery(YEAR_TABLE,KEY_YEAR_HASH, KEY_YEAR);
+					
 			
-			union = qb.buildUnionQuery(queries, null, null);
-			union = "SELECT DISTINCT "+dispCols+" FROM "+dispTbls+" JOIN gamelist"
+			String query = "SELECT DISTINCT "+dispCols+" FROM "+dispTbls+" JOIN gamelist"
 			+" ON cputable.cpuhash=gamelist.cpuhash AND "
 			+" sound1.sound1hash=gamelist.sound1hash AND "
 			+" sound2.sound2hash=gamelist.sound2hash AND "
@@ -252,7 +242,7 @@ public class GameListOpenHelper {
 			+" board.syshash=gamelist.syshash AND "
 			+" gamelist.romavail = 1";
 			if(filtered==true){
-			union = union+	" AND " +
+			query = query+	" AND " +
 				"cputable.filtered=1 " +
 				"AND sound1.filtered=1 " +
 				"AND sound2.filtered=1 " +
@@ -262,10 +252,10 @@ public class GameListOpenHelper {
 				"AND mfg.filtered=1 " +
 				"AND board.filtered=1";
 			}
-			union = union +   
+			query = query +   
 					" GROUP BY gamelist.title " +
 					"ORDER BY gamelist.title ASC";
-			return db.rawQuery(union, null);
+			return db.rawQuery(query, null);
 			
 						
 		//}/
