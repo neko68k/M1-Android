@@ -249,7 +249,8 @@ public class GameListOpenHelper {
 			+" sound4.sound4hash=gamelist.sound3hash AND "
 			+" year.yearhash=gamelist.yearhash AND "
 			+" mfg.mfghash=gamelist.mfghash AND "
-			+" board.syshash=gamelist.syshash";
+			+" board.syshash=gamelist.syshash AND "
+			+" gamelist.romavail = 1";
 			if(filtered==true){
 			union = union+	" AND " +
 				"cputable.filtered=1 " +
