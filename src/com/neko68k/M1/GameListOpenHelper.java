@@ -226,10 +226,7 @@ public class GameListOpenHelper {
 	}
 
 	public static Cursor getAllTitles(SQLiteDatabase db, boolean filtered) {
-		// default statement
-		//if(filtered){
-			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-					
+		
 			
 			String query = "SELECT DISTINCT "+dispCols+" FROM "+dispTbls+" JOIN gamelist"
 			+" ON cputable.cpuhash=gamelist.cpuhash AND "
@@ -242,8 +239,8 @@ public class GameListOpenHelper {
 			+" board.syshash=gamelist.syshash AND "
 			+" gamelist.romavail = 1";
 			if(filtered==true){
-			query = query+	" AND " +
-				"cputable.filtered=1 " +
+			query = query+	
+				" AND cputable.filtered=1 " +
 				"AND sound1.filtered=1 " +
 				"AND sound2.filtered=1 " +
 				"AND sound3.filtered=1 " +
@@ -257,10 +254,7 @@ public class GameListOpenHelper {
 					"ORDER BY gamelist.title ASC";
 			return db.rawQuery(query, null);
 			
-						
-		//}/
-		//return (db.query(GAMELIST_TABLE_NAME, null, KEY_ROMAVAIL + "=1 ", null,
-		//		null, null, KEY_TITLE));
+		
 
 	}
 

@@ -95,7 +95,7 @@ public class InitM1Task extends AsyncTask<Void, Void, Void> {
 		// SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
 
 		// FIXME: for ! for debugging only
-		if (!GameListOpenHelper.checkTable()) {
+		if (GameListOpenHelper.checkTable()) {
 			game = new Game();
 			CRC32 crc = new CRC32();
 			int maxGames = NDKBridge.getMaxGames();
