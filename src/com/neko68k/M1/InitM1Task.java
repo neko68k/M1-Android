@@ -85,6 +85,15 @@ public class InitM1Task extends AsyncTask<Void, Void, Void> {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+			
+			try {
+				outpath = NDKBridge.basepath + "/m1/icons/";
+				File m1dir = new File(outpath);
+				m1dir.mkdirs();
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 
 		NDKBridge.initM1();
@@ -95,7 +104,7 @@ public class InitM1Task extends AsyncTask<Void, Void, Void> {
 		// SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
 
 		// FIXME: for ! for debugging only
-		if (GameListOpenHelper.checkTable()) {
+		if (!GameListOpenHelper.checkTable()) {
 			game = new Game();
 			CRC32 crc = new CRC32();
 			int maxGames = NDKBridge.getMaxGames();

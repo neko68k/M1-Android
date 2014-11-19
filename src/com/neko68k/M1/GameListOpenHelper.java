@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 
 public class GameListOpenHelper {
+	// main table
 	public static final String KEY_ID = "_id";
 	public static final String KEY_TITLE = "title";
 	public static final String KEY_YEAR = "year";
@@ -22,9 +23,7 @@ public class GameListOpenHelper {
 	public static final String KEY_SOUNDHW = "soundhw";
 	public static final String KEY_FILTERED = "filtered";
 	
-	
-
-
+	// hash tables
 	public static final String KEY_YEAR_HASH = "yearhash";
 	public static final String KEY_MFG_HASH = "mfghash";
 	public static final String KEY_SYS_HASH = "syshash";
@@ -34,16 +33,8 @@ public class GameListOpenHelper {
 	public static final String KEY_SOUND3_HASH = "sound3hash";
 	public static final String KEY_SOUND4_HASH = "sound4hash";
 	public static final String KEY_SOUND5_HASH = "sound5hash";
-
-	
 	
 	private static final String GAMELIST_TABLE_NAME = "gamelist";
-	
-	
-	
-	
-	
-	
 
 	public static final int DATABASE_VERSION = 2;
 	
@@ -226,21 +217,29 @@ public class GameListOpenHelper {
 	}
 
 	public static Cursor getAllTitles(SQLiteDatabase db, boolean filtered) {
+			/*resetExtras(MFG_TABLE);
+			resetExtras(YEAR_TABLE);
+			resetExtras(BOARD_TABLE);
+			resetExtras(SOUND1_TABLE);
+			resetExtras(SOUND2_TABLE);
+			resetExtras(SOUND3_TABLE);
+			resetExtras(SOUND4_TABLE);
+			resetExtras(CPU_TABLE);*/
 		
-			
+			filtered = false;
 			String query = "SELECT DISTINCT "+dispCols+" FROM "+dispTbls+" JOIN gamelist"
 			+" ON cputable.cpuhash=gamelist.cpuhash AND "
 			+" sound1.sound1hash=gamelist.sound1hash AND "
 			+" sound2.sound2hash=gamelist.sound2hash AND "
-			+" sound3.sound3hash=gamelist.sound4hash AND "
-			+" sound4.sound4hash=gamelist.sound3hash AND "
+			+" sound3.sound3hash=gamelist.sound3hash AND "
+			+" sound4.sound4hash=gamelist.sound4hash AND "
 			+" year.yearhash=gamelist.yearhash AND "
 			+" mfg.mfghash=gamelist.mfghash AND "
 			+" board.syshash=gamelist.syshash AND "
 			+" gamelist.romavail = 1";
 			if(filtered==true){
 			query = query+	
-				" AND cputable.filtered=1 " +
+				" WHERE cputable.filtered=1 " +
 				"AND sound1.filtered=1 " +
 				"AND sound2.filtered=1 " +
 				"AND sound3.filtered=1 " +
@@ -257,7 +256,6 @@ public class GameListOpenHelper {
 		
 
 	}
-
 	
 	public static Cursor getAllExtra(SQLiteDatabase db, String table, String key) {
 		return (db.query(table, null, null, null, null, null, key));
@@ -271,7 +269,22 @@ public class GameListOpenHelper {
 		values.put(key, data);
 		values.put(KEY_FILTERED,  0);
 		db.insert(table, null, values);
-		//db.close(); // Closing database connection
+	}
+	
+	public static void updateExtra(String table, String keyCol, String[] data){
+		SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
+
+		ContentValues values = new ContentValues();
+		values.put(KEY_FILTERED,  1);
+		db.update(table, values, keyCol+"=?", data);
+	}
+	
+	public static void resetExtras(String table){
+		SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
+
+		ContentValues values = new ContentValues();
+		values.put(KEY_FILTERED,  0);
+		db.update(table, values, null, null);
 	}
 
 	public static void addGame(Game game) {

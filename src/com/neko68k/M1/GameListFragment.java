@@ -11,6 +11,8 @@ import android.view.MenuItem;
 public class GameListFragment extends FragmentActivity implements
 		GameListActivity.OnItemSelectedListener, GameListOptionsActivity.OnOptionsChanged {
 
+	private static boolean filtered = false;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -71,16 +73,21 @@ public class GameListFragment extends FragmentActivity implements
 	}
 	
 	public void onOptionsChanged(Bundle b){
-		boolean[] cpulist = b.getBooleanArray("cpu");
+		/*boolean[] cpulist = b.getBooleanArray("cpu");
 		boolean[] sound1list = b.getBooleanArray("sound1");
 		boolean[] sound2list = b.getBooleanArray("sound2");
 		boolean[] sound3list = b.getBooleanArray("sound3");
 		boolean[] sound4list = b.getBooleanArray("sound4");
 		boolean[] mfglist = b.getBooleanArray("mfg");
 		boolean[] boardlist = b.getBooleanArray("board");
-		boolean[] yearlist = b.getBooleanArray("year");
+		boolean[] yearlist = b.getBooleanArray("year");*/
+		filtered = b.getBoolean("filtered");
 		
 		return;
+	}
+	
+	public static boolean isFiltered(){
+		return filtered;
 	}
 
 	public void onGameSelected(Game game) {
