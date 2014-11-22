@@ -128,17 +128,19 @@ public class MultiSelectSpinner extends Spinner implements OnMultiChoiceClickLis
      * Sets the options and the selections for this spinner.
      * @param items
      */
-    public void setItems(Cursor cursor, String key){
+    public void setItems(Cursor cursor, String key, String selkey){
     	int i = 0;
     	_items = new String[cursor.getCount()];
+    	_selection = new boolean[cursor.getCount()];
     	
     	while(cursor.moveToNext()){
-    		_items[i++]=cursor.getString(cursor.getColumnIndex(key));
+    		_items[i]=cursor.getString(cursor.getColumnIndex(key));
+    		_selection[i++]=cursor.getInt(cursor.getColumnIndex(selkey))!=0;
+    		
     	}
+
     	
-    	_selection = new boolean[_items.length];
-        
-        Arrays.fill(_selection, false);
+        //Arrays.fill(_selection, false);
         _proxyAdapter.add(_items[0]);
         _items[0]="Select All";
         setSelection(0);

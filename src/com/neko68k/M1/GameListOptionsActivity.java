@@ -50,50 +50,34 @@ public class GameListOptionsActivity extends Fragment{
 		boardlist = (MultiSelectSpinner) view.findViewById(R.id.Board);
 		filterEnabled = (CheckBox) view.findViewById(R.id.EnableFilter);
 		
-		//boardlist.getItemIdAtPosition(position);
+		if(GameListFragment.isFiltered()){
+			filterEnabled.setChecked(true);
+		}
 		
 		SQLiteDatabase db = NDKBridge.m1db.getReadableDatabase();
 		Cursor cpuCursor = GameListOpenHelper.getAllExtra(db, GameListOpenHelper.CPU_TABLE, GameListOpenHelper.KEY_CPU);
-		cpulist.setItems(cpuCursor, GameListOpenHelper.KEY_CPU);
-
-		
-		
-		// *****************
-		// KEY_ID needs to get bound to each of these lists some how
-		// this ought to work if I just cheap out and update based on string instead of key
-		// no big deal
-		// public List<String> getSelectedStrings() {
-		
-		// *****************
-		
-
-		//cpulist.setOnItemSelectedListener(this);
+		cpulist.setItems(cpuCursor, GameListOpenHelper.KEY_CPU, GameListOpenHelper.KEY_FILTERED);
 
 		Cursor sound1Cursor = GameListOpenHelper.getAllExtra(db, GameListOpenHelper.SOUND1_TABLE, GameListOpenHelper.KEY_SOUND1);
-		sound1list.setItems(sound1Cursor, GameListOpenHelper.KEY_SOUND1);
-
+		sound1list.setItems(sound1Cursor, GameListOpenHelper.KEY_SOUND1, GameListOpenHelper.KEY_FILTERED);
+		
 		Cursor sound2Cursor = GameListOpenHelper.getAllExtra(db, GameListOpenHelper.SOUND2_TABLE, GameListOpenHelper.KEY_SOUND2);
-		sound2list.setItems(sound2Cursor, GameListOpenHelper.KEY_SOUND2);
+		sound2list.setItems(sound2Cursor, GameListOpenHelper.KEY_SOUND2, GameListOpenHelper.KEY_FILTERED);
 
 		Cursor sound3Cursor = GameListOpenHelper.getAllExtra(db, GameListOpenHelper.SOUND3_TABLE, GameListOpenHelper.KEY_SOUND3);
-		sound3list.setItems(sound3Cursor, GameListOpenHelper.KEY_SOUND3);
+		sound3list.setItems(sound3Cursor, GameListOpenHelper.KEY_SOUND3, GameListOpenHelper.KEY_FILTERED);
 
 		Cursor sound4Cursor = GameListOpenHelper.getAllExtra(db, GameListOpenHelper.SOUND4_TABLE, GameListOpenHelper.KEY_SOUND4);
-		sound4list.setItems(sound4Cursor, GameListOpenHelper.KEY_SOUND4);
+		sound4list.setItems(sound4Cursor, GameListOpenHelper.KEY_SOUND4, GameListOpenHelper.KEY_FILTERED);
 		
 		Cursor mfgCursor = GameListOpenHelper.getAllExtra(db, GameListOpenHelper.MFG_TABLE, GameListOpenHelper.KEY_MFG);
-		mfglist.setItems(mfgCursor, GameListOpenHelper.KEY_MFG);
+		mfglist.setItems(mfgCursor, GameListOpenHelper.KEY_MFG, GameListOpenHelper.KEY_FILTERED);
 		
 		Cursor boardCursor = GameListOpenHelper.getAllExtra(db, GameListOpenHelper.BOARD_TABLE, GameListOpenHelper.KEY_SYS);
-		boardlist.setItems(boardCursor, GameListOpenHelper.KEY_SYS);
+		boardlist.setItems(boardCursor, GameListOpenHelper.KEY_SYS, GameListOpenHelper.KEY_FILTERED);
 		
 		Cursor yearCursor = GameListOpenHelper.getAllExtra(db, GameListOpenHelper.YEAR_TABLE, GameListOpenHelper.KEY_YEAR);
-		yearlist.setItems(yearCursor, GameListOpenHelper.KEY_YEAR);
-		
-		
-		
-		//db.close();
-		
+		yearlist.setItems(yearCursor, GameListOpenHelper.KEY_YEAR, GameListOpenHelper.KEY_FILTERED);
 		
 		return view;
 	}

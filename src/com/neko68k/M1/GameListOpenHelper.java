@@ -339,7 +339,10 @@ public class GameListOpenHelper {
 
 		ContentValues values = new ContentValues();
 		values.put(KEY_FILTERED,  1);
-		db.update(table, values, keyCol+"=?", data);
+		for(int i = 0;i<data.length;i++){
+			db.update(table, values, keyCol+"=\""+data[i]+"\"", null);
+		}
+		//db.update(table, values, keyCol+"=?", data);
 	}
 	
 	public static void resetExtras(String table){

@@ -155,6 +155,8 @@ public class M1Android extends Activity {
 							}).create();
 			alert.show();
 		}
+		
+		
 
 		normalize = (Boolean) preferences.get("normPref");
 
@@ -563,6 +565,7 @@ public class M1Android extends Activity {
 		}
 		// ad.PlayQuit();
 		NDKBridge.nativeClose();
+		
 		this.finish();
 	}
 
