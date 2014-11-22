@@ -106,10 +106,16 @@ public class GameListOptionsActivity extends Fragment{
 		Bundle b = new Bundle();
 		
 		// *************
-		// should update the list filter flags here instead of passing the arrays back to the fragment controller
-		// update on string instead of id
-		// use this
-		// public List<String> getSelectedStrings() {
+		// 
+		
+		GameListOpenHelper.resetExtras(GameListOpenHelper.MFG_TABLE);
+		GameListOpenHelper.resetExtras(GameListOpenHelper.YEAR_TABLE);
+		GameListOpenHelper.resetExtras(GameListOpenHelper.BOARD_TABLE);
+		GameListOpenHelper.resetExtras(GameListOpenHelper.SOUND1_TABLE);
+		GameListOpenHelper.resetExtras(GameListOpenHelper.SOUND2_TABLE);
+		GameListOpenHelper.resetExtras(GameListOpenHelper.SOUND3_TABLE);
+		GameListOpenHelper.resetExtras(GameListOpenHelper.SOUND4_TABLE);
+		GameListOpenHelper.resetExtras(GameListOpenHelper.CPU_TABLE);
 		
 		List<String> cpu = cpulist.getSelectedStrings();
 		List<String> sound1 = sound1list.getSelectedStrings();
