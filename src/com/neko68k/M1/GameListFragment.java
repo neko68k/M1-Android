@@ -73,15 +73,17 @@ public class GameListFragment extends FragmentActivity implements
 	}
 	
 	public void onOptionsChanged(Bundle b){
-		/*boolean[] cpulist = b.getBooleanArray("cpu");
-		boolean[] sound1list = b.getBooleanArray("sound1");
-		boolean[] sound2list = b.getBooleanArray("sound2");
-		boolean[] sound3list = b.getBooleanArray("sound3");
-		boolean[] sound4list = b.getBooleanArray("sound4");
-		boolean[] mfglist = b.getBooleanArray("mfg");
-		boolean[] boardlist = b.getBooleanArray("board");
-		boolean[] yearlist = b.getBooleanArray("year");*/
 		filtered = b.getBoolean("filtered");
+		if(!filtered){
+			GameListOpenHelper.resetExtras(GameListOpenHelper.MFG_TABLE);
+			GameListOpenHelper.resetExtras(GameListOpenHelper.YEAR_TABLE);
+			GameListOpenHelper.resetExtras(GameListOpenHelper.BOARD_TABLE);
+			GameListOpenHelper.resetExtras(GameListOpenHelper.SOUND1_TABLE);
+			GameListOpenHelper.resetExtras(GameListOpenHelper.SOUND2_TABLE);
+			GameListOpenHelper.resetExtras(GameListOpenHelper.SOUND3_TABLE);
+			GameListOpenHelper.resetExtras(GameListOpenHelper.SOUND4_TABLE);
+			GameListOpenHelper.resetExtras(GameListOpenHelper.CPU_TABLE);
+		}
 		
 		return;
 	}

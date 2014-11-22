@@ -1,9 +1,11 @@
 package com.neko68k.M1;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteQueryBuilder;
 
 public class GameListOpenHelper {
 	// main table
@@ -153,6 +155,15 @@ public class GameListOpenHelper {
 		//return "SELECT " +dispCols+ " FROM " + GAMELIST_TABLE_NAME + " NATURAL JOIN " + table;
 	}
 
+	public static int cpulist;// = b.getBooleanArray("cpu");
+	public static int sound1list;// = b.getBooleanArray("sound1");
+	public static int sound2list;// = b.getBooleanArray("sound2");
+	public static int sound3list;// = b.getBooleanArray("sound3");
+	public static int sound4list;// = b.getBooleanArray("sound4");
+	public static int mfglist;// = b.getBooleanArray("mfg");
+	public static int boardlist;// = b.getBooleanArray("board");
+	public static int yearlist;// = b.getBooleanArray("year");
+	
 
 	public static void onCreate(SQLiteDatabase db) {
 		//if(checkTable()==false){
@@ -217,17 +228,15 @@ public class GameListOpenHelper {
 	}
 
 	public static Cursor getAllTitles(SQLiteDatabase db, boolean filtered) {
-			/*resetExtras(MFG_TABLE);
-			resetExtras(YEAR_TABLE);
-			resetExtras(BOARD_TABLE);
-			resetExtras(SOUND1_TABLE);
-			resetExtras(SOUND2_TABLE);
-			resetExtras(SOUND3_TABLE);
-			resetExtras(SOUND4_TABLE);
-			resetExtras(CPU_TABLE);*/
-		
-			filtered = false;
-			String query = "SELECT DISTINCT "+dispCols+" FROM "+dispTbls+" JOIN gamelist"
+			/**/
+					
+			String query;
+			List<String> filters = new ArrayList<String>();
+			
+			
+			
+			if(filtered==false){
+			query = "SELECT DISTINCT "+dispCols+" FROM "+dispTbls+" JOIN gamelist"
 			+" ON cputable.cpuhash=gamelist.cpuhash AND "
 			+" sound1.sound1hash=gamelist.sound1hash AND "
 			+" sound2.sound2hash=gamelist.sound2hash AND "
@@ -237,16 +246,70 @@ public class GameListOpenHelper {
 			+" mfg.mfghash=gamelist.mfghash AND "
 			+" board.syshash=gamelist.syshash AND "
 			+" gamelist.romavail = 1";
-			if(filtered==true){
-			query = query+	
-				" WHERE cputable.filtered=1 " +
-				"AND sound1.filtered=1 " +
-				"AND sound2.filtered=1 " +
-				"AND sound3.filtered=1 " +
-				"AND sound4.filtered=1 " +
-				"AND year.filtered=1 " +
-				"AND mfg.filtered=1 " +
-				"AND board.filtered=1";
+			}
+			
+			// ************
+			// this works
+			// need to dynamically add only the tables that need filtering
+			else{
+			query = "SELECT DISTINCT "+dispCols+" FROM "+dispTbls 
+					
+					+ " JOIN gamelist"
+					+ " ON cputable.cpuhash=gamelist.cpuhash AND"
+					+ " sound1.sound1hash=gamelist.sound1hash AND"
+					+ " sound2.sound2hash=gamelist.sound2hash AND"
+					+ " sound3.sound3hash=gamelist.sound3hash AND"
+					+ " sound4.sound4hash=gamelist.sound4hash AND"
+					+ " year.yearhash=gamelist.yearhash AND"
+					+ " mfg.mfghash=gamelist.mfghash AND"
+					+ " board.syshash=gamelist.syshash AND"
+					+ " gamelist.romavail = 1";
+			
+				filters.clear();
+				if(cpulist!=0){
+					filters.add(" cputable.filtered=1 ");
+				}
+				if(sound1list!=0){
+					filters.add(" sound1.filtered=1 ");
+				}
+				if(sound2list!=0){
+					filters.add(" sound2.filtered=1 ");
+				}
+				if(sound3list!=0){
+					filters.add(" sound3.filtered=1 ");
+				}
+				if(sound4list!=0){
+					filters.add(" sound4.filtered=1 ");
+				}
+				if(mfglist!=0){
+					filters.add(" mfg.filtered=1 ");
+				}
+				if(boardlist!=0){
+					filters.add(" board.filtered=1 ");
+				}
+				if(yearlist!=0){
+					filters.add(" year.filtered=1 ");
+				}
+				
+				
+				if(!filters.isEmpty()){
+					Object[] filterQuery = filters.toArray();
+					query += " WHERE";
+					for(int i = 0; i<filters.size(); i++){
+						if(i>0){
+							query+=" AND";
+						}
+						query += " " + filterQuery[i];
+					}
+				}
+					//+ " WHERE"// cputable.filtered=1" 
+					//+ " AND sound1.filtered=1" 
+					//+ " AND sound2.filtered=1" 
+					//+ " AND sound3.filtered=1" 
+					//+ " AND sound4.filtered=1" 
+					//+ " year.filtered=1"; 
+					//+ " AND mfg.filtered=1" 
+					//+ " AND board.filtered=1";
 			}
 			query = query +   
 					" GROUP BY gamelist.title " +

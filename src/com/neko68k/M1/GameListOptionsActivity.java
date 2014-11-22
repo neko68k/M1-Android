@@ -135,6 +135,7 @@ public class GameListOptionsActivity extends Fragment{
 		List<String> mfg = mfglist.getSelectedStrings();
 		List<String> board = boardlist.getSelectedStrings();
 		List<String> year = yearlist.getSelectedStrings();
+		
 		//cpu.toA
 
 		GameListOpenHelper.updateExtra(GameListOpenHelper.CPU_TABLE, GameListOpenHelper.KEY_CPU, cpu.toArray(new String[cpu.size()]));
@@ -146,6 +147,23 @@ public class GameListOptionsActivity extends Fragment{
 		GameListOpenHelper.updateExtra(GameListOpenHelper.BOARD_TABLE, GameListOpenHelper.KEY_SYS, board.toArray(new String[board.size()]));
 		GameListOpenHelper.updateExtra(GameListOpenHelper.YEAR_TABLE, GameListOpenHelper.KEY_YEAR, year.toArray(new String[year.size()]));
 				
+		//b.putBooleanArray("cpu",  cpulist.getSelectedIndicies());
+		//b.putBooleanArray("sound1",  sound1list.getSelectedIndicies());
+		//b.putBooleanArray("sound2",  sound2list.getSelectedIndicies());
+		//b.putBooleanArray("sound3",  sound3list.getSelectedIndicies());
+		//b.putBooleanArray("sound4",  sound4list.getSelectedIndicies());
+		//b.putBooleanArray("mfg",  mfglist.getSelectedIndicies());
+		//b.putBooleanArray("board",  boardlist.getSelectedIndicies());
+		//b.putBooleanArray("year",  yearlist.getSelectedIndicies());
+		
+		GameListOpenHelper.cpulist = cpu.size();
+		GameListOpenHelper.sound1list = sound1.size();
+		GameListOpenHelper.sound2list = sound2.size();
+		GameListOpenHelper.sound3list = sound3.size();
+		GameListOpenHelper.sound4list = sound4.size();
+		GameListOpenHelper.mfglist = mfg.size();
+		GameListOpenHelper.boardlist = board.size();
+		GameListOpenHelper.yearlist = year.size();
 		
 		b.putBoolean("filtered", filterEnabled.isChecked());
 		mCallback.onOptionsChanged(b);
