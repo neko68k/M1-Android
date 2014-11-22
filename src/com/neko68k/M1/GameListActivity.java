@@ -57,8 +57,10 @@ public class GameListActivity extends ListFragment {
 				onListItemClick(lv, v, pos, id);
 			}
 		});
-		lv.setFastScrollEnabled(true);
+		
+		
 		this.setListAdapter(adapter);
+		lv.setFastScrollEnabled(true);
 		//db.close();
 
 	}

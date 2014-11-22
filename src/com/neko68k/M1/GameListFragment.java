@@ -75,14 +75,14 @@ public class GameListFragment extends FragmentActivity implements
 	public void onOptionsChanged(Bundle b){
 		filtered = b.getBoolean("filtered");
 		if(!filtered){
-			GameListOpenHelper.resetExtras(GameListOpenHelper.MFG_TABLE);
+			/*GameListOpenHelper.resetExtras(GameListOpenHelper.MFG_TABLE);
 			GameListOpenHelper.resetExtras(GameListOpenHelper.YEAR_TABLE);
 			GameListOpenHelper.resetExtras(GameListOpenHelper.BOARD_TABLE);
 			GameListOpenHelper.resetExtras(GameListOpenHelper.SOUND1_TABLE);
 			GameListOpenHelper.resetExtras(GameListOpenHelper.SOUND2_TABLE);
 			GameListOpenHelper.resetExtras(GameListOpenHelper.SOUND3_TABLE);
 			GameListOpenHelper.resetExtras(GameListOpenHelper.SOUND4_TABLE);
-			GameListOpenHelper.resetExtras(GameListOpenHelper.CPU_TABLE);
+			GameListOpenHelper.resetExtras(GameListOpenHelper.CPU_TABLE);*/
 		}
 		
 		return;
