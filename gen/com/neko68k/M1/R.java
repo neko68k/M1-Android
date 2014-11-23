@@ -53,10 +53,11 @@ public final class R {
         public static final int minutes=0x7f0a0024;
         public static final int next=0x7f0a001f;
         public static final int open=0x7f0a0028;
-        public static final int options=0x7f0a0029;
+        public static final int options=0x7f0a002a;
         public static final int play=0x7f0a001d;
         public static final int playTime=0x7f0a0019;
         public static final int prev=0x7f0a001c;
+        public static final int rescan=0x7f0a0029;
         public static final int reset=0x7f0a0017;
         public static final int rest=0x7f0a001e;
         public static final int seconds=0x7f0a0026;

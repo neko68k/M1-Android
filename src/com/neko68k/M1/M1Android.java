@@ -13,6 +13,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -572,6 +573,7 @@ public class M1Android extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Intent intent;
+		InitM1Task task;
 		// Handle item selection
 		switch (item.getItemId()) {
 		case R.id.open:
@@ -583,6 +585,14 @@ public class M1Android extends Activity {
 		case R.id.options:
 			intent = new Intent(this, Prefs.class);
 			startActivityForResult(intent, 2);
+			return true;			
+		case R.id.rescan:
+			SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
+			//GameListOpenHelper.dropTable(db);
+			//GameListOpenHelper.onCreate(db);
+			GameListOpenHelper.wipeTables(db);
+			task = new InitM1Task(NDKBridge.ctx);
+			task.execute();
 			return true;
 
 		default:

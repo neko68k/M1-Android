@@ -143,9 +143,14 @@ public class GameListOpenHelper {
 	public static Boolean checkTable() {
 		SQLiteDatabase db = NDKBridge.m1db.getReadableDatabase();
 		Cursor cursor = null;
+		try{
 		cursor = db.rawQuery(
 				"select count(*) FROM '"
 						+ GAMELIST_TABLE_NAME + "'", null);
+		}
+		catch(Exception e){
+			return(false);
+		}
 		cursor.moveToFirst();
 		if(cursor.getInt(0)!=0){
 			return(true);
@@ -181,6 +186,18 @@ public class GameListOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS " + YEAR_TABLE_CREATE);
 		// Create tables again
 		onCreate(db);
+	}
+	
+	public static void wipeTables(SQLiteDatabase db){
+		db.execSQL("delete from "+ GAMELIST_TABLE_NAME);
+		db.execSQL("delete from "+ CPU_TABLE);
+		db.execSQL("delete from "+ SOUND1_TABLE);
+		db.execSQL("delete from "+ SOUND2_TABLE);
+		db.execSQL("delete from "+ SOUND3_TABLE);
+		db.execSQL("delete from "+ SOUND4_TABLE);
+		db.execSQL("delete from "+ BOARD_TABLE);
+		db.execSQL("delete from "+ MFG_TABLE);
+		db.execSQL("delete from "+ YEAR_TABLE);
 	}
 
 	public static Cursor getAllTitles(SQLiteDatabase db, boolean filtered) {
