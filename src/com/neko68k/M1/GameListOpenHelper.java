@@ -118,55 +118,17 @@ public class GameListOpenHelper {
 	public static final String dispTbls = YEAR_TABLE+","+MFG_TABLE+","+BOARD_TABLE+","+SOUND4_TABLE+","+
 	SOUND3_TABLE+","+SOUND2_TABLE+","+SOUND1_TABLE+","+CPU_TABLE;
 	
-	
-	// generates a single joined sql query
-	// these must be put in a String[] and passed to buildUnionQuery(...)
-	// to generate the final query
-	private static String genQuery(String table, String key, String dispCol){
-		/*return "SELECT C._id, C."+KEY_TITLE+", R."+ dispCol + " FROM " 
-				+ table + " AS R INNER JOIN " + GAMELIST_TABLE_NAME + " AS C ON " 
-				+ "C." + key + "=R._id" + " WHERE R.filtered=0";*/
-		
-		String query = 
-				"SELECT " + dispCols + " FROM " 
-				+ dispTbls + " JOIN " + GAMELIST_TABLE_NAME + " ON " 
-				+ GAMELIST_TABLE_NAME+"." + key + "="+table+"."+key + " WHERE "+table+".filtered=0";
-		
-		
-		/*query = "SELECT " + dispCols + " FROM " 
-				+ dispTbls + " LEFT JOIN " + GAMELIST_TABLE_NAME +" USING ("+ key +")";*/
-		
-		
-		//query = "SELECT DISTINCT "+GAMELIST_TABLE_NAME+" FROM (SELECT filtered from "+table+" WHERE "+GAMELIST_TABLE_NAME+"."+key+"="+table+"."+key+")";
-		
-		return query;
-		
-		/*return "SELECT "+GAMELIST_TABLE_NAME+"._id, "+GAMELIST_TABLE_NAME+"."+KEY_TITLE+", "+table+"."+ dispCol +" FROM " 
-		+ table + " JOIN " + GAMELIST_TABLE_NAME + " ON " 
-		+ GAMELIST_TABLE_NAME+"." + key + "="+table+"."+key + " WHERE "+table+".filtered=0";*/
-		
-		
-		
-		
-		
-		/*return "SELECT " +dispCols+ " FROM " + GAMELIST_TABLE_NAME + ", " 
-				+ table + " WHERE " + GAMELIST_TABLE_NAME + "." + key 
-				+ " = " + table + "._id AND " + table + "." + "filtered = 1;";*/
-		//return "SELECT " +dispCols+ " FROM " + GAMELIST_TABLE_NAME + " NATURAL JOIN " + table;
-	}
-
-	public static int cpulist;// = b.getBooleanArray("cpu");
-	public static int sound1list;// = b.getBooleanArray("sound1");
-	public static int sound2list;// = b.getBooleanArray("sound2");
-	public static int sound3list;// = b.getBooleanArray("sound3");
-	public static int sound4list;// = b.getBooleanArray("sound4");
-	public static int mfglist;// = b.getBooleanArray("mfg");
-	public static int boardlist;// = b.getBooleanArray("board");
-	public static int yearlist;// = b.getBooleanArray("year");
+	public static int cpulist;
+	public static int sound1list;
+	public static int sound2list;
+	public static int sound3list;
+	public static int sound4list;
+	public static int mfglist;
+	public static int boardlist;
+	public static int yearlist;
 	
 
 	public static void onCreate(SQLiteDatabase db) {
-		//if(checkTable()==false){
 		db.execSQL(GAMELIST_TABLE_CREATE);
 		db.execSQL(CPU_TABLE_CREATE);
 		db.execSQL(SOUND1_TABLE_CREATE);
@@ -176,7 +138,6 @@ public class GameListOpenHelper {
 		db.execSQL(MFG_TABLE_CREATE);
 		db.execSQL(BOARD_TABLE_CREATE);
 		db.execSQL(YEAR_TABLE_CREATE);
-		//}
 	}
 
 	public static Boolean checkTable() {
@@ -201,10 +162,9 @@ public class GameListOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS " + SOUND2_TABLE);
 		db.execSQL("DROP TABLE IF EXISTS " + SOUND3_TABLE);
 		db.execSQL("DROP TABLE IF EXISTS " + SOUND4_TABLE);
-		db.execSQL(MFG_TABLE_CREATE);
-		db.execSQL(BOARD_TABLE_CREATE);
-		db.execSQL(YEAR_TABLE_CREATE);
-
+		db.execSQL("DROP TABLE IF EXISTS " + MFG_TABLE_CREATE);
+		db.execSQL("DROP TABLE IF EXISTS " + BOARD_TABLE_CREATE);
+		db.execSQL("DROP TABLE IF EXISTS " + YEAR_TABLE_CREATE);
 	}
 
 	public static void onUpgrade(SQLiteDatabase db, int oldVersion,
@@ -216,51 +176,29 @@ public class GameListOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS " + SOUND2_TABLE);
 		db.execSQL("DROP TABLE IF EXISTS " + SOUND3_TABLE);
 		db.execSQL("DROP TABLE IF EXISTS " + SOUND4_TABLE);
-		db.execSQL(MFG_TABLE_CREATE);
-		db.execSQL(BOARD_TABLE_CREATE);
-		db.execSQL(YEAR_TABLE_CREATE);
+		db.execSQL("DROP TABLE IF EXISTS " + MFG_TABLE_CREATE);
+		db.execSQL("DROP TABLE IF EXISTS " + BOARD_TABLE_CREATE);
+		db.execSQL("DROP TABLE IF EXISTS " + YEAR_TABLE_CREATE);
 		// Create tables again
 		onCreate(db);
 	}
 
 	public static Cursor getAllTitles(SQLiteDatabase db, boolean filtered) {
-			/**/
-					
-			String query;
-			List<String> filters = new ArrayList<String>();
-			
-			
-			
-			if(filtered==false){
-			query = "SELECT DISTINCT "+dispCols+" FROM "+dispTbls+" JOIN gamelist"
-			+" ON cputable.cpuhash=gamelist.cpuhash AND "
-			+" sound1.sound1hash=gamelist.sound1hash AND "
-			+" sound2.sound2hash=gamelist.sound2hash AND "
-			+" sound3.sound3hash=gamelist.sound3hash AND "
-			+" sound4.sound4hash=gamelist.sound4hash AND "
-			+" year.yearhash=gamelist.yearhash AND "
-			+" mfg.mfghash=gamelist.mfghash AND "
-			+" board.syshash=gamelist.syshash AND "
-			+" gamelist.romavail = 1";
-			}
-			
-			// ************
-			// this works
-			// need to dynamically add only the tables that need filtering
-			else{
-			query = "SELECT DISTINCT "+dispCols+" FROM "+dispTbls 
-					
-					+ " JOIN gamelist"
-					+ " ON cputable.cpuhash=gamelist.cpuhash AND"
-					+ " sound1.sound1hash=gamelist.sound1hash AND"
-					+ " sound2.sound2hash=gamelist.sound2hash AND"
-					+ " sound3.sound3hash=gamelist.sound3hash AND"
-					+ " sound4.sound4hash=gamelist.sound4hash AND"
-					+ " year.yearhash=gamelist.yearhash AND"
-					+ " mfg.mfghash=gamelist.mfghash AND"
-					+ " board.syshash=gamelist.syshash AND"
-					+ " gamelist.romavail = 1";
-			
+		String query;
+		List<String> filters = new ArrayList<String>();
+		
+		query = "SELECT DISTINCT "+dispCols+" FROM "+dispTbls+" JOIN gamelist"
+		+" ON cputable.cpuhash=gamelist.cpuhash AND "
+		+" sound1.sound1hash=gamelist.sound1hash AND "
+		+" sound2.sound2hash=gamelist.sound2hash AND "
+		+" sound3.sound3hash=gamelist.sound3hash AND "
+		+" sound4.sound4hash=gamelist.sound4hash AND "
+		+" year.yearhash=gamelist.yearhash AND "
+		+" mfg.mfghash=gamelist.mfghash AND "
+		+" board.syshash=gamelist.syshash AND "
+		+" gamelist.romavail = 1";
+		
+		if(filtered==true){
 				filters.clear();
 				if(cpulist!=0){
 					filters.add(" cputable.filtered=1 ");
@@ -286,8 +224,7 @@ public class GameListOpenHelper {
 				if(yearlist!=0){
 					filters.add(" year.filtered=1 ");
 				}
-				
-				
+								
 				if(!filters.isEmpty()){
 					Object[] filterQuery = filters.toArray();
 					query += " WHERE";
@@ -297,23 +234,10 @@ public class GameListOpenHelper {
 						}
 						query += " " + filterQuery[i];
 					}
-				}
-					//+ " WHERE"// cputable.filtered=1" 
-					//+ " AND sound1.filtered=1" 
-					//+ " AND sound2.filtered=1" 
-					//+ " AND sound3.filtered=1" 
-					//+ " AND sound4.filtered=1" 
-					//+ " year.filtered=1"; 
-					//+ " AND mfg.filtered=1" 
-					//+ " AND board.filtered=1";
+				}					
 			}
-			query = query +   
-					" GROUP BY gamelist.title " +
-					"ORDER BY gamelist.title ASC";
+			query += " GROUP BY gamelist.title " + "ORDER BY gamelist.title ASC";
 			return db.rawQuery(query, null);
-			
-		
-
 	}
 	
 	public static Cursor getAllExtra(SQLiteDatabase db, String table, String key) {
@@ -338,7 +262,6 @@ public class GameListOpenHelper {
 		for(int i = 0;i<data.length;i++){
 			db.update(table, values, keyCol+"=\""+data[i]+"\"", null);
 		}
-		//db.update(table, values, keyCol+"=?", data);
 	}
 	
 	public static void resetExtras(String table){
@@ -369,6 +292,5 @@ public class GameListOpenHelper {
 
 		// Inserting Row
 		db.insert(GAMELIST_TABLE_NAME, null, values);
-		//db.close(); // Closing database connection
 	}
 }
