@@ -183,19 +183,15 @@ public class GameListOpenHelper {
 		SQLiteDatabase db = NDKBridge.m1db.getReadableDatabase();
 		Cursor cursor = null;
 		cursor = db.rawQuery(
-				"select DISTINCT tbl_name from sqlite_master where tbl_name = '"
+				"select count(*) FROM '"
 						+ GAMELIST_TABLE_NAME + "'", null);
-		if (cursor != null) {
-			/*if (cursor.getCount() > 0) {
-				cursor.close();
-				db.close();
-				return (true);
-			}*/
-			cursor.close();
-			//db.close();
+		cursor.moveToFirst();
+		if(cursor.getInt(0)!=0){
 			return(true);
 		}
-		return (false);
+		else{
+			return(false);
+		}
 	}
 
 	public static void dropTable(SQLiteDatabase db) {

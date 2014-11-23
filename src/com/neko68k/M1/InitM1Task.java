@@ -273,15 +273,7 @@ public class InitM1Task extends AsyncTask<Void, Void, Void> {
 
 	@Override
 	protected void onPostExecute(Void result) {
-		// NDKBridge.globalGLA = NDKCallbacks.nonglobalgla;
-		GameListOpenHelper.resetExtras(GameListOpenHelper.MFG_TABLE);
-		GameListOpenHelper.resetExtras(GameListOpenHelper.YEAR_TABLE);
-		GameListOpenHelper.resetExtras(GameListOpenHelper.BOARD_TABLE);
-		GameListOpenHelper.resetExtras(GameListOpenHelper.SOUND1_TABLE);
-		GameListOpenHelper.resetExtras(GameListOpenHelper.SOUND2_TABLE);
-		GameListOpenHelper.resetExtras(GameListOpenHelper.SOUND3_TABLE);
-		GameListOpenHelper.resetExtras(GameListOpenHelper.SOUND4_TABLE);
-		GameListOpenHelper.resetExtras(GameListOpenHelper.CPU_TABLE);
+		
 		dialog.dismiss();
 	}
 
