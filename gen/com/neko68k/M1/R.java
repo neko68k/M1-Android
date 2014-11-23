@@ -42,7 +42,7 @@ public final class R {
         public static final int fragment_container=0x7f0a000a;
         public static final int hardware=0x7f0a0009;
         public static final int hours=0x7f0a0022;
-        public static final int icon=0x7f0a0005;
+        public static final int icon=0x7f0a0004;
         public static final int image=0x7f0a0001;
         public static final int layout=0x7f0a0000;
         public static final int lbl1=0x7f0a0021;
@@ -63,10 +63,10 @@ public final class R {
         public static final int seconds=0x7f0a0026;
         public static final int song=0x7f0a001a;
         public static final int sortOptions=0x7f0a0027;
-        public static final int text=0x7f0a0003;
-        public static final int text2=0x7f0a0004;
+        public static final int text=0x7f0a0002;
+        public static final int text2=0x7f0a0003;
         public static final int text_opt=0x7f0a0020;
-        public static final int title=0x7f0a0002;
+        public static final int title=0x7f0a0005;
         public static final int trackNum=0x7f0a0018;
         public static final int year=0x7f0a0006;
     }

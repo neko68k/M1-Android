@@ -155,6 +155,8 @@ public class GameListOptionsActivity extends Fragment{
 		GameListOpenHelper.boardlist = board.size();
 		GameListOpenHelper.yearlist = year.size();
 		
+		
+		
 		b.putBoolean("filtered", filterEnabled.isChecked());
 		mCallback.onOptionsChanged(b);
 		// TODO Auto-generated method stub

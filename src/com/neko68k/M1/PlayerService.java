@@ -73,7 +73,7 @@ public class PlayerService extends Service {
 		RemoteViews contentView = new RemoteViews(getPackageName(),
 				R.layout.custom_notification);
 		contentView.setImageViewResource(R.id.image, R.drawable.ic_launcher);
-		contentView.setTextViewText(R.id.title, "M1Android");
+		//contentView.setTextViewText(R.id.title, "M1Android");
 
 		notification.contentView = contentView;
 		int cmdNum = NDKBridge
@@ -85,17 +85,17 @@ public class PlayerService extends Service {
 		// text = NDKBridge.getSong(NDKBridge.getCurrentCmd());
 		// text=null;
 		if (text != null) {
-			contentView.setTextViewText(R.id.text, text);
+			contentView.setTextViewText(R.id.text2, text);
 			contentView
-					.setTextViewText(R.id.text2, NDKBridge.getInfoStr(
+					.setTextViewText(R.id.text, NDKBridge.getInfoStr(
 							NDKBridge.M1_SINF_VISNAME,
 							NDKBridge.getInfoInt(NDKBridge.M1_IINF_CURGAME, 0)));
 		}
 		if (text == null) {
-			contentView.setTextViewText(R.id.text, "No track list");
+			contentView.setTextViewText(R.id.text2, "No track list");
 			// contentView.setTextViewText(R.id.text2,
 			// NDKBridge.getGameTitle(NDKBridge.curGame).getText());
-			contentView.setTextViewText(R.id.text2, "FIXME");
+			contentView.setTextViewText(R.id.text, "FIXME");
 		}
 
 		contentIntent = PendingIntent.getActivity(this, 0, new Intent(this,

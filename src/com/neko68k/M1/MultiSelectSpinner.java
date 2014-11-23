@@ -46,7 +46,7 @@ public class MultiSelectSpinner extends Spinner implements OnMultiChoiceClickLis
      */
     public MultiSelectSpinner(Context context) {
         super(context);
-        
+        this.
         _proxyAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item);
         super.setAdapter(_proxyAdapter);
     }
