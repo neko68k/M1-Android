@@ -60,7 +60,11 @@ public class GameListActivity extends ListFragment {
 		
 		
 		this.setListAdapter(adapter);
-		lv.setFastScrollEnabled(true);
+		if(GameListFragment.isFiltered()||GameListFragment.isSorted()){
+			lv.setFastScrollEnabled(false);	
+		} else {
+			lv.setFastScrollEnabled(true);
+		}
 		//db.close();
 
 	}
