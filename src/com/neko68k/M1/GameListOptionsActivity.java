@@ -1,6 +1,6 @@
 package com.neko68k.M1;
 
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -11,7 +11,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.Spinner;
 
 public class GameListOptionsActivity extends Fragment{
 	private MultiSelectSpinner cpulist;
@@ -22,7 +24,10 @@ public class GameListOptionsActivity extends Fragment{
 	private MultiSelectSpinner yearlist;
 	private MultiSelectSpinner boardlist;
 	private MultiSelectSpinner mfglist;
-	private CheckBox		   filterEnabled;	
+	private CheckBox		   filterEnabled;
+	private CheckBox		   sortedEnabled;
+	private Spinner			   sortedSpinner;	
+	private ArrayList<String>  sortList;
 	
 	
 	@Override
@@ -49,10 +54,32 @@ public class GameListOptionsActivity extends Fragment{
 		mfglist = (MultiSelectSpinner) view.findViewById(R.id.Mfg);
 		boardlist = (MultiSelectSpinner) view.findViewById(R.id.Board);
 		filterEnabled = (CheckBox) view.findViewById(R.id.EnableFilter);
+		sortedEnabled = (CheckBox) view.findViewById(R.id.EnableSort);
+		sortedSpinner = (Spinner) view.findViewById(R.id.Sort);
 		
 		if(GameListFragment.isFiltered()){
 			filterEnabled.setChecked(true);
 		}
+		if(GameListFragment.isSorted()){
+			sortedEnabled.setChecked(true);
+		}
+		
+		sortList = new ArrayList<String>();
+		
+		sortList.add("Title");
+		sortList.add("Manufacturer");
+		sortList.add("Board");
+		sortList.add("Year");
+		sortList.add("CPU");
+		sortList.add("Sound Chip 1");
+		sortList.add("Sound Chip 2");
+		sortList.add("Sound Chip 3");
+		sortList.add("Sound Chip 4");
+		
+		ArrayAdapter<String> _proxyAdapter = new ArrayAdapter<String>(NDKBridge.ctx, android.R.layout.simple_spinner_item, sortList);
+		sortedSpinner.setAdapter(_proxyAdapter);
+		
+		sortedSpinner.setSelection(GameListFragment.getSortType());
 		
 		SQLiteDatabase db = NDKBridge.m1db.getReadableDatabase();
 		Cursor cpuCursor = GameListOpenHelper.getAllExtra(db, GameListOpenHelper.CPU_TABLE, GameListOpenHelper.KEY_CPU);
@@ -142,7 +169,10 @@ public class GameListOptionsActivity extends Fragment{
 		GameListOpenHelper.yearlist = year.size();
 		
 		
-		
+		if(sortedEnabled.isChecked()){
+			b.putInt("sortType",  sortedSpinner.getSelectedItemPosition());
+		}
+		b.putBoolean("sorted", sortedEnabled.isChecked());
 		b.putBoolean("filtered", filterEnabled.isChecked());
 		mCallback.onOptionsChanged(b);
 		return;

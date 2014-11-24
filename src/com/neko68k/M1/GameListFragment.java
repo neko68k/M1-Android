@@ -4,14 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 
 public class GameListFragment extends FragmentActivity implements
 		GameListActivity.OnItemSelectedListener, GameListOptionsActivity.OnOptionsChanged {
 
 	private static boolean filtered = false;
+	private static boolean sorted = false;
+	private static int sortType = 0;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -74,22 +74,19 @@ public class GameListFragment extends FragmentActivity implements
 	
 	public void onOptionsChanged(Bundle b){
 		filtered = b.getBoolean("filtered");
-		if(!filtered){
-			/*GameListOpenHelper.resetExtras(GameListOpenHelper.MFG_TABLE);
-			GameListOpenHelper.resetExtras(GameListOpenHelper.YEAR_TABLE);
-			GameListOpenHelper.resetExtras(GameListOpenHelper.BOARD_TABLE);
-			GameListOpenHelper.resetExtras(GameListOpenHelper.SOUND1_TABLE);
-			GameListOpenHelper.resetExtras(GameListOpenHelper.SOUND2_TABLE);
-			GameListOpenHelper.resetExtras(GameListOpenHelper.SOUND3_TABLE);
-			GameListOpenHelper.resetExtras(GameListOpenHelper.SOUND4_TABLE);
-			GameListOpenHelper.resetExtras(GameListOpenHelper.CPU_TABLE);*/
-		}
-		
+		sorted = b.getBoolean("sorted");
+		sortType = b.getInt("sortType");
 		return;
 	}
 	
 	public static boolean isFiltered(){
 		return filtered;
+	}
+	public static boolean isSorted(){
+		return sorted;
+	}
+	public static int getSortType(){
+		return sortType;
 	}
 
 	public void onGameSelected(Game game) {

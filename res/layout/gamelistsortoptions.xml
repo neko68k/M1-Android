@@ -16,7 +16,7 @@
             android:layout_weight=".5"
             android:text="Enable Sort" />
 
-        <com.neko68k.M1.MultiSelectSpinner
+        <Spinner
             android:id="@+id/Sort"
             android:layout_width="0dip"
             android:layout_height="wrap_content"

@@ -253,7 +253,42 @@ public class GameListOpenHelper {
 					}
 				}					
 			}
-			query += " GROUP BY gamelist.title " + "ORDER BY gamelist.title ASC";
+		
+		query += " GROUP BY gamelist.title ";
+		if(GameListFragment.isSorted()){
+			switch(GameListFragment.getSortType()){
+				case 0:
+					query += "ORDER BY gamelist.title ASC";
+					break;
+				case 1:
+					query += "ORDER BY mfg.mfg ASC";	
+					break;
+				case 2:
+					query += "ORDER BY board.sys ASC";
+					break;
+				case 3:
+					query += "ORDER BY year.year ASC";
+					break;
+				case 4:
+					query += "ORDER BY cputable.cpu ASC";
+					break;
+				case 5:
+					query += "ORDER BY sound1.sound1 ASC";
+					break;
+				case 6:
+					query += "ORDER BY sound2.sound2 ASC";
+					break;
+				case 7:
+					query += "ORDER BY sound3.sound3 ASC";
+					break;
+				case 8:
+					query += "ORDER BY sound4.sound4 ASC";
+					break;
+			}
+		} else {
+			query += "ORDER BY gamelist.title ASC";
+		}
+			
 			return db.rawQuery(query, null);
 	}
 	
