@@ -105,9 +105,6 @@ public class GameListOptionsActivity extends Fragment{
 	public void listClosed() {
 		Bundle b = new Bundle();
 		
-		// *************
-		// 
-		
 		GameListOpenHelper.resetExtras(GameListOpenHelper.MFG_TABLE);
 		GameListOpenHelper.resetExtras(GameListOpenHelper.YEAR_TABLE);
 		GameListOpenHelper.resetExtras(GameListOpenHelper.BOARD_TABLE);
@@ -125,8 +122,6 @@ public class GameListOptionsActivity extends Fragment{
 		List<String> mfg = mfglist.getSelectedStrings();
 		List<String> board = boardlist.getSelectedStrings();
 		List<String> year = yearlist.getSelectedStrings();
-		
-		//cpu.toA
 
 		GameListOpenHelper.updateExtra(GameListOpenHelper.CPU_TABLE, GameListOpenHelper.KEY_CPU, cpu.toArray(new String[cpu.size()]));
 		GameListOpenHelper.updateExtra(GameListOpenHelper.SOUND1_TABLE, GameListOpenHelper.KEY_SOUND1, sound1.toArray(new String[sound1.size()]));
@@ -136,15 +131,6 @@ public class GameListOptionsActivity extends Fragment{
 		GameListOpenHelper.updateExtra(GameListOpenHelper.MFG_TABLE, GameListOpenHelper.KEY_MFG, mfg.toArray(new String[mfg.size()]));
 		GameListOpenHelper.updateExtra(GameListOpenHelper.BOARD_TABLE, GameListOpenHelper.KEY_SYS, board.toArray(new String[board.size()]));
 		GameListOpenHelper.updateExtra(GameListOpenHelper.YEAR_TABLE, GameListOpenHelper.KEY_YEAR, year.toArray(new String[year.size()]));
-				
-		//b.putBooleanArray("cpu",  cpulist.getSelectedIndicies());
-		//b.putBooleanArray("sound1",  sound1list.getSelectedIndicies());
-		//b.putBooleanArray("sound2",  sound2list.getSelectedIndicies());
-		//b.putBooleanArray("sound3",  sound3list.getSelectedIndicies());
-		//b.putBooleanArray("sound4",  sound4list.getSelectedIndicies());
-		//b.putBooleanArray("mfg",  mfglist.getSelectedIndicies());
-		//b.putBooleanArray("board",  boardlist.getSelectedIndicies());
-		//b.putBooleanArray("year",  yearlist.getSelectedIndicies());
 		
 		GameListOpenHelper.cpulist = cpu.size();
 		GameListOpenHelper.sound1list = sound1.size();
@@ -159,7 +145,6 @@ public class GameListOptionsActivity extends Fragment{
 		
 		b.putBoolean("filtered", filterEnabled.isChecked());
 		mCallback.onOptionsChanged(b);
-		// TODO Auto-generated method stub
 		return;
 	}
 }
