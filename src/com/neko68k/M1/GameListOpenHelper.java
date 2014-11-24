@@ -136,6 +136,7 @@ public class GameListOpenHelper {
 	public static int mfglist;
 	public static int boardlist;
 	public static int yearlist;
+	public static int favelist;
 	
 
 	public static void onCreate(SQLiteDatabase db) {
@@ -230,6 +231,9 @@ public class GameListOpenHelper {
 		
 		if(GameListFragment.isFiltered()){
 				filters.clear();
+				if(GameListFragment.isFaves()){
+					filters.add(" gamelist.fave=1 ");
+				}
 				if(cpulist!=0){
 					filters.add(" cputable.filtered=1 ");
 				}
@@ -253,7 +257,8 @@ public class GameListOpenHelper {
 				}
 				if(yearlist!=0){
 					filters.add(" year.filtered=1 ");
-				}
+				}	
+				
 								
 				if(!filters.isEmpty()){
 					Object[] filterQuery = filters.toArray();
@@ -265,6 +270,10 @@ public class GameListOpenHelper {
 						query += " " + filterQuery[i];
 					}
 				}					
+			} else {
+				if(GameListFragment.isFaves()){
+					query+=" WHERE gamelist.fave=1 ";
+				}
 			}
 		
 		query += " GROUP BY gamelist.title ";

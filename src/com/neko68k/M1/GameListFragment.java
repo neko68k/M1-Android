@@ -14,6 +14,7 @@ public class GameListFragment extends FragmentActivity implements
 	private static boolean filtered = false;
 	private static boolean sorted = false;
 	private static int sortType = 0;
+	private static boolean faves = false;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,10 @@ public class GameListFragment extends FragmentActivity implements
 					.add(R.id.fragment_container, firstFragment).commit();
 		}
 
+	}
+	
+	public static boolean isFaves(){
+		return faves;
 	}
 
 	@Override
@@ -77,7 +82,8 @@ public class GameListFragment extends FragmentActivity implements
 	public void onOptionsChanged(Bundle b){
 		filtered = b.getBoolean("filtered");
 		sorted = b.getBoolean("sorted");
-		sortType = b.getInt("sortType");
+		faves = b.getBoolean("faves");
+		sortType = b.getInt("sortType");		
 		return;
 	}
 	

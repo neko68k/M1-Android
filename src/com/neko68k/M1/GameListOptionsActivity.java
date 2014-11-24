@@ -26,6 +26,7 @@ public class GameListOptionsActivity extends Fragment{
 	private MultiSelectSpinner mfglist;
 	private CheckBox		   filterEnabled;
 	private CheckBox		   sortedEnabled;
+	private CheckBox		   favesEnabled;
 	private Spinner			   sortedSpinner;	
 	private ArrayList<String>  sortList;
 	
@@ -55,6 +56,7 @@ public class GameListOptionsActivity extends Fragment{
 		boardlist = (MultiSelectSpinner) view.findViewById(R.id.Board);
 		filterEnabled = (CheckBox) view.findViewById(R.id.EnableFilter);
 		sortedEnabled = (CheckBox) view.findViewById(R.id.EnableSort);
+		favesEnabled = (CheckBox) view.findViewById(R.id.EnableFaves);
 		sortedSpinner = (Spinner) view.findViewById(R.id.Sort);
 		
 		if(GameListFragment.isFiltered()){
@@ -62,6 +64,9 @@ public class GameListOptionsActivity extends Fragment{
 		}
 		if(GameListFragment.isSorted()){
 			sortedEnabled.setChecked(true);
+		}
+		if(GameListFragment.isFaves()){
+			favesEnabled.setChecked(true);
 		}
 		
 		sortList = new ArrayList<String>();
@@ -174,6 +179,7 @@ public class GameListOptionsActivity extends Fragment{
 		}
 		b.putBoolean("sorted", sortedEnabled.isChecked());
 		b.putBoolean("filtered", filterEnabled.isChecked());
+		b.putBoolean("faves",  favesEnabled.isChecked());
 		mCallback.onOptionsChanged(b);
 		return;
 	}
