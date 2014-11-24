@@ -24,6 +24,8 @@ public class GameListOpenHelper {
 	public static final String KEY_ROMAVAIL = "romavail";
 	public static final String KEY_SOUNDHW = "soundhw";
 	public static final String KEY_FILTERED = "filtered";
+	public static final String KEY_FAVECMD			= "favecmd";
+	public static final String KEY_FAVE			= "fave";
 	
 	// hash tables
 	public static final String KEY_YEAR_HASH = "yearhash";
@@ -39,22 +41,29 @@ public class GameListOpenHelper {
 	private static final String GAMELIST_TABLE_NAME = "gamelist";
 
 	public static final int DATABASE_VERSION = 2;
+
+	// add another table for favorite tracks that includes <game id> and <track cmd>
 	
+	// add a row here for a favorite flag
 	private static final String GAMELIST_TABLE_CREATE = "CREATE TABLE "
 			+ GAMELIST_TABLE_NAME + " (" + KEY_ID + " INTEGER PRIMARY KEY, "
 			+ KEY_TITLE + " TEXT, " + KEY_YEAR_HASH + " INTEGER, " + KEY_ROMNAME
 			+ " TEXT, " + KEY_MFG_HASH + " INTEGER, " + KEY_SYS_HASH + " INTEGER, " + KEY_CPU_HASH
 			+ " INTEGER, " + KEY_SOUND1_HASH + " INTEGER, " + KEY_SOUND2_HASH + " INTEGER, "
-			+ KEY_SOUND3_HASH + " INTEGER, " + KEY_SOUND4_HASH + " INTEGER, " +
-			 KEY_SOUNDHW + " TEXT, " +
-			KEY_ROMAVAIL + " INTEGER);";
-
+			+ KEY_SOUND3_HASH + " INTEGER, " + KEY_SOUND4_HASH + " INTEGER, " 
+			+ KEY_SOUNDHW + " TEXT, " + KEY_ROMAVAIL + " INTEGER, " + KEY_FAVE + " INTEGER DEFAULT 0);";
+	
+	public static final String FAVE_TABLE = "favetable";
+	private static final String FAVE_TABLE_CREATE = "CREATE TABLE " 
+			+ FAVE_TABLE	+ " ( "+KEY_ID + " INTEGER PRIMARY KEY, "
+			+ KEY_FAVECMD + " INTEGER DEFAULT 0);";
+	
 	public static final String CPU_TABLE = "cputable";
 	private static final String CPU_TABLE_CREATE = "CREATE TABLE " 
 			+ CPU_TABLE	+ " (" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " 
 			+ KEY_CPU_HASH + " INTEGER, "
 			+ KEY_CPU + " TEXT, " 
-			+ KEY_FILTERED+ " INTEGER DEFAULT 0);";
+			+ KEY_FILTERED+ " INTEGER);";
 
 	public static final String SOUND1_TABLE = "sound1";
 	private static final String SOUND1_TABLE_CREATE = "CREATE TABLE "
@@ -111,7 +120,8 @@ public class GameListOpenHelper {
 			+ ", " + GAMELIST_TABLE_NAME+"."+KEY_ID 
 			+ ", " + GAMELIST_TABLE_NAME+"."+KEY_TITLE 
 			+ ", " + GAMELIST_TABLE_NAME+"."+KEY_SOUNDHW
-			+ ", " + GAMELIST_TABLE_NAME+"."+KEY_ROMNAME;
+			+ ", " + GAMELIST_TABLE_NAME+"."+KEY_ROMNAME
+			+ ", " + GAMELIST_TABLE_NAME+"."+KEY_FAVE;
 	
 
 	
@@ -138,6 +148,7 @@ public class GameListOpenHelper {
 		db.execSQL(MFG_TABLE_CREATE);
 		db.execSQL(BOARD_TABLE_CREATE);
 		db.execSQL(YEAR_TABLE_CREATE);
+		db.execSQL(FAVE_TABLE_CREATE);
 	}
 
 	public static Boolean checkTable() {
@@ -170,6 +181,7 @@ public class GameListOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS " + MFG_TABLE_CREATE);
 		db.execSQL("DROP TABLE IF EXISTS " + BOARD_TABLE_CREATE);
 		db.execSQL("DROP TABLE IF EXISTS " + YEAR_TABLE_CREATE);
+		db.execSQL("DROP TABLE IF EXISTS " + FAVE_TABLE_CREATE);
 	}
 
 	public static void onUpgrade(SQLiteDatabase db, int oldVersion,
@@ -184,6 +196,7 @@ public class GameListOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS " + MFG_TABLE_CREATE);
 		db.execSQL("DROP TABLE IF EXISTS " + BOARD_TABLE_CREATE);
 		db.execSQL("DROP TABLE IF EXISTS " + YEAR_TABLE_CREATE);
+		db.execSQL("DROP TABLE IF EXISTS " + FAVE_TABLE_CREATE);
 		// Create tables again
 		onCreate(db);
 	}
@@ -200,7 +213,7 @@ public class GameListOpenHelper {
 		db.execSQL("delete from "+ YEAR_TABLE);
 	}
 
-	public static Cursor getAllTitles(SQLiteDatabase db, boolean filtered) {
+	public static Cursor getAllTitles(SQLiteDatabase db) {
 		String query;
 		List<String> filters = new ArrayList<String>();
 		
@@ -215,7 +228,7 @@ public class GameListOpenHelper {
 		+" board.syshash=gamelist.syshash AND "
 		+" gamelist.romavail = 1";
 		
-		if(filtered==true){
+		if(GameListFragment.isFiltered()){
 				filters.clear();
 				if(cpulist!=0){
 					filters.add(" cputable.filtered=1 ");
@@ -295,7 +308,35 @@ public class GameListOpenHelper {
 	public static Cursor getAllExtra(SQLiteDatabase db, String table, String key) {
 		return (db.query(table, null, null, null, null, null, key));
 	}
+	
+	public static void setAlbumFave(int id, boolean set){
+		SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
+		String[] ids = new String[1];
+		ids[0]=Integer.toString(id);
+		ContentValues values = new ContentValues();
+		values.put(KEY_FAVE,  set);
+		db.update(GAMELIST_TABLE_NAME, values, "_id=?", ids);
+	}
 
+	public static void addFave(int id, int cmd){
+		SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
+
+		ContentValues values = new ContentValues();
+		values.put(KEY_ID,  id);
+		values.put(KEY_FAVECMD,  cmd);
+		db.insert(FAVE_TABLE, null,  values);
+	}
+	
+	public static void delFave(int id, int cmd){
+		SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
+
+		db.rawQuery("DELETE FROM "+FAVE_TABLE+"WHERE id="+id+"AND cmd="+cmd,null);
+		
+		if(db.rawQuery("SELECT count(*) FROM "+FAVE_TABLE+"WHERE id="+id, null).getInt(0)!=0){
+			setAlbumFave(id, false);
+		}		
+	}
+	
 	public static void addExtra(String table, String key, String data, Long id){
 		SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
 

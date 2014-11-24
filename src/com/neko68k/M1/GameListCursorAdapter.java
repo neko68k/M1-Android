@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.SectionIndexer;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 public class GameListCursorAdapter extends SimpleCursorAdapter implements
 		SectionIndexer {
@@ -27,6 +28,7 @@ public class GameListCursorAdapter extends SimpleCursorAdapter implements
 	final int tblRomname;
 	final int tblTitle;
 	final int tblId;
+	final int tblFave;
 
 	AlphabetIndexer mAlphabetIndexer;
 
@@ -36,6 +38,7 @@ public class GameListCursorAdapter extends SimpleCursorAdapter implements
 		TextView mfg;
 		TextView board;
 		TextView hardware;
+		ToggleButton favorite;
 		String title;
 		String romname;
 		int index;
@@ -55,6 +58,7 @@ public class GameListCursorAdapter extends SimpleCursorAdapter implements
 		tblRomname = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_ROMNAME);
 		tblTitle = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_TITLE);
 		tblId = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_ID);
+		tblFave = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_FAVE);
 
 		mAlphabetIndexer = new AlphabetIndexer(cursor,
 				cursor.getColumnIndex(GameListOpenHelper.KEY_TITLE),
@@ -103,7 +107,7 @@ public class GameListCursorAdapter extends SimpleCursorAdapter implements
 			holder.mfg = (TextView) view.findViewById(R.id.mfg);
 			holder.board = (TextView) view.findViewById(R.id.board);
 			holder.hardware = (TextView) view.findViewById(R.id.hardware);
-			
+			holder.favorite = (ToggleButton) view.findViewById(R.id.togglebutton);
 			view.setTag(holder);
 		}
 
@@ -115,6 +119,10 @@ public class GameListCursorAdapter extends SimpleCursorAdapter implements
 		// KEY_ROMNAME
 		holder.romname = cursor.getString(tblRomname);
 		holder.title = cursor.getString(tblTitle);
+		holder.favorite.setTag(cursor.getInt(tblId));
+		holder.favorite.setChecked(cursor.getInt(tblFave)!=0);
+		
+		
 		new AsyncTask<ViewHolder, Void, Bitmap>() {
 			private ViewHolder v;
 

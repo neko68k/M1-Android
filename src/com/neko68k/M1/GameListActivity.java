@@ -2,18 +2,17 @@ package com.neko68k.M1;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.ToggleButton;
 
 public class GameListActivity extends ListFragment {
 	int isRunning = 0;
@@ -43,7 +42,7 @@ public class GameListActivity extends ListFragment {
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		SQLiteDatabase db = NDKBridge.m1db.getReadableDatabase();
-		Cursor c = GameListOpenHelper.getAllTitles(db, GameListFragment.isFiltered());
+		Cursor c = GameListOpenHelper.getAllTitles(db);
 		Context cxt = getActivity();
 		GameListCursorAdapter adapter = new GameListCursorAdapter(cxt,
 				R.layout.gamelist_detailed,
@@ -83,6 +82,8 @@ public class GameListActivity extends ListFragment {
 	public interface OnItemSelectedListener {
 		public void onGameSelected(Game game);
 	}
+	
+	
 
 	@Override
 	public void onAttach(Activity activity) {

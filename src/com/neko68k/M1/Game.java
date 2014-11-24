@@ -26,6 +26,7 @@ public class Game implements Parcelable {
 	String sound4;
 	long intsound4;
 	Integer romavail;
+	Integer fave;
 
 	public Game() {
 		this.index = 0;
@@ -48,6 +49,7 @@ public class Game implements Parcelable {
 		this.intsound2=0;
 		this.intsound3=0;
 		this.intsound4=0;
+		this.fave=0;
 		// this.sound5="";
 		// this.listavail=0;
 	}
@@ -80,6 +82,7 @@ public class Game implements Parcelable {
 		//sound1 = cursor.getString(tblSound1);
 		romname = cursor.getString(tblRomname);
 		soundhw = cursor.getString(tblSoundhw);
+		this.fave=0;
 		this.intmfg=0;
 		this.intyear=0;
 		this.intsys=0;
@@ -289,6 +292,7 @@ public class Game implements Parcelable {
 		out.writeLong(intsound3);
 		out.writeLong(intsound4);
 		out.writeString(soundhw);
+		out.writeInt(fave);
 		// out.writeInt(romavail);
 
 	}
@@ -314,6 +318,7 @@ public class Game implements Parcelable {
 		intsound3 = in.readInt();
 		intsound4 = in.readInt();
 		soundhw = in.readString();
+		fave = in.readInt();
 		// romavail = in.readInt();
 	}
 

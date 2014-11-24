@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ToggleButton;
 
 public class GameListFragment extends FragmentActivity implements
 		GameListActivity.OnItemSelectedListener, GameListOptionsActivity.OnOptionsChanged {
@@ -77,6 +79,17 @@ public class GameListFragment extends FragmentActivity implements
 		sorted = b.getBoolean("sorted");
 		sortType = b.getInt("sortType");
 		return;
+	}
+	
+	public void onToggleClicked(View view) {
+	    // Is the toggle on?
+	    boolean on = ((ToggleButton) view).isChecked();
+	    
+	    if (on) {
+	    	GameListOpenHelper.setAlbumFave((Integer)view.getTag(), true);
+	    } else {
+	    	GameListOpenHelper.setAlbumFave((Integer)view.getTag(), false);
+	    }
 	}
 	
 	public static boolean isFiltered(){

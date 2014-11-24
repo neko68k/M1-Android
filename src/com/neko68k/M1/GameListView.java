@@ -2,9 +2,11 @@ package com.neko68k.M1;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 public class GameListView extends LinearLayout {
 	private TextView mText;
@@ -29,13 +31,15 @@ public class GameListView extends LinearLayout {
 		 */
 		// addView(mIcon, new LinearLayout.LayoutParams(
 		// LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-
+		
 		mText = new TextView(context);
 		mText.setText(aIconifiedText.getText());
 		mText.setTextSize(17);
 		/* Now the text (after the icon) */
 		addView(mText, new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
 				LayoutParams.WRAP_CONTENT));
+		
+		
 	}
 
 	public void setText(String words) {
@@ -45,4 +49,7 @@ public class GameListView extends LinearLayout {
 	public void setIcon(Bitmap bullet) {
 		mIcon.setImageBitmap(bullet);
 	}
+	
+	
+	
 }

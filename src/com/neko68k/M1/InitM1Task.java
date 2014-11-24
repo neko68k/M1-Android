@@ -114,8 +114,6 @@ public class InitM1Task extends AsyncTask<Void, Void, Void> {
 				game.romavail = NDKBridge.simpleAudit(i);
 				game.index = i;
 				
-				
-				
 				crc.update(game.mfg.getBytes());
 				mfgHashSet.put(crc.getValue(), game.mfg);
 				game.intmfg = crc.getValue();
