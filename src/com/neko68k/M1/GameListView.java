@@ -38,7 +38,7 @@ public class GameListView extends LinearLayout {
 		/* Now the text (after the icon) */
 		addView(mText, new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
 				LayoutParams.WRAP_CONTENT));
-		
+		this.setFocusable(true);
 		
 	}
 

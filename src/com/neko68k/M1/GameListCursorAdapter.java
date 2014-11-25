@@ -48,7 +48,6 @@ public class GameListCursorAdapter extends SimpleCursorAdapter implements
 
 	public GameListCursorAdapter(Context context, int layout, Cursor cursor,
 			String[] from, int[] to) {
-		// crashes here
 		super(context, layout, cursor, from, to);
 		tblYear = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_YEAR);
 		tblMfg = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_MFG);
