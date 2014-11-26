@@ -70,9 +70,8 @@ public class MultiSelectSpinner extends Spinner implements OnMultiChoiceClickLis
     public void onClick(DialogInterface dialog, int which, boolean isChecked) {
         if (_selection != null && which < _selection.length) {
             _selection[which] = isChecked;
-            
             _proxyAdapter.clear();
-            
+            _proxyAdapter.add(buildSelectedItemString());
         }
         else {
             throw new IllegalArgumentException("Argument 'which' is out of bounds.");
