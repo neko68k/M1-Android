@@ -37,6 +37,8 @@ import android.widget.SpinnerAdapter;
 public class MultiSelectSpinner extends Spinner implements OnMultiChoiceClickListener {
     String[] _items = null;
     boolean[] _selection = null;
+    String origTop = null;
+    String newTop = null;
     
     ArrayAdapter<String> _proxyAdapter;
     
@@ -69,10 +71,19 @@ public class MultiSelectSpinner extends Spinner implements OnMultiChoiceClickLis
     //@Override
     public void onClick(DialogInterface dialog, int which, boolean isChecked) {
         if (_selection != null && which < _selection.length) {
-            _selection[which] = isChecked;
-            _proxyAdapter.clear();
-            _proxyAdapter.add(buildSelectedItemString());
+	        	_selection[which] = isChecked;
+	        	//String origTop = _proxyAdapter.getItem(0);
+	        	newTop = buildSelectedItemString();
+	        	if(newTop==""){
+	        		newTop = origTop;
+	        	}
+	            _proxyAdapter.clear();
+
+	            _proxyAdapter.add(newTop);
+
         }
+        
+        
         else {
             throw new IllegalArgumentException("Argument 'which' is out of bounds.");
         }
@@ -135,11 +146,14 @@ public class MultiSelectSpinner extends Spinner implements OnMultiChoiceClickLis
     	while(cursor.moveToNext()){
     		_items[i]=cursor.getString(cursor.getColumnIndex(key));
     		_selection[i++]=cursor.getInt(cursor.getColumnIndex(selkey))!=0;
-    		
+    		if(cursor.getInt(cursor.getColumnIndex(selkey))!=0){
+    			_items[0] = buildSelectedItemString();
+    		}
     	}
 
     	
         //Arrays.fill(_selection, false);
+    	origTop = _items[0];
         _proxyAdapter.add(_items[0]);
         _items[0]="Select All";
         setSelection(0);
