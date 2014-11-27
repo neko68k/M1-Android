@@ -224,6 +224,8 @@ public class M1Android extends Activity {
 						NDKBridge.playtime = 0;
 						if (listLen)
 							NDKBridge.getSongLen();
+						else
+							NDKBridge.songLen = NDKBridge.defLen;
 						trackList.smoothScrollToPosition(i);
 					}
 				}
@@ -241,6 +243,8 @@ public class M1Android extends Activity {
 						NDKBridge.playtime = 0;
 						if (listLen)
 							NDKBridge.getSongLen();
+						else
+							NDKBridge.songLen = NDKBridge.defLen;
 						trackList.smoothScrollToPosition(i);
 					}
 				}
@@ -294,7 +298,10 @@ public class M1Android extends Activity {
 			if (mIsBound) {
 				NDKBridge.jumpSong(position);
 				NDKBridge.playerService.setNoteText();
-				NDKBridge.getSongLen();
+				if (listLen)
+					NDKBridge.getSongLen();
+				else
+					NDKBridge.songLen = NDKBridge.defLen;
 			}
 		}
 	};
@@ -328,6 +335,8 @@ public class M1Android extends Activity {
 										.next());
 								if (listLen)
 									NDKBridge.getSongLen();
+								else
+									NDKBridge.songLen = NDKBridge.defLen;
 							}
 							int minutes = seconds / 60;
 							seconds -= minutes * 60;
@@ -501,6 +510,8 @@ public class M1Android extends Activity {
 					} else {
 						if (listLen)
 							NDKBridge.getSongLen();
+						else
+							NDKBridge.songLen = NDKBridge.defLen;
 						NDKBridge.playerService.play();
 
 					}
