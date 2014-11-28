@@ -86,14 +86,16 @@
                 android:minLines="2"
                 android:text="Song: " >
             </TextView>
+            
+            <ListView
+	        android:id="@+id/listView1"
+	        android:layout_width="match_parent"
+	        android:layout_height="fill_parent"
+	        android:layout_weight=".35" />
         </LinearLayout>
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/listView1"
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:layout_weight=".35" />
+    
 
     <!-- linearlayout for horizontal placement of player buttons -->
 
