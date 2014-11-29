@@ -49,18 +49,18 @@ public final class R {
         public static final int lbl1=0x7f0a0023;
         public static final int lbl2=0x7f0a0025;
         public static final int lbl3=0x7f0a0027;
-        public static final int listView1=0x7f0a001d;
+        public static final int listView1=0x7f0a0021;
         public static final int mfg=0x7f0a0008;
         public static final int minutes=0x7f0a0026;
-        public static final int next=0x7f0a0021;
+        public static final int next=0x7f0a0020;
         public static final int open=0x7f0a002a;
         public static final int options=0x7f0a002c;
-        public static final int play=0x7f0a001f;
+        public static final int play=0x7f0a001e;
         public static final int playTime=0x7f0a001b;
-        public static final int prev=0x7f0a001e;
+        public static final int prev=0x7f0a001d;
         public static final int rescan=0x7f0a002b;
         public static final int reset=0x7f0a0019;
-        public static final int rest=0x7f0a0020;
+        public static final int rest=0x7f0a001f;
         public static final int seconds=0x7f0a0028;
         public static final int song=0x7f0a001c;
         public static final int sortOptions=0x7f0a0029;
@@ -78,9 +78,10 @@ public final class R {
         public static final int gamelistfraglayout=0x7f030002;
         public static final int gamelistsortoptions=0x7f030003;
         public static final int main=0x7f030004;
-        public static final int newui=0x7f030005;
-        public static final int option_spinner_layout=0x7f030006;
-        public static final int timepicker=0x7f030007;
+        public static final int mainuifrag=0x7f030005;
+        public static final int newui=0x7f030006;
+        public static final int option_spinner_layout=0x7f030007;
+        public static final int timepicker=0x7f030008;
     }
     public static final class menu {
         public static final int gamelistmenu=0x7f090000;
