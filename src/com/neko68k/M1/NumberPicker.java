@@ -26,7 +26,7 @@ public class NumberPicker extends LinearLayout {
 
 	private final int ELEMENT_HEIGHT = 65;
 	private final int TEXT_WIDTH = 65*2;
-	private final int ELEMENT_WIDTH = 65*2; // you're all squares, yo
+	private final int ELEMENT_WIDTH = 65*2;
 
 	private final int MINIMUM = 0;
 	private final int MAXIMUM = 60;
