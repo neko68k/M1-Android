@@ -10,3 +10,5 @@
 *.sh
 *.ap_
 *.cache
+gen/com/neko68k/M1/BuildConfig.java
+project.properties
