@@ -10,14 +10,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.CompoundButton;
 import android.widget.ListView;
-import android.widget.ToggleButton;
 
 public class GameListActivity extends ListFragment {
 	int isRunning = 0;
 	int max_games;
-	private int defaultSelector = 0;
 	//private boolean filtered = false;
 
 	@Override

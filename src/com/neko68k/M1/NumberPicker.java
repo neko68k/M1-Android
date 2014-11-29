@@ -25,7 +25,8 @@ public class NumberPicker extends LinearLayout {
 	private final long REPEAT_DELAY = 50;
 
 	private final int ELEMENT_HEIGHT = 65;
-	private final int ELEMENT_WIDTH = ELEMENT_HEIGHT; // you're all squares, yo
+	private final int TEXT_WIDTH = 65*2;
+	private final int ELEMENT_WIDTH = 65*2; // you're all squares, yo
 
 	private final int MINIMUM = 0;
 	private final int MAXIMUM = 60;
@@ -69,7 +70,10 @@ public class NumberPicker extends LinearLayout {
 		this.setLayoutParams(new LinearLayout.LayoutParams(
 				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 		LayoutParams elementParams = new LinearLayout.LayoutParams(
-				ELEMENT_HEIGHT, ELEMENT_WIDTH);
+				ELEMENT_WIDTH, LayoutParams.WRAP_CONTENT);
+		elementParams.gravity = Gravity.CENTER;
+		LayoutParams textParams = new LinearLayout.LayoutParams(
+				TEXT_WIDTH, LayoutParams.WRAP_CONTENT);
 
 		// init the individual elements
 		initDecrementButton(context);
@@ -80,11 +84,11 @@ public class NumberPicker extends LinearLayout {
 		// Thanks for the help, LinearLayout!
 		if (getOrientation() == VERTICAL) {
 			addView(increment, elementParams);
-			addView(valueText, elementParams);
+			addView(valueText, textParams);
 			addView(decrement, elementParams);
 		} else {
 			addView(decrement, elementParams);
-			addView(valueText, elementParams);
+			addView(valueText, textParams);
 			addView(increment, elementParams);
 		}
 	}
