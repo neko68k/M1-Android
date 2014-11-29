@@ -46,8 +46,8 @@ public class M1Android extends Activity {
 	Timer updateTimer;
 	ImageView icon;
 
-	ArrayList<String> listItems = new ArrayList<String>();
-	ArrayAdapter<String> adapter;
+	ArrayList<TrackList> listItems = new ArrayList<TrackList>();
+	TrackListAdapter adapter;
 
 	private Handler mHandler = new Handler();
 	// public PlayerService playerService = new PlayerService();
@@ -79,6 +79,7 @@ public class M1Android extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+		TrackList item;
 
 		// get our widget id's
 		trackList = (ListView) findViewById(R.id.listView1);
@@ -98,11 +99,13 @@ public class M1Android extends Activity {
 
 		NDKBridge.ctx = this;
 		if (inited == false) {
-			listItems.add("No game loaded");
-			adapter = new ArrayAdapter<String>(this,
-					android.R.layout.simple_list_item_1, listItems);
+			item = new TrackList("No game loaded");
+			//listItems.add("No game loaded");
+			listItems.add(item);
+			adapter = new TrackListAdapter(this, listItems);
 			trackList.setAdapter(adapter);
 			trackList.setOnItemClickListener(mMessageClickedHandler);
+			trackList.setFocusable(true);
 			GetPrefs();
 			if (NDKBridge.basepath != null) {
 				task = new InitM1Task(NDKBridge.ctx);
@@ -487,9 +490,15 @@ public class M1Android extends Activity {
 									tmp = ":0";
 								else
 									tmp = ":";
-								listItems.add((i + 1) + ". " + song + " - "
-										+ (songlen / 60 / 60) + tmp
+								TrackList item = new TrackList();
+								item.setText(song);
+								item.setTime((songlen / 60 / 60) + tmp
 										+ (songlen / 60 % 60));
+								item.setTrackNum(i+1+".");
+								//listItems.add((i + 1) + ". " + song + " - "
+								//		+ (songlen / 60 / 60) + tmp
+								//		+ (songlen / 60 % 60));
+								listItems.add(item);
 							}
 						}
 
@@ -500,7 +509,9 @@ public class M1Android extends Activity {
 
 					} else {
 						listItems.clear();
-						listItems.add("No playlist");
+						TrackList item = new TrackList("No playlist");
+						//listItems.add("No playlist");
+						listItems.add(item);
 						trackList.setOnItemClickListener(mDoNothing);
 						adapter.notifyDataSetChanged();
 					}
@@ -518,7 +529,9 @@ public class M1Android extends Activity {
 					paused = false;
 				} else {
 					listItems.clear();
-					listItems.add("No game loaded");
+					TrackList item = new TrackList("No game loaded");
+					listItems.add(item);
+					//listItems.add("No game loaded");
 					trackList.setOnItemClickListener(mDoNothing);
 					adapter.notifyDataSetChanged();
 					board.setText("");

@@ -17,11 +17,11 @@
             </intent-filter>
         </activity>
         <activity android:name="com.neko68k.M1.FileBrowser" android:label="@string/app_name"
-    	    />
-        <activity android:name="com.neko68k.M1.Prefs" />
-        <activity android:name="com.neko68k.M1.GameListFragment" />
-        <activity android:name="com.neko68k.M1.GameListActivity" />
-        <activity android:name="com.neko68k.M1.OptionsActivity" />
+    	    android:screenOrientation="portrait"/>
+        <activity android:name="com.neko68k.M1.Prefs" android:screenOrientation="portrait"/>
+        <activity android:name="com.neko68k.M1.GameListFragment" android:screenOrientation="portrait"/>
+        <activity android:name="com.neko68k.M1.GameListActivity" android:screenOrientation="portrait"/>
+        <activity android:name="com.neko68k.M1.OptionsActivity" android:screenOrientation="portrait"/>
 		<service android:name="com.neko68k.M1.PlayerService" />
     </application>
 </manifest>
