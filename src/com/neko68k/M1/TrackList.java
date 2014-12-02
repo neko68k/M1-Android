@@ -56,9 +56,6 @@ public class TrackList implements Comparable<TrackList> {
 	public void setFave(boolean fave) {
 		this.fave = fave;
 	}
-
-	/** Make IconifiedText comparable by its name */
-	// @Override
 	public int compareTo(TrackList other) {
 		if (this.mText != null)
 			return this.trackNum.compareTo(other.getText());

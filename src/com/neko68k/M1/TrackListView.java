@@ -15,33 +15,21 @@ public class TrackListView extends LinearLayout {
 	public TrackListView(Context context, TrackList trackList) {
 		super(context);
 
-		/*
-		 * First Icon and the Text to the right (horizontal), not above and
-		 * below (vertical)
-		 */
-		 this.setOrientation(HORIZONTAL);
+		this.setOrientation(HORIZONTAL);
 
-		// mIcon = new ImageView(context);
-		// mIcon.setImageBitmap(aIconifiedText.getIcon());
-		// left, top, right, bottom
-		// mIcon.setPadding(0, 2, 5, 0); // 5px to the right
-
-		/*
-		 * At first, add the Icon to ourself (! we are extending LinearLayout)
-		 */
-		// addView(mIcon, new LinearLayout.LayoutParams(
-		// LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-		
 		mText = new TextView(context);
 		trackNum = new TextView(context);
 		time = new TextView(context);
 		fave = new CheckBox(context);
 		
-		mText.setText(trackList.getText());
-		//mText.setTextSize(17);
+		mText.setText(trackList.getText());		
 		trackNum.setText(trackList.getTrackNum());
 		time.setText(trackList.getTime());
 		fave.setChecked(false);
+		
+		mText.setTextSize(17);
+		time.setTextSize(17);
+		trackNum.setTextSize(17);
 		
 		fave.setFocusable(false);
 		mText.setFocusable(false);
@@ -55,13 +43,10 @@ public class TrackListView extends LinearLayout {
 				LayoutParams.WRAP_CONTENT); 
 		rightlayout.weight = 0.69f;
 		
-		/* Now the text (after the icon) */
 		addView(trackNum, layout);
 		addView(mText, rightlayout);
 		addView(time, layout);
 		addView(fave, layout);
-		
-		
 	}
 
 	public void setText(String words) {
