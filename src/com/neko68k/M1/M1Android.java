@@ -190,7 +190,7 @@ public class M1Android extends Activity {
 
 		String tmp = (String) preferences.get("langPref");
 		if (tmp != null) {
-			lstLang = new Integer(tmp);
+			lstLang = Integer.valueOf(tmp);
 			NDKBridge.SetOption(NDKBridge.M1_OPT_LANGUAGE, lstLang);
 		}
 
@@ -198,7 +198,7 @@ public class M1Android extends Activity {
 				+ (int) prefs.getLong("defLenMins", 300)
 				+ (int) prefs.getLong("defLenSecs", 0);
 
-		NDKBridge.defLen = new Integer(time);
+		NDKBridge.defLen = Integer.valueOf(time);
 
 		listLen = (Boolean) preferences.get("listLenPref");
 		if (listLen != null) {
@@ -297,7 +297,7 @@ public class M1Android extends Activity {
 	}
 
 	private OnItemClickListener mMessageClickedHandler = new OnItemClickListener() {
-		public void onItemClick(AdapterView parent, View v, int position,
+		public void onItemClick(AdapterView<?> parent, View v, int position,
 				long id) {
 			if (mIsBound) {
 				NDKBridge.jumpSong(position);
@@ -311,7 +311,7 @@ public class M1Android extends Activity {
 	};
 
 	private OnItemClickListener mDoNothing = new OnItemClickListener() {
-		public void onItemClick(AdapterView parent, View v, int position,
+		public void onItemClick(AdapterView<?> parent, View v, int position,
 				long id) {
 			// NDKBridge.jumpSong(position);
 		}
@@ -433,24 +433,16 @@ public class M1Android extends Activity {
 		if (resultCode == RESULT_OK) {
 			if (requestCode == 1) {
 
-				// playerService.//.startService(new Intent(this,
-				// PlayerService.class));
+
 				if (playing == true) {
 
-					// ad.PlayStop();
-					// doUnbindService();
 					playing = false;
 					paused = true;
 					NDKBridge.playerService.stop();
 					doUnbindService();
 					NDKBridge.playtime = 0;
 				}
-				 //NDKBridge.game.index = data.getIntExtra("com.neko68k.M1.position", 0);
-				// NDKBridge.loadROM(NDKBridge.globalGLA.get(gameid));
-				//NDKBridge.game = data.getParcelableExtra("com.neko68k.M1.game");
-				 
-				//Bundle bun = data.getExtras();
-				//Game game = bun.getParcelable("com.neko68k.M1.game");
+
 				NDKBridge.nativeLoadROM(NDKBridge.game.index);
 
 				if (NDKBridge.loadError == false) {
@@ -462,10 +454,8 @@ public class M1Android extends Activity {
 					board.setText("Board: " + NDKBridge.game.sys);
 					mfg.setText("Maker: " + NDKBridge.game.mfg);
 					year.setText("Year: " + NDKBridge.game.year);
-					hardware.setText("Hardware: " + NDKBridge.game.soundhw);// + ", "+ NDKBridge.game.sound1
-							 //+ ", "+ NDKBridge.game.sound2 + ", "+ NDKBridge.game.sound3 + ", "+ NDKBridge.game.sound4);
-
-					//playButton.setText("Pause");
+					hardware.setText("Hardware: " + NDKBridge.game.soundhw);
+					
 					playButton.setImageResource(R.drawable.ic_action_pause);
 
 					numSongs = NDKBridge.getInfoInt(NDKBridge.M1_IINF_TRACKS,
@@ -499,9 +489,6 @@ public class M1Android extends Activity {
 								item.setTime((songlen / 60 / 60) + tmp
 										+ (songlen / 60 % 60));
 								item.setTrackNum(i+1+".");
-								//listItems.add((i + 1) + ". " + song + " - "
-								//		+ (songlen / 60 / 60) + tmp
-								//		+ (songlen / 60 % 60));
 								listItems.add(item);
 							}
 						}
@@ -514,7 +501,6 @@ public class M1Android extends Activity {
 					} else {
 						listItems.clear();
 						TrackList item = new TrackList("No playlist");
-						//listItems.add("No playlist");
 						listItems.add(item);
 						trackList.setOnItemClickListener(mDoNothing);
 						adapter.notifyDataSetChanged();
@@ -535,7 +521,6 @@ public class M1Android extends Activity {
 					listItems.clear();
 					TrackList item = new TrackList("No game loaded");
 					listItems.add(item);
-					//listItems.add("No game loaded");
 					trackList.setOnItemClickListener(mDoNothing);
 					adapter.notifyDataSetChanged();
 					board.setText("");
@@ -546,10 +531,7 @@ public class M1Android extends Activity {
 					trackNum.setText("Track:");
 
 					title.setText("No game loaded");
-					//playButton.setText("Play");
 					playButton.setImageResource(R.drawable.ic_action_play);
-					// Toast.makeText(this, NDKBridge.m1error,
-					// Toast.LENGTH_SHORT).show();
 				}
 			} else if (requestCode == 2) {
 				// options returned
@@ -559,7 +541,6 @@ public class M1Android extends Activity {
 				NDKBridge.basepath = data.getStringExtra("com.neko68k.M1.FN");
 				task = new InitM1Task(NDKBridge.ctx);
 				task.execute();
-				// GetPrefs();
 
 				SharedPreferences prefs = PreferenceManager
 						.getDefaultSharedPreferences(this);
@@ -591,7 +572,6 @@ public class M1Android extends Activity {
 			NDKBridge.playerService.stop();
 			doUnbindService();
 		}
-		// ad.PlayQuit();
 		NDKBridge.nativeClose();
 		
 		this.finish();
@@ -615,8 +595,6 @@ public class M1Android extends Activity {
 			return true;			
 		case R.id.rescan:
 			SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
-			//GameListOpenHelper.dropTable(db);
-			//GameListOpenHelper.onCreate(db);
 			GameListOpenHelper.wipeTables(db);
 			task = new InitM1Task(NDKBridge.ctx);
 			task.execute();

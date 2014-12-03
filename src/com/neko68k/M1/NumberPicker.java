@@ -24,7 +24,7 @@ public class NumberPicker extends LinearLayout {
 
 	private final long REPEAT_DELAY = 50;
 
-	private final int ELEMENT_HEIGHT = 65;
+	
 	private final int TEXT_WIDTH = 65*2;
 	private final int ELEMENT_WIDTH = 65*2;
 
@@ -127,7 +127,7 @@ public class NumberPicker extends LinearLayout {
 
 	private void initValueEditText(Context context) {
 
-		value = new Integer(0);
+		value = Integer.valueOf(0);
 
 		valueText = new EditText(context);
 		valueText.setTextSize(18);

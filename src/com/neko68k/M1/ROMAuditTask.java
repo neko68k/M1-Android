@@ -29,9 +29,6 @@ public class ROMAuditTask extends AsyncTask<Void, Void, Void> {
 		// do stuff here
 		int numGames = NDKBridge.getMaxGames();
 		int i = 0;
-		int j = 0;
-		String title;
-
 		// List<GameList> mItems = new ArrayList<GameList>();
 		for (i = 0; i < numGames; i++) {
 			// NDKBridge.auditROM(i);

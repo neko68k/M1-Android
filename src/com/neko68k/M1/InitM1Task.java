@@ -51,8 +51,7 @@ public class InitM1Task extends AsyncTask<Void, Void, Void> {
 		String outpath = null;
 		Game game;
 		File xml = new File(NDKBridge.basepath + "/m1/m1.xml");
-		if (xml.exists() == false) {
-			File extdir = Environment.getExternalStorageDirectory();
+		if (xml.exists() == false) {			
 			try {
 				outpath = NDKBridge.basepath + "/m1/";
 				File m1dir = new File(outpath);
@@ -185,7 +184,7 @@ public class InitM1Task extends AsyncTask<Void, Void, Void> {
 			GameListOpenHelper.addExtra(GameListOpenHelper.YEAR_TABLE, GameListOpenHelper.KEY_YEAR, 
 					"!--Year--!", Long.valueOf(0));
 
-			Iterator it = cpuHashSet.entrySet().iterator();
+			Iterator<?> it = cpuHashSet.entrySet().iterator();
 			while (it.hasNext()) {
 				Map.Entry pairs = (Map.Entry) it.next();
 				GameListOpenHelper.addExtra(GameListOpenHelper.CPU_TABLE, GameListOpenHelper.KEY_CPU,

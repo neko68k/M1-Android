@@ -1,7 +1,6 @@
 package com.neko68k.M1;
 
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
@@ -16,9 +15,6 @@ import android.widget.RemoteViews;
 // up the battery
 
 public class PlayerService extends Service {
-	private NotificationManager mNM;
-
-	private int NOTIFICATION = 1;
 	String text;
 	Notification notification = null;
 	PendingIntent contentIntent;
@@ -61,7 +57,7 @@ public class PlayerService extends Service {
 		if (notification == null)
 			notification = new Notification(R.drawable.icon, "",
 					System.currentTimeMillis());
-		Intent i = new Intent(this, M1Android.class);
+		new Intent(this, M1Android.class);
 
 		setNoteText();
 		ad.PlayStart();

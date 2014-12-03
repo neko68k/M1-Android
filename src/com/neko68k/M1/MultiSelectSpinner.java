@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -93,6 +94,7 @@ public class MultiSelectSpinner extends Spinner implements OnMultiChoiceClickLis
      * {@inheritDoc}
      */
     
+	@SuppressLint("ClickableViewAccessibility")
 	@Override
     public boolean performClick() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());

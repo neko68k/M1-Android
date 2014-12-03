@@ -2,11 +2,9 @@ package com.neko68k.M1;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
 public class GameListView extends LinearLayout {
 	private TextView mText;
