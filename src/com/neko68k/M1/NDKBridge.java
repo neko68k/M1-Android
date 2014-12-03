@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.TextView;
@@ -191,7 +192,7 @@ public class NDKBridge {
 	}
 
 	public static void Silence() {
-		NDKBridge.next();
+		ctx.startActivity(new Intent(M1Android.ACTION_SKIP));
 		// playerService.setNoteText();
 
 		// if we are to skip songs when we here silence, this is where we do it
@@ -201,6 +202,7 @@ public class NDKBridge {
 		playtime = 0;
 		int i = nextSong();
 		playerService.setNoteText();
+		
 		return i;
 	}
 

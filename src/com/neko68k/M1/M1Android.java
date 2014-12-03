@@ -305,10 +305,16 @@ public class M1Android extends Activity implements MusicFocusable{
                 RemoteControlClientCompat.FLAG_KEY_MEDIA_NEXT |
                 RemoteControlClientCompat.FLAG_KEY_MEDIA_PREVIOUS);
         // Update the remote controls
+        int cmdNum = NDKBridge
+				.getInfoInt(NDKBridge.M1_IINF_TRACKCMD, (NDKBridge.getInfoInt(
+						NDKBridge.M1_IINF_CURSONG, 0) << 16 | NDKBridge
+						.getInfoInt(NDKBridge.M1_IINF_CURGAME, 0)));
+		String text = NDKBridge.getInfoStr(NDKBridge.M1_SINF_TRKNAME, cmdNum << 16
+				| NDKBridge.getInfoInt(NDKBridge.M1_IINF_CURGAME, 0));
         mRemoteControlClientCompat.editMetadata(true)
                 .putString(RemoteControlClientCompat.MetadataEditorCompat.METADATA_KEY_ARTIST, NDKBridge.game.getMfg())
                 .putString(RemoteControlClientCompat.MetadataEditorCompat.METADATA_KEY_ALBUM, NDKBridge.game.getTitle())
-                .putString(RemoteControlClientCompat.MetadataEditorCompat.METADATA_KEY_TITLE, song.getText().toString())
+                .putString(RemoteControlClientCompat.MetadataEditorCompat.METADATA_KEY_TITLE, text)
                 .putLong(RemoteControlClientCompat.MetadataEditorCompat.METADATA_KEY_DURATION,
                         NDKBridge.songLen)
                 // TODO: fetch real item artwork
