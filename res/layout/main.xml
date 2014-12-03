@@ -31,6 +31,13 @@
                 android:minLines="2"
                 android:text="No game loaded " >
             </TextView>
+            
+            <TextView
+                android:id="@+id/year"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"                
+                android:text="Year: " >
+            </TextView>
 
             <TextView
                 android:id="@+id/mfg"

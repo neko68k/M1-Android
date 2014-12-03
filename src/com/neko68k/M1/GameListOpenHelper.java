@@ -374,6 +374,7 @@ public class GameListOpenHelper {
 		db.update(table, values, null, null);
 	}
 
+
 	public static void addGame(Game game) {
 		SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
 

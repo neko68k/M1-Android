@@ -1,7 +1,6 @@
 package com.neko68k.M1;
 
 import android.content.Context;
-import android.view.Gravity;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;

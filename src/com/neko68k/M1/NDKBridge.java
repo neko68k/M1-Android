@@ -45,6 +45,7 @@ public class NDKBridge {
 	static final int M1_OPT_FIXEDVOLUME = 9; // 0 = silence, 100 = regular
 												// volume, 300 = 3 times regular
 												// volume
+	//NDKBridge.SetOption(NDKBridge.M1_OPT_FIXEDVOLUME, 50);
 	static final int M1_OPT_POSTVOLUME = 10;
 
 	// types for m1_get_info_str/_ex
@@ -180,7 +181,7 @@ public class NDKBridge {
 
 	static String basepath = null;
 
-	static GameListAdapter globalGLA = new GameListAdapter();
+	//static GameListAdapter globalGLA = new GameListAdapter();
 	static Map<String, Integer> lookup = new HashMap<String, Integer>();
 	// Map<String, Integer> m = new HashMap<String, Integer>();
 

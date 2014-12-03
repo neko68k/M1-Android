@@ -24,7 +24,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -43,6 +42,7 @@ public class M1Android extends Activity {
 	TextView mfg;
 	TextView song;
 	TextView title;
+	TextView year;
 	Timer updateTimer;
 	ImageView icon;
 
@@ -94,12 +94,14 @@ public class M1Android extends Activity {
 		mfg = (TextView) findViewById(R.id.mfg);
 		song = (TextView) findViewById(R.id.song);
 		title = (TextView) findViewById(R.id.title);
+		year = (TextView) findViewById(R.id.year);
 		icon = (ImageView) findViewById(R.id.icon);
+		
 		NDKBridge.setTitleView(title);
 
 		NDKBridge.ctx = this;
 		if (inited == false) {
-			item = new TrackList("No game loaded");
+			item = new TrackList("No game loadd");
 			//listItems.add("No game loaded");
 			listItems.add(item);
 			adapter = new TrackListAdapter(this, listItems);
@@ -110,7 +112,7 @@ public class M1Android extends Activity {
 			if (NDKBridge.basepath != null) {
 				task = new InitM1Task(NDKBridge.ctx);
 				task.execute();
-			}
+			}			
 		}
 	}
 
@@ -446,6 +448,9 @@ public class M1Android extends Activity {
 				 //NDKBridge.game.index = data.getIntExtra("com.neko68k.M1.position", 0);
 				// NDKBridge.loadROM(NDKBridge.globalGLA.get(gameid));
 				//NDKBridge.game = data.getParcelableExtra("com.neko68k.M1.game");
+				 
+				//Bundle bun = data.getExtras();
+				//Game game = bun.getParcelable("com.neko68k.M1.game");
 				NDKBridge.nativeLoadROM(NDKBridge.game.index);
 
 				if (NDKBridge.loadError == false) {
@@ -453,11 +458,10 @@ public class M1Android extends Activity {
 
 					mHandler.post(mUpdateTimeTask);
 					icon.setImageBitmap(NDKBridge.getIcon());
-					title.setText(NDKBridge.getInfoStr(
-							NDKBridge.M1_SINF_VISNAME,
-							NDKBridge.getInfoInt(NDKBridge.M1_IINF_CURGAME, 0)));
+					title.setText(NDKBridge.game.getTitle());
 					board.setText("Board: " + NDKBridge.game.sys);
 					mfg.setText("Maker: " + NDKBridge.game.mfg);
+					year.setText("Year: " + NDKBridge.game.year);
 					hardware.setText("Hardware: " + NDKBridge.game.soundhw);// + ", "+ NDKBridge.game.sound1
 							 //+ ", "+ NDKBridge.game.sound2 + ", "+ NDKBridge.game.sound3 + ", "+ NDKBridge.game.sound4);
 

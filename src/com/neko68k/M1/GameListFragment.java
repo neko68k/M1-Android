@@ -114,10 +114,13 @@ public class GameListFragment extends FragmentActivity implements
 		// LoadROMTask loadTask = new LoadROMTask(this);
 		// loadTask.execute(new Integer(selectionRowID));
 		// game.index= position;
+		
 		Intent i = new Intent();
 		String title = "";// NDKBridge.getGameList(selectionRowID);
+		//i.putExtra("com.neko68k.M1.game", game);
 		i.putExtra("com.neko68k.M1.title", title);
 		i.putExtra("com.neko68k.M1.position", game.index);
+		
 		//i.putExtra("com.neko68k.M1.game", game);
 		// startActivity(i);
 		NDKBridge.game = game;
