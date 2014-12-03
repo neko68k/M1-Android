@@ -211,22 +211,20 @@ public class NDKBridge {
 	public static Bitmap getIcon() {
 		Bitmap bm = null;
 		// v = params[0];
-		File file = new File(NDKBridge.basepath
+
+		File file = new File(basepath
 				+ "/m1/icons/"
-				+ NDKBridge.getInfoStr(NDKBridge.M1_SINF_ROMNAME,
-						NDKBridge.getInfoInt(M1_IINF_CURGAME, 0)) + ".ico");
+				+ game.romname + ".ico");
 		FileInputStream inputStream;
 		try {
 			inputStream = new FileInputStream(file);
 			bm = BitmapFactory.decodeStream(inputStream);
 			inputStream.close();
-			// v.icon.setImageBitmap(Bitmap.createScaledBitmap(bm, 128, 128,
-			// false));
 		} catch (FileNotFoundException e) {
 			// check for parent(and clone) romsets
 			// if none set default icon
-			file = new File(NDKBridge.basepath + "/m1/icons/"
-					+ NDKBridge.getInfoStr(NDKBridge.M1_SINF_PARENTNAME, cur)
+			file = new File(basepath + "/m1/icons/"
+					+ getInfoStr(NDKBridge.M1_SINF_PARENTNAME, cur)
 					+ ".ico");
 			try {
 				inputStream = new FileInputStream(file);
@@ -235,12 +233,25 @@ public class NDKBridge {
 
 			} catch (FileNotFoundException e1) {
 				// TODO Auto-generated catch block
+				file = new File(basepath + "/m1/icons/!MAMu_0.145u4.ico");
+				try {
+					inputStream = new FileInputStream(file);
+					bm = BitmapFactory.decodeStream(inputStream);
+					inputStream.close();
 
-				e1.printStackTrace();
+				} catch (FileNotFoundException e2) {
+					// TODO Auto-generated catch block
+
+					e2.printStackTrace();
+					return (null);
+				} catch (IOException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
 				return (null);
-			} catch (IOException e1) {
+			} catch (IOException e2) {
 				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				e2.printStackTrace();
 			}
 
 			e.printStackTrace();
@@ -248,15 +259,65 @@ public class NDKBridge {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		// v.icon.setImageBitmap(Bitmap.createScaledBitmap(bm, 128, 128,
-		// false));
+		return (Bitmap.createScaledBitmap(bm, 128, 128, false));
+	}
+	
+	public static Bitmap getIcon(String romname, int romnum) {
+		Bitmap bm = null;
+		// v = params[0];
 
+		File file = new File(basepath
+				+ "/m1/icons/"
+				+ romname + ".ico");
+		FileInputStream inputStream;
+		try {
+			inputStream = new FileInputStream(file);
+			bm = BitmapFactory.decodeStream(inputStream);
+			inputStream.close();
+		} catch (FileNotFoundException e) {
+			// check for parent(and clone) romsets
+			// if none set default icon
+			file = new File(basepath + "/m1/icons/"
+					+ getInfoStr(NDKBridge.M1_SINF_PARENTNAME, romnum)
+					+ ".ico");
+			try {
+				inputStream = new FileInputStream(file);
+				bm = BitmapFactory.decodeStream(inputStream);
+				inputStream.close();
+
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				file = new File(basepath + "/m1/icons/!MAMu_0.145u4.ico");
+				try {
+					inputStream = new FileInputStream(file);
+					bm = BitmapFactory.decodeStream(inputStream);
+					inputStream.close();
+
+				} catch (FileNotFoundException e2) {
+					// TODO Auto-generated catch block
+
+					e2.printStackTrace();
+					return (null);
+				} catch (IOException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+				return (null);
+			} catch (IOException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return (Bitmap.createScaledBitmap(bm, 128, 128, false));
 	}
 
 	public static native void nativeInit(String basepath);
 
-	// public static native void initCallbacks();
 	public static native void nativeClose();
 
 	public static native int simpleAudit(int i);

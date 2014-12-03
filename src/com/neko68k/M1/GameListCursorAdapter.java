@@ -129,47 +129,11 @@ public class GameListCursorAdapter extends SimpleCursorAdapter implements
 			protected Bitmap doInBackground(ViewHolder... params) {
 				Bitmap bm = null;
 				v = params[0];
-				File file = new File(NDKBridge.basepath + "/m1/icons/"
-						+ v.romname + ".ico");
-				FileInputStream inputStream;
-				try {
-					inputStream = new FileInputStream(file);
-					bm = BitmapFactory.decodeStream(inputStream);
-					inputStream.close();
-					// v.icon.setImageBitmap(Bitmap.createScaledBitmap(bm, 128,
-					// 128, false));
-				} catch (FileNotFoundException e) {
-					// check for parent(and clone) romsets
-					// if none set default icon
-					file = new File(NDKBridge.basepath
-							+ "/m1/icons/"
-							+ NDKBridge.getInfoStr(
-									NDKBridge.M1_SINF_PARENTNAME, v.index)
-							+ ".ico");
-					try {
-						inputStream = new FileInputStream(file);
-						bm = BitmapFactory.decodeStream(inputStream);
-						inputStream.close();
-
-					} catch (FileNotFoundException e1) {
-						// TODO Auto-generated catch block
-
-						e1.printStackTrace();
-						return (null);
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				// v.icon.setImageBitmap(Bitmap.createScaledBitmap(bm, 128, 128,
-				// false));
-
-				return (Bitmap.createScaledBitmap(bm, 128, 128, false));
+				bm = NDKBridge.getIcon(v.romname, v.index);
+				
+				if(bm != null)
+					return (bm);
+				else return null;
 			}
 
 			@Override
