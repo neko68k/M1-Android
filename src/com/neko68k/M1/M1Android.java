@@ -376,7 +376,7 @@ public class M1Android extends Activity implements MusicFocusable{
 		        if (mRemoteControlClientCompat != null) {
 		            mRemoteControlClientCompat
 		                    .setPlaybackState(RemoteControlClientCompat.PLAYSTATE_PLAYING);//);
-		            updateRemoteMetadata();
+		            //updateRemoteMetadata();
 		        }       
 			}
 		}
@@ -396,7 +396,7 @@ public class M1Android extends Activity implements MusicFocusable{
 		        if (mRemoteControlClientCompat != null) {
 		            mRemoteControlClientCompat
 		                    .setPlaybackState(RemoteControlClientCompat.PLAYSTATE_PAUSED);
-		            updateRemoteMetadata();
+		            //updateRemoteMetadata();
 		        }
 			}
 		}
@@ -431,7 +431,7 @@ public class M1Android extends Activity implements MusicFocusable{
 		        }
 			}
 		}
-		updateRemoteMetadata();
+		//updateRemoteMetadata();
 	}
 
 	private OnItemClickListener mMessageClickedHandler = new OnItemClickListener() {
