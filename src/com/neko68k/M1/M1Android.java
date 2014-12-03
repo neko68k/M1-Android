@@ -572,12 +572,14 @@ public class M1Android extends Activity implements MusicFocusable{
 	@Override
 	protected void onNewIntent(Intent intent) {
 		String action = intent.getAction();
-        if (action.equals(ACTION_TOGGLE_PLAYBACK)) processTogglePlaybackRequest();
-        else if (action.equals(ACTION_PLAY)) processPlayRequest();
-        else if (action.equals(ACTION_PAUSE)) processPauseRequest();
-        else if (action.equals(ACTION_SKIP)) processSkipRequest();
-        //else if (action.equals(ACTION_STOP)) processStopRequest();
-        else if (action.equals(ACTION_REWIND)) processRewindRequest();
+		if(action != null){
+	        if (action.equals(ACTION_TOGGLE_PLAYBACK)) processTogglePlaybackRequest();
+	        else if (action.equals(ACTION_PLAY)) processPlayRequest();
+	        else if (action.equals(ACTION_PAUSE)) processPauseRequest();
+	        else if (action.equals(ACTION_SKIP)) processSkipRequest();
+	        //else if (action.equals(ACTION_STOP)) processStopRequest();
+	        else if (action.equals(ACTION_REWIND)) processRewindRequest();
+		}
         
         //return START_NOT_STICKY; // Means we started the service, but don't want it to
                                  // restart in case it's killed.
