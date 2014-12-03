@@ -425,6 +425,7 @@ public class M1Android extends Activity implements MusicFocusable{
 		        }
 			}
 		}
+		updateRemoteMetadata();
 	}
 
 	private OnItemClickListener mMessageClickedHandler = new OnItemClickListener() {
@@ -591,6 +592,7 @@ public class M1Android extends Activity implements MusicFocusable{
         // restart media player with new focus settings
         if (playing)
             configAndStartMediaPlayer();
+    
     }
 	
 	void configAndStartMediaPlayer() {
@@ -617,6 +619,7 @@ public class M1Android extends Activity implements MusicFocusable{
 				NDKBridge.unPause();
 				NDKBridge.playerService.unpause();
 				paused = false;
+				updateRemoteMetadata();
 			} 
         }
     }
