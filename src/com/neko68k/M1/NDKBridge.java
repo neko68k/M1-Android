@@ -166,36 +166,17 @@ public class NDKBridge {
 	static int songLen;
 	static boolean inited = false;
 	static int playtime;
-	static Integer curGame;
-	static String board;
-	static String hdw;
-	static String mfg;
-
 	static int mixrate;
-
 	static String xmlPath;
 	static String listPath;
 	static String romPath;
-
 	static String basepath = null;
-
-	//static GameListAdapter globalGLA = new GameListAdapter();
-	static Map<String, Integer> lookup = new HashMap<String, Integer>();
-	// Map<String, Integer> m = new HashMap<String, Integer>();
-
-	static TextView Title;
-	static TextView PlayTime;
-	static TextView TrackNum;
 	static boolean loadError = false;
-	// static GameListAdapter nonglobalgla = new GameListAdapter();
 	static PlayerService playerService = new PlayerService();
 	static String m1error;
 	static Context ctx;
 	static int cur;
 
-	static public void setTitleView(TextView tv) {
-		Title = tv;
-	}
 
 	public static void RomLoadErr() {
 		// this flag prevents it from attempting to start playing
@@ -225,16 +206,6 @@ public class NDKBridge {
 
 	public static void initM1() {
 		nativeInit(basepath);
-	}
-
-	public static void loadROM(String name) {
-
-		// curGame = getROMID(name);
-		curGame = (Integer) lookup.get(name);
-		// board = getBoard(curGame);
-		// hdw = getHardware(curGame);
-		// mfg = getMaker(curGame);
-		nativeLoadROM(curGame);
 	}
 
 	public static Bitmap getIcon() {

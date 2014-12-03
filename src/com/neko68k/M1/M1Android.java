@@ -97,7 +97,7 @@ public class M1Android extends Activity {
 		year = (TextView) findViewById(R.id.year);
 		icon = (ImageView) findViewById(R.id.icon);
 		
-		NDKBridge.setTitleView(title);
+		//NDKBridge.setTitleView(title);
 
 		NDKBridge.ctx = this;
 		if (inited == false) {
