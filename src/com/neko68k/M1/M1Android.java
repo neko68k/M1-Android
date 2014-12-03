@@ -719,14 +719,16 @@ public class M1Android extends Activity implements MusicFocusable{
 						else
 							NDKBridge.songLen = NDKBridge.defLen;
 						//if (mRemoteControlClientCompat != null){							
-							tryToGetAudioFocus();
-							updateRemoteMetadata();
+							
+							
 						//}
 						NDKBridge.playerService.play();
+						
 
 					}
 					playing = true;
 					paused = false;
+					updateRemoteMetadata();
 				} else {
 					listItems.clear();
 					TrackList item = new TrackList("No game loaded");
