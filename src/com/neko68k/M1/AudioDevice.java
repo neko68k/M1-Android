@@ -67,6 +67,10 @@ public class AudioDevice extends Thread {
 		// playing = false;
 		theProducer.PlayUnPause();
 	}
+	
+	public void setVolume(float l, float r){
+		track.setStereoVolume(l, r);
+	}
 
 	public void run() {
 		byte buffer[];

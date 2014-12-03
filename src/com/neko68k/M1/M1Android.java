@@ -5,8 +5,10 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,6 +16,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -29,7 +32,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class M1Android extends Activity {
+@SuppressLint("NewApi")
+public class M1Android extends Activity implements MusicFocusable{
 	ListView trackList;
 	ImageButton nextButton;
 	ImageButton prevButton;
@@ -71,7 +75,31 @@ public class M1Android extends Activity {
 	Integer lstLang;
 
 	InitM1Task task;
+	
+	// ***** Remote Control Stuff ***** //
+	public static final String ACTION_TOGGLE_PLAYBACK =
+            "com.neko68k.M1.action.TOGGLE_PLAYBACK";
+    public static final String ACTION_PLAY = "com.neko68k.M1.action.PLAY";
+    public static final String ACTION_PAUSE = "com.neko68k.M1.action.PAUSE";
+    public static final String ACTION_STOP = "com.neko68k.M1.action.STOP";
+    public static final String ACTION_SKIP = "com.neko68k.M1.action.SKIP";
+    public static final String ACTION_REWIND = "com.neko68k.M1.action.REWIND";
+    public static final String ACTION_URL = "com.neko68k.M1.action.URL";
 
+    RemoteControlClientCompat mRemoteControlClientCompat;
+    ComponentName mMediaButtonReceiverComponent;
+    AudioFocusHelper mAudioFocusHelper = null;
+    public static final float DUCK_VOLUME = 0.1f;
+    AudioFocus mAudioFocus = AudioFocus.NoFocusNoDuck;
+    AudioManager mAudioManager;
+    
+    enum AudioFocus {
+        NoFocusNoDuck,    // we don't have audio focus, and can't duck
+        NoFocusCanDuck,   // we don't have focus, but can play at a low volume ("ducking")
+        Focused           // we have full audio focus
+    }
+    // ***** End Remote Control Stuff ***** //
+    
 	// private PlayerService playerService;
 
 	/** Called when the activity is first created. */
@@ -97,12 +125,19 @@ public class M1Android extends Activity {
 		year = (TextView) findViewById(R.id.year);
 		icon = (ImageView) findViewById(R.id.icon);
 		
-		//NDKBridge.setTitleView(title);
+		mMediaButtonReceiverComponent = new ComponentName(this, MusicIntentReceiver.class);
+		
+		
+		mAudioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+		
+		if (android.os.Build.VERSION.SDK_INT >= 8)
+            mAudioFocusHelper = new AudioFocusHelper(getApplicationContext(), this);
+        else
+            mAudioFocus = AudioFocus.Focused; // no focus feature, so we always "have" audio focus
 
 		NDKBridge.ctx = this;
 		if (inited == false) {
-			item = new TrackList("No game loadd");
-			//listItems.add("No game loaded");
+			item = new TrackList("No game loaded");
 			listItems.add(item);
 			adapter = new TrackListAdapter(this, listItems);
 			trackList.setAdapter(adapter);
@@ -219,39 +254,13 @@ public class M1Android extends Activity {
 
 		nextButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				if (playing == true) {
-					if (paused == false) {
-						int i = NDKBridge.next();
-						trackNum.setText("Track: " + (i));
-
-						NDKBridge.playerService.setNoteText();
-						NDKBridge.playtime = 0;
-						if (listLen)
-							NDKBridge.getSongLen();
-						else
-							NDKBridge.songLen = NDKBridge.defLen;
-						trackList.smoothScrollToPosition(i);
-					}
-				}
-
+				processSkipRequest();
 			}
 		});
 		// PREV
 		prevButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				if (playing == true) {
-					if (paused == false) {
-						int i = NDKBridge.prevSong();
-						trackNum.setText("Track: " + (i));
-						NDKBridge.playerService.setNoteText();
-						NDKBridge.playtime = 0;
-						if (listLen)
-							NDKBridge.getSongLen();
-						else
-							NDKBridge.songLen = NDKBridge.defLen;
-						trackList.smoothScrollToPosition(i);
-					}
-				}
+				processRewindRequest();
 			}
 		});
 		// STOP
@@ -259,15 +268,7 @@ public class M1Android extends Activity {
 			// need to to something with this. it basically kills
 			// the game now and thats kind of unfriendly
 			public void onClick(View v) {
-				// playing = false;
-				// paused = false;
-				// playButton.setText("Play");
-				// ad.PlayStop();
-				// NDKBridge.playerService.stop();
-				// doUnbindService();
-				// NDKBridge.pause();
-				// NDKBridge.stop();
-
+								
 				NDKBridge.restSong();
 				NDKBridge.playtime = 0;
 			}
@@ -275,25 +276,155 @@ public class M1Android extends Activity {
 		// PLAY
 		playButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				if (playing == true) {
-					if (paused == true) {
-						//playButton.setText("Pause");
-						playButton.setImageResource(R.drawable.ic_action_pause);
-						NDKBridge.unPause();
-						// ad.UnPause();
-						NDKBridge.playerService.unpause();
-						paused = false;
-					} else if (paused == false) {
-						NDKBridge.pause();
-						//playButton.setText("Play");
-						playButton.setImageResource(R.drawable.ic_action_play);
-						// ad.PlayPause();
-						NDKBridge.playerService.pause();
-						paused = true;
-					}
-				}
+				processTogglePlaybackRequest();
 			}
 		});
+	}
+	
+	private void updateRemoteMetadata(){
+		// Use the media button APIs (if available) to register ourselves for media button
+        // events
+		tryToGetAudioFocus();
+        MediaButtonHelper.registerMediaButtonEventReceiverCompat(
+                mAudioManager, mMediaButtonReceiverComponent);
+        // Use the remote control APIs (if available) to set the playback state
+        if (mRemoteControlClientCompat == null) {
+            Intent intent = new Intent(Intent.ACTION_MEDIA_BUTTON);
+            intent.setComponent(mMediaButtonReceiverComponent);
+            mRemoteControlClientCompat = new RemoteControlClientCompat(
+                    PendingIntent.getBroadcast(this /*context*/,
+                            0 /*requestCode, ignored*/, intent /*intent*/, 0 /*flags*/));
+            RemoteControlHelper.registerRemoteControlClient(mAudioManager,
+                    mRemoteControlClientCompat);
+        }
+        mRemoteControlClientCompat.setPlaybackState(
+                RemoteControlClientCompat.PLAYSTATE_PLAYING);
+        mRemoteControlClientCompat.setTransportControlFlags(
+                RemoteControlClientCompat.FLAG_KEY_MEDIA_PLAY |
+                RemoteControlClientCompat.FLAG_KEY_MEDIA_PAUSE |
+                RemoteControlClientCompat.FLAG_KEY_MEDIA_NEXT |
+                RemoteControlClientCompat.FLAG_KEY_MEDIA_PREVIOUS);
+        // Update the remote controls
+        mRemoteControlClientCompat.editMetadata(true)
+                .putString(RemoteControlClientCompat.MetadataEditorCompat.METADATA_KEY_ARTIST, NDKBridge.game.getMfg())
+                .putString(RemoteControlClientCompat.MetadataEditorCompat.METADATA_KEY_ALBUM, NDKBridge.game.getTitle())
+                .putString(RemoteControlClientCompat.MetadataEditorCompat.METADATA_KEY_TITLE, song.getText().toString())
+                .putLong(RemoteControlClientCompat.MetadataEditorCompat.METADATA_KEY_DURATION,
+                        NDKBridge.songLen)
+                // TODO: fetch real item artwork
+                //.putBitmap(
+                //        RemoteControlClientCompat.MetadataEditorCompat.METADATA_KEY_ARTWORK,
+                //        mDummyAlbumArt)
+                .apply();
+	}
+	
+	private void processSkipRequest(){
+		if (playing == true) {
+			if (paused == false) {
+				int i = NDKBridge.next();
+				trackNum.setText("Track: " + (i));
+
+				NDKBridge.playerService.setNoteText();
+				NDKBridge.playtime = 0;
+				if (listLen)
+					NDKBridge.getSongLen();
+				else
+					NDKBridge.songLen = NDKBridge.defLen;
+				trackList.smoothScrollToPosition(i);
+				//if (mRemoteControlClientCompat != null)
+					updateRemoteMetadata();
+			}
+		}
+	}
+	
+	
+	private void processRewindRequest(){
+		if (playing == true) {
+			if (paused == false) {
+				int i = NDKBridge.prevSong();
+				trackNum.setText("Track: " + (i));
+				NDKBridge.playerService.setNoteText();
+				NDKBridge.playtime = 0;
+				if (listLen)
+					NDKBridge.getSongLen();
+				else
+					NDKBridge.songLen = NDKBridge.defLen;
+				trackList.smoothScrollToPosition(i);
+				//if (mRemoteControlClientCompat != null)
+					updateRemoteMetadata();
+			}
+		}
+	}
+	
+	private void processPlayRequest(){
+		if (playing == true) {
+			if (paused == true) {
+				tryToGetAudioFocus();
+				//playButton.setText("Pause");
+				playButton.setImageResource(R.drawable.ic_action_pause);
+				NDKBridge.unPause();
+				// ad.UnPause();
+				NDKBridge.playerService.unpause();
+				paused = false;
+				// Tell any remote controls that our playback state is 'playing'.
+		        if (mRemoteControlClientCompat != null) {
+		            mRemoteControlClientCompat
+		                    .setPlaybackState(RemoteControlClientCompat.PLAYSTATE_PLAYING);//);
+		            updateRemoteMetadata();
+		        }       
+			}
+		}
+	
+	}
+	
+	private void processPauseRequest(){
+		if (playing == true) {
+			if (paused == false) {
+				NDKBridge.pause();
+				//playButton.setText("Play");
+				playButton.setImageResource(R.drawable.ic_action_play);
+				// ad.PlayPause();
+				NDKBridge.playerService.pause();
+				paused = true;
+				// Tell any remote controls that our playback state is 'paused'.
+		        if (mRemoteControlClientCompat != null) {
+		            mRemoteControlClientCompat
+		                    .setPlaybackState(RemoteControlClientCompat.PLAYSTATE_PAUSED);
+		            updateRemoteMetadata();
+		        }
+			}
+		}
+	}
+	
+	private void processTogglePlaybackRequest(){
+		if (playing == true) {
+			if (paused == true) {
+				tryToGetAudioFocus();
+				//playButton.setText("Pause");
+				playButton.setImageResource(R.drawable.ic_action_pause);
+				NDKBridge.unPause();
+				// ad.UnPause();
+				NDKBridge.playerService.unpause();
+				paused = false;
+				// Tell any remote controls that our playback state is 'playing'.
+		        if (mRemoteControlClientCompat != null) {
+		            mRemoteControlClientCompat
+		                    .setPlaybackState(RemoteControlClientCompat.PLAYSTATE_PLAYING);
+		        }
+			} else if (paused == false) {
+				NDKBridge.pause();
+				//playButton.setText("Play");
+				playButton.setImageResource(R.drawable.ic_action_play);
+				// ad.PlayPause();
+				NDKBridge.playerService.pause();
+				paused = true;
+				// Tell any remote controls that our playback state is 'paused'.
+		        if (mRemoteControlClientCompat != null) {
+		            mRemoteControlClientCompat
+		                    .setPlaybackState(RemoteControlClientCompat.PLAYSTATE_PAUSED);
+		        }
+			}
+		}
 	}
 
 	private OnItemClickListener mMessageClickedHandler = new OnItemClickListener() {
@@ -302,6 +433,8 @@ public class M1Android extends Activity {
 			if (mIsBound) {
 				NDKBridge.jumpSong(position);
 				NDKBridge.playerService.setNoteText();
+				if (mRemoteControlClientCompat != null)
+					updateRemoteMetadata();
 				if (listLen)
 					NDKBridge.getSongLen();
 				else
@@ -341,6 +474,7 @@ public class M1Android extends Activity {
 									NDKBridge.getSongLen();
 								else
 									NDKBridge.songLen = NDKBridge.defLen;
+								updateRemoteMetadata();
 							}
 							int minutes = seconds / 60;
 							seconds -= minutes * 60;
@@ -390,7 +524,8 @@ public class M1Android extends Activity {
 													NDKBridge.M1_IINF_CURGAME,
 													0));
 							song.setText("Title: " + text);// +track);
-
+							//if (mRemoteControlClientCompat != null)
+								
 						}
 					}
 				}
@@ -426,7 +561,78 @@ public class M1Android extends Activity {
 			mIsBound = false;
 		}
 	}
+	
+	@Override
+	protected void onNewIntent(Intent intent) {
+		String action = intent.getAction();
+        if (action.equals(ACTION_TOGGLE_PLAYBACK)) processTogglePlaybackRequest();
+        else if (action.equals(ACTION_PLAY)) processPlayRequest();
+        else if (action.equals(ACTION_PAUSE)) processPauseRequest();
+        else if (action.equals(ACTION_SKIP)) processSkipRequest();
+        //else if (action.equals(ACTION_STOP)) processStopRequest();
+        else if (action.equals(ACTION_REWIND)) processRewindRequest();
+        
+        //return START_NOT_STICKY; // Means we started the service, but don't want it to
+                                 // restart in case it's killed.
+	}
+	
+	public void onLostAudioFocus(boolean canDuck) {
+        //Toast.makeText(getApplicationContext(), "lost audio focus." + (canDuck ? "can duck" :
+            //"no duck"), Toast.LENGTH_SHORT).show();
+        mAudioFocus = canDuck ? AudioFocus.NoFocusCanDuck : AudioFocus.NoFocusNoDuck;
+        // start/restart/pause media player with new focus settings
+        if (mIsBound && playing)
+            configAndStartMediaPlayer();
+    }
+	
+	public void onGainedAudioFocus() {
+        //Toast.makeText(getApplicationContext(), "gained audio focus.", Toast.LENGTH_SHORT).show();
+        mAudioFocus = AudioFocus.Focused;
+        // restart media player with new focus settings
+        if (playing)
+            configAndStartMediaPlayer();
+    }
+	
+	void configAndStartMediaPlayer() {
+        if (mAudioFocus == AudioFocus.NoFocusNoDuck) {
+            // If we don't have audio focus and can't duck, we have to pause, even if mState
+            // is State.Playing. But we stay in the Playing state so that we know we have to resume
+            // playback once we get the focus back.
+               	if (playing == true) {
+					if (paused == false) {
+						NDKBridge.pause();
+						playButton.setImageResource(R.drawable.ic_action_play);
+						NDKBridge.playerService.pause();
+						paused = true;
+					}
+				}
+        }
+        else if (mAudioFocus == AudioFocus.NoFocusCanDuck)
+        	NDKBridge.playerService.setVolume(DUCK_VOLUME, DUCK_VOLUME);  // we'll be relatively quiet
+        else
+        	NDKBridge.playerService.setVolume(1.0f, 1.0f); // we can be loud
+        if (playing == true) {
+			if (paused == true) {
+				playButton.setImageResource(R.drawable.ic_action_pause);
+				NDKBridge.unPause();
+				NDKBridge.playerService.unpause();
+				paused = false;
+			} 
+        }
+    }
 
+	void giveUpAudioFocus() {
+        if (mAudioFocus == AudioFocus.Focused && mAudioFocusHelper != null
+                                && mAudioFocusHelper.abandonFocus())
+            mAudioFocus = AudioFocus.NoFocusNoDuck;
+    }
+	
+	void tryToGetAudioFocus() {
+        if (mAudioFocus != AudioFocus.Focused && mAudioFocusHelper != null
+                        && mAudioFocusHelper.requestFocus())
+            mAudioFocus = AudioFocus.Focused;
+    }
+	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
 		super.onActivityResult(requestCode, resultCode, data);
@@ -512,6 +718,10 @@ public class M1Android extends Activity {
 							NDKBridge.getSongLen();
 						else
 							NDKBridge.songLen = NDKBridge.defLen;
+						//if (mRemoteControlClientCompat != null){							
+							tryToGetAudioFocus();
+							updateRemoteMetadata();
+						//}
 						NDKBridge.playerService.play();
 
 					}
@@ -573,7 +783,7 @@ public class M1Android extends Activity {
 			doUnbindService();
 		}
 		NDKBridge.nativeClose();
-		
+		giveUpAudioFocus();
 		this.finish();
 	}
 

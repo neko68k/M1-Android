@@ -37,6 +37,10 @@ public class PlayerService extends Service {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		return START_STICKY;
 	}
+	
+	public void setVolume(float l, float r){
+		ad.setVolume(l, r);
+	}
 
 	public void pause() {
 		ad.PlayPause();
