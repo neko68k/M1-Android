@@ -248,7 +248,7 @@ public class NDKBridge {
 					// TODO Auto-generated catch block
 					e2.printStackTrace();
 				}
-				return (null);
+				//return (null);
 			} catch (IOException e2) {
 				// TODO Auto-generated catch block
 				e2.printStackTrace();
@@ -302,7 +302,7 @@ public class NDKBridge {
 					// TODO Auto-generated catch block
 					e2.printStackTrace();
 				}
-				return (null);
+				//return (null);
 			} catch (IOException e2) {
 				// TODO Auto-generated catch block
 				e2.printStackTrace();
