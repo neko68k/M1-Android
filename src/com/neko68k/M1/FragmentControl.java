@@ -8,7 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ToggleButton;
 
-public class GameListFragment extends FragmentActivity implements
+public class FragmentControl extends FragmentActivity implements
 		GameListActivity.OnItemSelectedListener, GameListOptionsActivity.OnOptionsChanged {
 
 	private static boolean filtered = false;
@@ -19,7 +19,7 @@ public class GameListFragment extends FragmentActivity implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.gamelistfraglayout);
+		setContentView(R.layout.fragmentcontainer);
 
 		// Check that the activity is using the layout version with
 		// the fragment_container FrameLayout
@@ -33,7 +33,7 @@ public class GameListFragment extends FragmentActivity implements
 			}
 
 			// Create a new Fragment to be placed in the activity layout
-			GameListActivity firstFragment = new GameListActivity();
+			M1AndroidFragment firstFragment = new M1AndroidFragment();
 
 			// In case this activity was started with special instructions from
 			// an

@@ -39,18 +39,18 @@ public final class R {
         public static final int Sound4=0x7f0a0017;
         public static final int Year=0x7f0a0012;
         public static final int apply=0x7f0a0018;
-        public static final int board=0x7f0a0009;
-        public static final int fragment_container=0x7f0a000b;
-        public static final int hardware=0x7f0a000a;
+        public static final int board=0x7f0a000a;
+        public static final int fragment_container=0x7f0a0004;
+        public static final int hardware=0x7f0a000b;
         public static final int hours=0x7f0a0024;
-        public static final int icon=0x7f0a0004;
+        public static final int icon=0x7f0a0005;
         public static final int image=0x7f0a0001;
         public static final int layout=0x7f0a0000;
         public static final int lbl1=0x7f0a0023;
         public static final int lbl2=0x7f0a0025;
         public static final int lbl3=0x7f0a0027;
         public static final int listView1=0x7f0a0021;
-        public static final int mfg=0x7f0a0008;
+        public static final int mfg=0x7f0a0009;
         public static final int minutes=0x7f0a0026;
         public static final int next=0x7f0a0020;
         public static final int open=0x7f0a002a;
@@ -67,19 +67,20 @@ public final class R {
         public static final int text=0x7f0a0002;
         public static final int text2=0x7f0a0003;
         public static final int text_opt=0x7f0a0022;
-        public static final int title=0x7f0a0006;
-        public static final int togglebutton=0x7f0a0005;
+        public static final int title=0x7f0a0007;
+        public static final int togglebutton=0x7f0a0006;
         public static final int trackNum=0x7f0a001a;
-        public static final int year=0x7f0a0007;
+        public static final int year=0x7f0a0008;
     }
     public static final class layout {
         public static final int custom_notification=0x7f030000;
-        public static final int gamelist_detailed=0x7f030001;
-        public static final int gamelistfraglayout=0x7f030002;
-        public static final int gamelistsortoptions=0x7f030003;
-        public static final int main=0x7f030004;
-        public static final int option_spinner_layout=0x7f030005;
-        public static final int timepicker=0x7f030006;
+        public static final int fragmentcontainer=0x7f030001;
+        public static final int gamelist_detailed=0x7f030002;
+        public static final int gamelistfraglayout=0x7f030003;
+        public static final int gamelistsortoptions=0x7f030004;
+        public static final int main=0x7f030005;
+        public static final int option_spinner_layout=0x7f030006;
+        public static final int timepicker=0x7f030007;
     }
     public static final class menu {
         public static final int gamelistmenu=0x7f090000;
