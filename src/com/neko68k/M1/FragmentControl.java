@@ -58,6 +58,7 @@ public class FragmentControl extends FragmentActivity implements
 		Intent intent;
 		InitM1Task task;
 		FragmentTransaction transaction;
+		
 		switch (item.getItemId()) {
 		case R.id.open:
 
