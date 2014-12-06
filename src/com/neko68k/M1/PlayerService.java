@@ -61,7 +61,7 @@ public class PlayerService extends Service {
 		if (notification == null)
 			notification = new Notification(R.drawable.icon, "",
 					System.currentTimeMillis());
-		new Intent(this, M1Android.class);
+		new Intent(this, M1AndroidFragment.class);
 
 		setNoteText();
 		ad.PlayStart();
@@ -99,10 +99,10 @@ public class PlayerService extends Service {
 		}
 
 		contentIntent = PendingIntent.getActivity(this, 0, new Intent(this,
-				M1Android.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+				M1AndroidFragment.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
 				| Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
 
-		Intent notificationIntent = new Intent(this, M1Android.class);
+		Intent notificationIntent = new Intent(this, M1AndroidFragment.class);
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
 				notificationIntent, 0);
 		notification.contentIntent = contentIntent;

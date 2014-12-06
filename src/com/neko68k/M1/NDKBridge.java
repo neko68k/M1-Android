@@ -192,7 +192,7 @@ public class NDKBridge {
 	}
 
 	public static void Silence() {
-		ctx.startActivity(new Intent(M1Android.ACTION_SKIP));
+		ctx.startActivity(new Intent(M1AndroidFragment.ACTION_SKIP));
 		// playerService.setNoteText();
 
 		// if we are to skip songs when we here silence, this is where we do it
