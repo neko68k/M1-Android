@@ -660,7 +660,7 @@ public class M1AndroidFragment extends Fragment implements MusicFocusable{
             mAudioFocus = AudioFocus.Focused;
     }
 	
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	/*protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == RESULT_OK) {
@@ -792,18 +792,18 @@ public class M1AndroidFragment extends Fragment implements MusicFocusable{
 				Init();
 			}
 		}
-	}
+	}*/
 
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		super.onSaveInstanceState(savedInstanceState);
 	}
 
-	@Override
+	/*@Override
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
-	}
-
+	}*/
+/*
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
@@ -815,7 +815,7 @@ public class M1AndroidFragment extends Fragment implements MusicFocusable{
 		giveUpAudioFocus();
 		this.finish();
 	}
-
+*/
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Intent intent;
@@ -824,8 +824,8 @@ public class M1AndroidFragment extends Fragment implements MusicFocusable{
 		switch (item.getItemId()) {
 		case R.id.open:
 
-			NDKBridge.loadError = false;
-			intent = new Intent(NDKBridge.ctx, GameListFragment.class);
+			NDKBridge.loadError = false; 
+			intent = new Intent(NDKBridge.ctx, GameListActivity.class);
 			startActivityForResult(intent, 1);
 			return true;
 		case R.id.options:

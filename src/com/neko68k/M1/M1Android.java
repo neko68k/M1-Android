@@ -809,7 +809,7 @@ public class M1Android extends Activity implements MusicFocusable{
 		case R.id.open:
 
 			NDKBridge.loadError = false;
-			intent = new Intent(this, GameListFragment.class);
+			intent = new Intent(this, FragmentControl.class);
 			startActivityForResult(intent, 1);
 			return true;
 		case R.id.options:

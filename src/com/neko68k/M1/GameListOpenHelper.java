@@ -229,9 +229,9 @@ public class GameListOpenHelper {
 		+" board.syshash=gamelist.syshash AND "
 		+" gamelist.romavail = 1";
 		
-		if(GameListFragment.isFiltered()){
+		if(FragmentControl.isFiltered()){
 				filters.clear();
-				if(GameListFragment.isFaves()){
+				if(FragmentControl.isFaves()){
 					filters.add(" gamelist.fave=1 ");
 				}
 				if(cpulist!=0){
@@ -271,14 +271,14 @@ public class GameListOpenHelper {
 					}
 				}					
 			} else {
-				if(GameListFragment.isFaves()){
+				if(FragmentControl.isFaves()){
 					query+=" WHERE gamelist.fave=1 ";
 				}
 			}
 		
 		query += " GROUP BY gamelist.title ";
-		if(GameListFragment.isSorted()){
-			switch(GameListFragment.getSortType()){
+		if(FragmentControl.isSorted()){
+			switch(FragmentControl.getSortType()){
 				case 0:
 					query += "ORDER BY gamelist.title ASC";
 					break;

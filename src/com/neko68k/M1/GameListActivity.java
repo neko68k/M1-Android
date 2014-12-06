@@ -56,7 +56,7 @@ public class GameListActivity extends ListFragment {
 		
 		
 		this.setListAdapter(adapter);
-		if(GameListFragment.isFiltered()||GameListFragment.isSorted()||GameListFragment.isFaves()){
+		if(FragmentControl.isFiltered()||FragmentControl.isSorted()||FragmentControl.isFaves()){
 			lv.setFastScrollEnabled(false);	
 		} else {
 			lv.setFastScrollEnabled(true);
