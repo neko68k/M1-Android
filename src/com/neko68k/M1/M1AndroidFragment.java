@@ -150,22 +150,39 @@ public class M1AndroidFragment extends Fragment implements MusicFocusable{
 				task.execute();
 			}			
 		}
-		
+		// set up the button handlers
+		// NEXT
+
+		nextButton.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				processSkipRequest();
+			}
+		});
+		// PREV
+		prevButton.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				processRewindRequest();
+			}
+		});
+		// STOP
+		restButton.setOnClickListener(new View.OnClickListener() {
+			// need to to something with this. it basically kills
+			// the game now and thats kind of unfriendly
+			public void onClick(View v) {
+								
+				NDKBridge.restSong();
+				NDKBridge.playtime = 0;
+			}
+		});
+		// PLAY
+		playButton.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				processTogglePlaybackRequest();
+			}
+		});
+		setHasOptionsMenu(true);
         return v;
     }
-
-	/** Called when the activity is first created. */
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		//setContentView(R.layout.main);
-		
-
-		// get our widget id's
-		
-		
-		
-	}
 
 	private void GetPrefs() {
 		SharedPreferences prefs = PreferenceManager
@@ -261,40 +278,7 @@ public class M1AndroidFragment extends Fragment implements MusicFocusable{
 			listLen = false;
 		}
 
-		Init();
-	}
-
-	private void Init() {
-		// set up the button handlers
-		// NEXT
-
-		nextButton.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				processSkipRequest();
-			}
-		});
-		// PREV
-		prevButton.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				processRewindRequest();
-			}
-		});
-		// STOP
-		restButton.setOnClickListener(new View.OnClickListener() {
-			// need to to something with this. it basically kills
-			// the game now and thats kind of unfriendly
-			public void onClick(View v) {
-								
-				NDKBridge.restSong();
-				NDKBridge.playtime = 0;
-			}
-		});
-		// PLAY
-		playButton.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				processTogglePlaybackRequest();
-			}
-		});
+		
 	}
 	
 	private void updateRemoteMetadata(){

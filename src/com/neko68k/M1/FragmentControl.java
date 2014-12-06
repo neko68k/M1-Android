@@ -1,6 +1,7 @@
 package com.neko68k.M1;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -54,13 +55,41 @@ public class FragmentControl extends FragmentActivity implements
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection
+		Intent intent;
+		InitM1Task task;
+		FragmentTransaction transaction;
 		switch (item.getItemId()) {
+		case R.id.open:
+
+			NDKBridge.loadError = false; 
+			//intent = new Intent(NDKBridge.ctx, GameListActivity.class);
+			//startActivityForResult(intent, 1);
+			
+			GameListActivity glaFragment = new GameListActivity();
+			transaction = getSupportFragmentManager()
+					.beginTransaction();
+			transaction.replace(R.id.fragment_container, glaFragment);
+			transaction.addToBackStack(null);
+
+			// Commit the transaction
+			transaction.commit();
+			return true;
+		case R.id.options:
+			intent = new Intent(NDKBridge.ctx, Prefs.class);
+			startActivityForResult(intent, 2);
+			return true;			
+		case R.id.rescan:
+			SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
+			GameListOpenHelper.wipeTables(db);
+			task = new InitM1Task(NDKBridge.ctx);
+			task.execute();
+			return true;
 		case R.id.sortOptions:
 			GameListOptionsActivity newFragment = new GameListOptionsActivity();
 			// args.putInt(GameListOptionsActivity.ARG_POSITION, position);
 			// newFragment.setArguments(args);
 
-			FragmentTransaction transaction = getSupportFragmentManager()
+			transaction = getSupportFragmentManager()
 					.beginTransaction();
 
 			// Replace whatever is in the fragment_container view with this
