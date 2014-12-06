@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
@@ -35,7 +34,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-@SuppressLint("NewApi")
+
 public class M1AndroidFragment extends Fragment implements MusicFocusable{
 	ListView trackList;
 	ImageButton nextButton;

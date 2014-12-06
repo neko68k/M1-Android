@@ -66,8 +66,6 @@ public class FileBrowser extends ListActivity {
 	 * This function browses to the root-directory of the file-system.
 	 */
 	private void browseToRoot() {
-		String state = Environment.getExternalStorageState();
-
 		// browseTo(Environment.getExternalStorageDirectory());
 		browseTo(new File("/mnt"));
 	}
@@ -130,7 +128,6 @@ public class FileBrowser extends ListActivity {
 		switch (this.displayMode) {
 		case ABSOLUTE:
 			for (File file : files) {
-				int extOfs = file.getName().lastIndexOf(".");
 				// String ext = file.getName().substring(extOfs,
 				// file.getName().length());
 				this.directoryEntries.add(file.getPath());

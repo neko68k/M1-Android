@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.ToggleButton;
 
 public class FragmentControl extends FragmentActivity implements
-		GameListActivity.OnItemSelectedListener, GameListOptionsActivity.OnOptionsChanged {
+		GameListFrag.OnItemSelectedListener, GameListOptionsFrag.OnOptionsChanged {
 
 	private static boolean filtered = false;
 	private static boolean sorted = false;
@@ -66,10 +66,10 @@ public class FragmentControl extends FragmentActivity implements
 			//intent = new Intent(NDKBridge.ctx, GameListActivity.class);
 			//startActivityForResult(intent, 1);
 			
-			GameListActivity glaFragment = new GameListActivity();
+			GameListFrag glfFragment = new GameListFrag();
 			transaction = getSupportFragmentManager()
 					.beginTransaction();
-			transaction.replace(R.id.fragment_container, glaFragment);
+			transaction.replace(R.id.fragment_container, glfFragment);
 			transaction.addToBackStack(null);
 
 			// Commit the transaction
@@ -86,7 +86,7 @@ public class FragmentControl extends FragmentActivity implements
 			task.execute();
 			return true;
 		case R.id.sortOptions:
-			GameListOptionsActivity newFragment = new GameListOptionsActivity();
+			GameListOptionsFrag newFragment = new GameListOptionsFrag();
 			// args.putInt(GameListOptionsActivity.ARG_POSITION, position);
 			// newFragment.setArguments(args);
 
