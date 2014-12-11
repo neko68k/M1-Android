@@ -101,7 +101,7 @@ public class M1Android extends Activity {
 
 		NDKBridge.ctx = this;
 		if (inited == false) {
-			item = new TrackList("No game loadd");
+			item = new TrackList("No game loaded");
 			//listItems.add("No game loaded");
 			listItems.add(item);
 			adapter = new TrackListAdapter(this, listItems);
