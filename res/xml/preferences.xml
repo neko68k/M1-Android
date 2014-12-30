@@ -37,7 +37,10 @@
                         
                         android:summary="Time to wait before skipping songs, in seconds."
                         android:key="defLenPref" />
-                
+                <Preference
+                    android:title="ROM Directory:"
+                    android:key="romdir"
+                    />
 		</PreferenceCategory>
 
 </PreferenceScreen>

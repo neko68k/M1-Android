@@ -7,15 +7,12 @@ import java.util.List;
 
 import android.R;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Environment;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.ListAdapter;
 import android.widget.Toast;
 
-public class FileBrowser { 
+public class FileBrowser{ 
 
 	
 	private List<String> directoryEntries = new ArrayList<String>();
@@ -24,33 +21,43 @@ public class FileBrowser {
 	ArrayAdapter<String> directoryList;
 	private int savenum;
 	Context ctx;
+	//final ListView lv;
 
 	/** Called when the activity is first created. */
-	public FileBrowser(Context ictx, ListView ilv) {
-		ctx = ictx;
+	public FileBrowser() {
+		//super(ictx);
+		//ctx = ictx;
 		
 		savenum = 0;
 		
-		//final ListView lv = ilv;
+		//lv = this.getListView();
 		
-		/*lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			public void onItemClick(AdapterView<?> av, View v, int pos, long id) {
-				onListItemClick(lv, v, pos, id);
-			}
-		});
 		
-		lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+		
+		/*lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 			public boolean onItemLongClick(AdapterView<?> av, View v,
 					int pos, long id) {
 				onListItemLongClick(lv, v, pos, id);
 				return false;
 			}
 		});*/
-		
+		//lv.setAdapter(directoryList);
 		directoryList = new ArrayAdapter<String>(ctx,
 				R.layout.simple_list_item_1, this.directoryEntries);
 
 		browseToRoot();
+	}
+	
+	public String getCurrent(){
+			return (this.currentDirectory.getAbsolutePath());
+	}
+	
+	public String getStringAtOfs(long l){
+		return(this.directoryEntries.get((int) l));
+	}
+	
+	public ArrayAdapter<String> getAdapter(){
+		return(directoryList);
 	}
 
 	/**
@@ -107,26 +114,27 @@ public class FileBrowser {
 
 		// On relative Mode, we have to add the current-path to
 						// the beginning
-			int currentPathStringLenght = this.currentDirectory
+			int currentPathStringLength = this.currentDirectory
 					.getAbsolutePath().length();
 			for (File file : files) {
 				if (file.isDirectory()) {
 					this.directoryEntries.add(file.getAbsolutePath().substring(
-							currentPathStringLenght)
+							currentPathStringLength)
 							+ "/");				
 				}
 			}
 			
 		Collections.sort(this.directoryEntries);
-		//directoryList.notifyDataSetChanged();
+		directoryList.notifyDataSetChanged();
 		
-		//this.getListView().setAdapter(directoryList);
+		//lv.setAdapter(directoryList);
 		//this.setListAdapter(directoryList);
 	}
 	
 	public List<String> getEntries(){
 		return (directoryEntries);
 	}
+	
 
 	/*protected void onListItemLongClick(ListView l, View v, int position, long id) {
 
@@ -159,31 +167,8 @@ public class FileBrowser {
 				//finish();
 			}
 		}
-	}
+	}*/
 
 	
-	protected void onListItemClick(ListView l, View v, int position, long id) {
-		int selectionRowID = (int) position;// (int)
-											// this.getSelectedItemPosition();
-		String selectedFileString = this.directoryEntries.get(selectionRowID);
-		if (selectedFileString.equals(".")) {
-			try {
-				File clickedFile = new File(
-						this.currentDirectory.getAbsolutePath()
-								+ this.directoryEntries.get(selectionRowID));
-				// TODO
-				// return clickedFile and finish dialog
-			} catch (SecurityException e) {
-				File clickedFile = null;
-			}
-		} else if (selectedFileString.equals("..")) {
-			this.upOneLevel();
-		} else {
-			File clickedFile = null;
-				clickedFile = new File(this.currentDirectory.getAbsolutePath()
-						+ this.directoryEntries.get(selectionRowID));		
-			if (clickedFile != null)
-				this.browseTo(clickedFile);
-		}
-	}*/
+	
 }
