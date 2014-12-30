@@ -6,17 +6,15 @@ import java.util.Collections;
 import java.util.List;
 
 import android.R;
-import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class FileBrowser extends ListActivity {
+public class FileBrowser { //extends AlertDialog {
 
 	private enum DISPLAYMODE {
 		ABSOLUTE, RELATIVE;
@@ -27,23 +25,23 @@ public class FileBrowser extends ListActivity {
 	private File currentDirectory = Environment.getExternalStorageDirectory();
 	private boolean dirpick;
 	private int savenum;
+	Context ctx;
 
 	/** Called when the activity is first created. */
-	@Override
-	public void onCreate(Bundle icicle) {
-
-		super.onCreate(icicle);
+	public FileBrowser(Context ictx) {
+		ctx = ictx;
+		//super.onCreate(icicle);
 
 		// setContentView() gets called within the next line,
 		// so we do not need it here.
 		// File roots[] = File.listRoots();
-		Intent intent = getIntent();
-		dirpick = intent.getBooleanExtra("dirpick", false);
-		String title = intent.getStringExtra("title");
-		savenum = intent.getIntExtra("savenum", 0);
-		if (title != null)
-			this.setTitle(title);
-		final ListView lv = getListView();
+		//Intent intent = getIntent();
+		dirpick = true;// intent.getBooleanExtra("dirpick", false);
+		String title = "Choose folder..."; //intent.getStringExtra("title");
+		savenum = 0; // intent.getIntExtra("savenum", 0);
+		//if (title != null)
+		//	this.setTitle(title);
+		/*final ListView lv = getListView();
 		lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			public void onItemClick(AdapterView<?> av, View v, int pos, long id) {
 				onListItemClick(lv, v, pos, id);
@@ -58,7 +56,7 @@ public class FileBrowser extends ListActivity {
 				}
 			});
 		}
-
+*/
 		browseToRoot();
 	}
 
@@ -89,7 +87,7 @@ public class FileBrowser extends ListActivity {
 			try {
 				files = aDirectory.listFiles();
 			} catch (SecurityException e) {
-				Toast.makeText(this, "Permission denied.", Toast.LENGTH_SHORT)
+				Toast.makeText(ctx, "Permission denied.", Toast.LENGTH_SHORT)
 						.show();
 				return;
 			}
@@ -104,8 +102,8 @@ public class FileBrowser extends ListActivity {
 				}
 				i.putExtra("com.neko68k.M1.FN", fn);
 				// startActivity(i);
-				setResult(RESULT_OK, i);
-				finish();
+				//setResult(RESULT_OK, i);
+				//finish();
 			}
 
 		}
@@ -144,35 +142,17 @@ public class FileBrowser extends ListActivity {
 				if (file.isDirectory()) {
 					this.directoryEntries.add(file.getAbsolutePath().substring(
 							currentPathStringLenght)
-							+ "/");
-				} else {
-					if (!dirpick) {
-						int extOfs = file.getName().lastIndexOf(".");
-						if (extOfs != -1) {
-							String ext = file.getName().substring(extOfs,
-									file.getName().length());
-							if (ext.contentEquals(".mcd")
-									|| ext.contentEquals(".MCD")
-									|| ext.contentEquals(".mcr")
-									|| ext.contentEquals(".MCR")
-									|| ext.contentEquals(".GME")
-									|| ext.contentEquals(".gme")) {
-								this.directoryEntries.add(file
-										.getAbsolutePath().substring(
-												currentPathStringLenght));
-							}
-						}
-					}
+							+ "/");				
 				}
 			}
 			break;
 		}
 		Collections.sort(this.directoryEntries);
 
-		ArrayAdapter<String> directoryList = new ArrayAdapter<String>(this,
+		ArrayAdapter<String> directoryList = new ArrayAdapter<String>(ctx,
 				R.layout.simple_list_item_1, this.directoryEntries);
-
-		this.setListAdapter(directoryList);
+		//this.getListView().setAdapter(directoryList);
+		//this.setListAdapter(directoryList);
 	}
 
 	protected void onListItemLongClick(ListView l, View v, int position, long id) {
@@ -209,13 +189,13 @@ public class FileBrowser extends ListActivity {
 				Intent i = new Intent().putExtra("com.neko68k.M1.FN", fn);
 				i.putExtra("savenum", savenum);
 				// startActivity(i);
-				setResult(RESULT_OK, i);
-				finish();
+				//setResult(RESULT_OK, i);
+				//finish();
 			}
 		}
 	}
 
-	@Override
+	
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		int selectionRowID = (int) position;// (int)
 											// this.getSelectedItemPosition();
