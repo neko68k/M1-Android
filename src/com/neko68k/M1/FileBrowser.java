@@ -15,16 +15,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class FileBrowser { //extends AlertDialog {
+public class FileBrowser { 
 
-	private enum DISPLAYMODE {
-		ABSOLUTE, RELATIVE;
-	}
-
-	private final DISPLAYMODE displayMode = DISPLAYMODE.RELATIVE;
+	
 	private List<String> directoryEntries = new ArrayList<String>();
 	private File currentDirectory = Environment.getExternalStorageDirectory();
-	//private boolean dirpick;
+
 	ArrayAdapter<String> directoryList;
 	private int savenum;
 	Context ctx;
@@ -35,9 +31,9 @@ public class FileBrowser { //extends AlertDialog {
 		
 		savenum = 0;
 		
-		final ListView lv = ilv;
+		//final ListView lv = ilv;
 		
-		lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+		/*lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			public void onItemClick(AdapterView<?> av, View v, int pos, long id) {
 				onListItemClick(lv, v, pos, id);
 			}
@@ -49,7 +45,7 @@ public class FileBrowser { //extends AlertDialog {
 				onListItemLongClick(lv, v, pos, id);
 				return false;
 			}
-		});
+		});*/
 		
 		directoryList = new ArrayAdapter<String>(ctx,
 				R.layout.simple_list_item_1, this.directoryEntries);
@@ -60,8 +56,8 @@ public class FileBrowser { //extends AlertDialog {
 	/**
 	 * This function browses to the root-directory of the file-system.
 	 */
-	private void browseToRoot() {
-		String state = Environment.getExternalStorageState();
+	public void browseToRoot() {
+		//String state = Environment.getExternalStorageState();
 
 		// browseTo(Environment.getExternalStorageDirectory());
 		browseTo(new File("/mnt"));
@@ -71,12 +67,12 @@ public class FileBrowser { //extends AlertDialog {
 	 * This function browses up one level according to the field:
 	 * currentDirectory
 	 */
-	private void upOneLevel() {
+	public void upOneLevel() {
 		if (this.currentDirectory.getParent() != null)
 			this.browseTo(this.currentDirectory.getParentFile());
 	}
 
-	private void browseTo(final File aDirectory) {
+	public void browseTo(final File aDirectory) {
 		
 		File files[] = null;
 		if (aDirectory.isDirectory()) {
@@ -109,16 +105,7 @@ public class FileBrowser { //extends AlertDialog {
 			// if(this.currentDirectory.getParent()!="/") //TODO: fix this
 			this.directoryEntries.add("..");
 
-		switch (this.displayMode) {
-		case ABSOLUTE:
-			for (File file : files) {
-				int extOfs = file.getName().lastIndexOf(".");
-				// String ext = file.getName().substring(extOfs,
-				// file.getName().length());
-				this.directoryEntries.add(file.getPath());
-			}
-			break;
-		case RELATIVE: // On relative Mode, we have to add the current-path to
+		// On relative Mode, we have to add the current-path to
 						// the beginning
 			int currentPathStringLenght = this.currentDirectory
 					.getAbsolutePath().length();
@@ -129,20 +116,19 @@ public class FileBrowser { //extends AlertDialog {
 							+ "/");				
 				}
 			}
-			break;
-		}
+			
 		Collections.sort(this.directoryEntries);
-		directoryList.notifyDataSetChanged();
+		//directoryList.notifyDataSetChanged();
 		
 		//this.getListView().setAdapter(directoryList);
 		//this.setListAdapter(directoryList);
 	}
 	
-	public ArrayAdapter<String> getAdapter(){
-		return (directoryList);
+	public List<String> getEntries(){
+		return (directoryEntries);
 	}
 
-	protected void onListItemLongClick(ListView l, View v, int position, long id) {
+	/*protected void onListItemLongClick(ListView l, View v, int position, long id) {
 
 		String fn = new String(this.currentDirectory.getAbsolutePath());
 
@@ -154,14 +140,7 @@ public class FileBrowser { //extends AlertDialog {
 			File clickedFile = null;
 			switch (this.displayMode) {
 			case RELATIVE:
-				try {
-					clickedFile = new File(
-							this.currentDirectory.getAbsolutePath()
-									+ this.directoryEntries.get(selectionRowID));
-				} catch (SecurityException e) {
-					clickedFile = null;
-				}
-				break;
+				
 			case ABSOLUTE:
 				try {
 					clickedFile = new File(
@@ -188,24 +167,23 @@ public class FileBrowser { //extends AlertDialog {
 											// this.getSelectedItemPosition();
 		String selectedFileString = this.directoryEntries.get(selectionRowID);
 		if (selectedFileString.equals(".")) {
-			// Refresh
-			this.browseTo(this.currentDirectory);
+			try {
+				File clickedFile = new File(
+						this.currentDirectory.getAbsolutePath()
+								+ this.directoryEntries.get(selectionRowID));
+				// TODO
+				// return clickedFile and finish dialog
+			} catch (SecurityException e) {
+				File clickedFile = null;
+			}
 		} else if (selectedFileString.equals("..")) {
 			this.upOneLevel();
 		} else {
 			File clickedFile = null;
-			switch (this.displayMode) {
-			case RELATIVE:
 				clickedFile = new File(this.currentDirectory.getAbsolutePath()
-						+ this.directoryEntries.get(selectionRowID));
-				break;
-			case ABSOLUTE:
-				clickedFile = new File(
-						this.directoryEntries.get(selectionRowID));
-				break;
-			}
+						+ this.directoryEntries.get(selectionRowID));		
 			if (clickedFile != null)
 				this.browseTo(clickedFile);
 		}
-	}
+	}*/
 }
