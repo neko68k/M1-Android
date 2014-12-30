@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Environment;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -23,40 +24,36 @@ public class FileBrowser { //extends AlertDialog {
 	private final DISPLAYMODE displayMode = DISPLAYMODE.RELATIVE;
 	private List<String> directoryEntries = new ArrayList<String>();
 	private File currentDirectory = Environment.getExternalStorageDirectory();
-	private boolean dirpick;
+	//private boolean dirpick;
+	ArrayAdapter<String> directoryList;
 	private int savenum;
 	Context ctx;
 
 	/** Called when the activity is first created. */
-	public FileBrowser(Context ictx) {
+	public FileBrowser(Context ictx, ListView ilv) {
 		ctx = ictx;
-		//super.onCreate(icicle);
-
-		// setContentView() gets called within the next line,
-		// so we do not need it here.
-		// File roots[] = File.listRoots();
-		//Intent intent = getIntent();
-		dirpick = true;// intent.getBooleanExtra("dirpick", false);
-		String title = "Choose folder..."; //intent.getStringExtra("title");
-		savenum = 0; // intent.getIntExtra("savenum", 0);
-		//if (title != null)
-		//	this.setTitle(title);
-		/*final ListView lv = getListView();
+		
+		savenum = 0;
+		
+		final ListView lv = ilv;
+		
 		lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			public void onItemClick(AdapterView<?> av, View v, int pos, long id) {
 				onListItemClick(lv, v, pos, id);
 			}
 		});
-		if (dirpick) {
-			lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-				public boolean onItemLongClick(AdapterView<?> av, View v,
-						int pos, long id) {
-					onListItemLongClick(lv, v, pos, id);
-					return false;
-				}
-			});
-		}
-*/
+		
+		lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+			public boolean onItemLongClick(AdapterView<?> av, View v,
+					int pos, long id) {
+				onListItemLongClick(lv, v, pos, id);
+				return false;
+			}
+		});
+		
+		directoryList = new ArrayAdapter<String>(ctx,
+				R.layout.simple_list_item_1, this.directoryEntries);
+
 		browseToRoot();
 	}
 
@@ -80,7 +77,7 @@ public class FileBrowser { //extends AlertDialog {
 	}
 
 	private void browseTo(final File aDirectory) {
-		String fn = null;
+		
 		File files[] = null;
 		if (aDirectory.isDirectory()) {
 			this.currentDirectory = aDirectory;
@@ -92,19 +89,6 @@ public class FileBrowser { //extends AlertDialog {
 				return;
 			}
 			fill(files);
-		} else {
-			if (!dirpick) {
-				Intent i = new Intent();
-				try {
-					fn = new String(aDirectory.getAbsolutePath());
-				} catch (SecurityException e) {
-					fn = null;
-				}
-				i.putExtra("com.neko68k.M1.FN", fn);
-				// startActivity(i);
-				//setResult(RESULT_OK, i);
-				//finish();
-			}
 
 		}
 	}
@@ -148,11 +132,14 @@ public class FileBrowser { //extends AlertDialog {
 			break;
 		}
 		Collections.sort(this.directoryEntries);
-
-		ArrayAdapter<String> directoryList = new ArrayAdapter<String>(ctx,
-				R.layout.simple_list_item_1, this.directoryEntries);
+		directoryList.notifyDataSetChanged();
+		
 		//this.getListView().setAdapter(directoryList);
 		//this.setListAdapter(directoryList);
+	}
+	
+	public ArrayAdapter<String> getAdapter(){
+		return (directoryList);
 	}
 
 	protected void onListItemLongClick(ListView l, View v, int position, long id) {
