@@ -37,6 +37,7 @@
                         
                         android:summary="Time to wait before skipping songs, in seconds."
                         android:key="defLenPref" />
+                
 		</PreferenceCategory>
 
 </PreferenceScreen>
