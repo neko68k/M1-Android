@@ -6,11 +6,15 @@ import java.util.Collections;
 import java.util.List;
 
 import android.R;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnShowListener;
 import android.content.SharedPreferences;
 import android.os.Environment;
 import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -18,18 +22,21 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class FileBrowser{ 
 
-	
+
+public class FileBrowser{ 
 	private List<String> directoryEntries = new ArrayList<String>();
 	private File currentDirectory = Environment.getExternalStorageDirectory();
 
 	ArrayAdapter<String> directoryList;
-	private int savenum;
 	Context ctx;
 	
 	AlertDialog dialog;
 	ListView list;
+	
+	public interface FBCallback{
+		public void selected();
+	}
 	
 	public void showBrowserDlg(final Preference preference){
     	final AlertDialog.Builder builder = new AlertDialog.Builder(preference.getContext());
@@ -64,18 +71,62 @@ public class FileBrowser{
 				}
     	    });
     	builder.setView(list);
+    	
     	list.setAdapter(directoryList);
 
     	dialog = builder.create();
     	dialog.show();
     
 	}
+	
+	public void showBrowserDlg(final String key, final Context ictx){
+		
+		final FBCallback mCallback = (FBCallback)NDKBridge.ctx;
+		
+    	final AlertDialog.Builder builder = new AlertDialog.Builder(ictx);
+
+    	builder.setTitle("Select Folder");
+    	list = new ListView(ictx);
+    	list.setOnItemClickListener(new OnItemClickListener() {
+
+				public void onItemClick(AdapterView<?> arg0, View arg1,
+						int arg2, long arg3) {
+					String selectedFileString = (String) (list.getItemAtPosition(arg2));;
+					if (selectedFileString.equals("(Select this folder)")) {
+						String selectedPath = getCurrent();
+						if(selectedPath!=null){
+							SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ictx);//.getSharedPreferences();
+							SharedPreferences.Editor sped = sp.edit();
+							sped.putString(key, selectedPath);
+							sped.commit();	
+							dialog.dismiss();
+							mCallback.selected();
+							
+							return;
+						}
+					} else if (selectedFileString.equals("(Go up)")) {
+						upOneLevel();
+					} else {
+						File clickedFile = null;
+						clickedFile = new File(getCurrent()+selectedFileString);		
+						if (clickedFile != null){
+							browseTo(clickedFile);
+						}
+					}
+				}
+    	    });
+    	builder.setView(list);
+    	list.setAdapter(directoryList);
+    	
+    	dialog = builder.create();
+    	dialog.show();
+    
+	}
+
 
 	/** Called when the activity is first created. */
 	public FileBrowser(Context ictx) {
 		ctx = ictx;
-		
-		savenum = 0;
 		
 		directoryList = new ArrayAdapter<String>(ctx,
 				R.layout.simple_list_item_1, this.directoryEntries);

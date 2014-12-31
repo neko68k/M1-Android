@@ -32,7 +32,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 @TargetApi(Build.VERSION_CODES.FROYO)
-public class M1Android extends Activity {
+public class M1Android extends Activity implements FileBrowser.FBCallback{
 	ListView trackList;
 	ImageButton nextButton;
 	ImageButton prevButton;
@@ -120,7 +120,7 @@ public class M1Android extends Activity {
 	}
 
 	private void GetPrefs() {
-		SharedPreferences prefs = PreferenceManager
+		final SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(this);
 		preferences = prefs.getAll();
 
@@ -143,14 +143,23 @@ public class M1Android extends Activity {
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
 										int whichButton) {
-									Intent intent = new Intent().setClass(
-											getApplicationContext(),
-											FileBrowser.class);
-									intent.putExtra("title",
-											"Select install directory...");
-									intent.putExtra("dirpick", true);
-									startActivityForResult(intent, 65535);
+									FileBrowser browser = new FileBrowser(M1Android.this);
+									
 									/* User clicked OK so do some stuff */
+									browser.showBrowserDlg("romdir", M1Android.this);
+
+									/*SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(NDKBridge.ctx);
+									preferences = prefs.getAll();
+									
+									NDKBridge.basepath = (String) preferences.get("romdir");
+									task = new InitM1Task(NDKBridge.ctx);
+									task.execute();
+
+									SharedPreferences.Editor editor = prefs.edit();
+									editor.putBoolean("firstRun", false);
+									//editor.putString("basepath", NDKBridge.basepath);
+									editor.commit();
+									Init();*/
 								}
 							})
 					.setNegativeButton("Cancel",
@@ -215,6 +224,8 @@ public class M1Android extends Activity {
 
 		Init();
 	}
+	
+	
 
 	private void Init() {
 		// set up the button handlers
@@ -607,5 +618,20 @@ public class M1Android extends Activity {
 
 			return super.onOptionsItemSelected(item);
 		}
+	}
+public void selected() {
+	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(NDKBridge.ctx);
+	preferences = prefs.getAll();
+	
+	NDKBridge.basepath = (String) preferences.get("romdir");
+	task = new InitM1Task(NDKBridge.ctx);
+	task.execute();
+
+	SharedPreferences.Editor editor = prefs.edit();
+	editor.putBoolean("firstRun", false);
+	//editor.putString("basepath", NDKBridge.basepath);
+	editor.commit();
+	Init();
+		
 	}
 }

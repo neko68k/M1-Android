@@ -12,7 +12,6 @@ import android.widget.ListView;
 public class Prefs extends PreferenceActivity implements
 		Preference.OnPreferenceChangeListener {
 	
-	private Context ctx;
 	FileBrowser browser;
 	AlertDialog dialog;
 	ListView list;
@@ -28,11 +27,6 @@ public class Prefs extends PreferenceActivity implements
 		setResult(RESULT_OK);
 
 	}
-	
-	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        
-        
-    }
 
 	@Override
 	public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen,

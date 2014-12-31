@@ -400,7 +400,7 @@ void Java_com_neko68k_M1_NDKBridge_nativeInit( JNIEnv*  env, jobject thiz, jstri
 			
 			
 			rompath = (char *)malloc(512);
-			sprintf(rompath, "%s/m1/roms/", nbasepath);
+			sprintf(rompath, "%s", nbasepath);
 //			strcpy(rompath, "/sdcard/m1/roms;");	// default rompath
 			wavpath = (char *)malloc(512);
 			sprintf(wavpath, "%s/m1/wave;", nbasepath);
