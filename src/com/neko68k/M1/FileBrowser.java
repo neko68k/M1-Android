@@ -106,11 +106,11 @@ public class FileBrowser{
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		// this.directoryEntries.add(".");
+		 this.directoryEntries.add("(Select this folder)");
 		// String test = this.currentDirectory.getAbsolutePath();
 		if (this.currentDirectory.getParent() != null)
 			// if(this.currentDirectory.getParent()!="/") //TODO: fix this
-			this.directoryEntries.add("..");
+			this.directoryEntries.add("(Go up)");
 
 		// On relative Mode, we have to add the current-path to
 						// the beginning

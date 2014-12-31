@@ -41,29 +41,32 @@ public class Prefs extends PreferenceActivity implements
 
 	@Override
 	public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen,
-			Preference preference) {
+			final Preference preference) {
 		if (preference.getKey().equals("romdir")) {
             //Show your AlertDialog here!
         	final AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         	// 2. Chain together various setter methods to set the dialog characteristics
         	builder.setTitle("Select Folder");
-        	
+        	//preference.set
         	list = new ListView(this);
-        	//list.setAdapter(new ArrayAdapter<String>(this, android.R.layout.select_dialog_item, items));
         	list.setOnItemClickListener(new OnItemClickListener() {
-        	        //public void onItemClick(AdapterView<?> arg0, View view, int pos, long id) {
-        	            
-        	        //}
 
 					public void onItemClick(AdapterView<?> arg0, View arg1,
 							int arg2, long arg3) {
 						String which = (String) (list.getItemAtPosition(arg2));
 						String selectedFileString = which;//browser.getStringAtOfs(which);
-						if (selectedFileString.equals(".")) {
+						if (selectedFileString.equals("(Select this folder)")) {
 							String selectedPath = browser.getCurrent();
+							if(selectedPath!=null){
+								SharedPreferences sp = preference.getSharedPreferences();
+								SharedPreferences.Editor sped = sp.edit();
+								sped.putString("romdir", selectedPath);
+								sped.commit();	
+								dialog.dismiss();
+							}
 							//((AlertDialog) dialog).getListView().setAdapter(browser.getAdapter());
-						} else if (selectedFileString.equals("..")) {
+						} else if (selectedFileString.equals("(Go up)")) {
 							browser.upOneLevel();
 							//((AlertDialog) dialog).getListView().setAdapter(browser.getAdapter());
 						} else {
@@ -78,31 +81,7 @@ public class Prefs extends PreferenceActivity implements
 					}
         	    });
         	builder.setView(list);
-        	
-        	
-        	
-        	list.setAdapter(browser.getAdapter());/*, 
-        			new DialogInterface.OnClickListener() {
-				
-				public void onClick(DialogInterface dialog, int which) {
-					String selectedFileString = browser.getStringAtOfs(which);
-					if (selectedFileString.equals(".")) {
-						String selectedPath = browser.getCurrent();
-						//((AlertDialog) dialog).getListView().setAdapter(browser.getAdapter());
-					} else if (selectedFileString.equals("..")) {
-						browser.upOneLevel();
-						((AlertDialog) dialog).getListView().setAdapter(browser.getAdapter());
-					} else {
-						File clickedFile = null;
-						clickedFile = new File(browser.getCurrent()+selectedFileString);		
-						if (clickedFile != null){
-							browser.browseTo(clickedFile);
-							((AlertDialog) dialog).getListView().setAdapter(browser.getAdapter());
-							
-						}
-					}
-				}});*/
-			
+        	       	list.setAdapter(browser.getAdapter());
 
         	// 3. Get the AlertDialog from create()
         	dialog = builder.create();
