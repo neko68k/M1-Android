@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import android.R;
 import android.app.Activity;
@@ -12,6 +13,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnShowListener;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
@@ -57,6 +59,18 @@ public class FileBrowser{
 							sped.commit();	
 							dialog.dismiss();
 							preference.setSummary(selectedPath);
+							if(preference.getKey()!="icondir"){
+								SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(NDKBridge.ctx);
+								Map<String, ?> preferences = prefs.getAll();
+								
+								NDKBridge.basepath = (String) preferences.get("sysdir");
+								NDKBridge.rompath = (String) preferences.get("romdir");
+								NDKBridge.iconpath = (String) preferences.get("icondir");
+								SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
+								GameListOpenHelper.wipeTables(db);
+								InitM1Task task = new InitM1Task(NDKBridge.ctx);
+								task.execute();
+							}
 							return;
 						}
 					} else if (selectedFileString.equals("(Go up)")) {

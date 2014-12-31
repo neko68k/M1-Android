@@ -177,7 +177,7 @@ public class NDKBridge {
 	static String m1error;
 	static Context ctx;
 	static int cur;
-
+	static Boolean forceRescan = false;
 
 	public static void RomLoadErr() {
 		// this flag prevents it from attempting to start playing

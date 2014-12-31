@@ -43,6 +43,7 @@ public class Prefs extends PreferenceActivity implements
 
 	public boolean onPreferenceChange(Preference preference, Object newValue) {
 		// TODO Auto-generated method stub
+		
 		return true;
 	}
 }
