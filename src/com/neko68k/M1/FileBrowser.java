@@ -40,6 +40,10 @@ public class FileBrowser{
 		public void selected();
 	}
 	
+	public FileBrowser(){
+		
+	}
+	
 	public void showBrowserDlg(final Preference preference){
     	final AlertDialog.Builder builder = new AlertDialog.Builder(preference.getContext());
 
