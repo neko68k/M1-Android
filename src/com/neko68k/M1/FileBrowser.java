@@ -24,9 +24,9 @@ public class FileBrowser{
 	//final ListView lv;
 
 	/** Called when the activity is first created. */
-	public FileBrowser() {
+	public FileBrowser(Context ictx) {
 		//super(ictx);
-		//ctx = ictx;
+		ctx = ictx;
 		
 		savenum = 0;
 		
