@@ -6,10 +6,16 @@ import java.util.Collections;
 import java.util.List;
 
 import android.R;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Environment;
+import android.preference.Preference;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 public class FileBrowser{ 
@@ -21,7 +27,56 @@ public class FileBrowser{
 	ArrayAdapter<String> directoryList;
 	private int savenum;
 	Context ctx;
-	//final ListView lv;
+	
+	AlertDialog dialog;
+	ListView list;
+	
+	public void showBrowserDlg(final Preference preference){
+		//Show your AlertDialog here!
+    	final AlertDialog.Builder builder = new AlertDialog.Builder(preference.getContext());
+
+    	// 2. Chain together various setter methods to set the dialog characteristics
+    	builder.setTitle("Select Folder");
+    	//preference.set
+    	list = new ListView(preference.getContext());
+    	list.setOnItemClickListener(new OnItemClickListener() {
+
+				public void onItemClick(AdapterView<?> arg0, View arg1,
+						int arg2, long arg3) {
+					String selectedFileString = (String) (list.getItemAtPosition(arg2));;
+					if (selectedFileString.equals("(Select this folder)")) {
+						String selectedPath = getCurrent();
+						if(selectedPath!=null){
+							SharedPreferences sp = preference.getSharedPreferences();
+							SharedPreferences.Editor sped = sp.edit();
+							sped.putString(preference.getKey(), selectedPath);
+							sped.commit();	
+							dialog.dismiss();
+							preference.setSummary(selectedPath);
+						}
+						//((AlertDialog) dialog).getListView().setAdapter(browser.getAdapter());
+					} else if (selectedFileString.equals("(Go up)")) {
+						upOneLevel();
+						//((AlertDialog) dialog).getListView().setAdapter(browser.getAdapter());
+					} else {
+						File clickedFile = null;
+						clickedFile = new File(getCurrent()+selectedFileString);		
+						if (clickedFile != null){
+							browseTo(clickedFile);
+							//((AlertDialog) dialog).getListView().setAdapter(browser.getAdapter());
+							
+						}
+					}
+				}
+    	    });
+    	builder.setView(list);
+    	list.setAdapter(directoryList);
+
+    	// 3. Get the AlertDialog from create()
+    	dialog = builder.create();
+    	dialog.show();
+    
+	}
 
 	/** Called when the activity is first created. */
 	public FileBrowser(Context ictx) {
