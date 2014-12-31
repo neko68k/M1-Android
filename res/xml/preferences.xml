@@ -29,16 +29,19 @@
                         android:key="listLenPref" />
                 <TimePickerPreference
                         android:title="Default Song Length"
-                        
                         android:summary="Time to wait before skipping songs, in seconds."
                         android:key="defLenPref" />
                 <Preference
-                    android:title="Base Directory"
-                    android:key="basedir"
+                    android:title="System Folder"
+                    android:key="sysdir"
                     />
                 <Preference
-                    android:title="ROM Directory"
+                    android:title="ROM Folder"
                     android:key="romdir"
+                    />
+                <Preference
+                    android:title="Icon Folder"
+                    android:key="icondir"
                     />
 		</PreferenceCategory>
 

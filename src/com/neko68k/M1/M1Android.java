@@ -125,7 +125,9 @@ public class M1Android extends Activity implements FileBrowser.FBCallback{
 		preferences = prefs.getAll();
 
 		Boolean firstRun = prefs.getBoolean("firstRun", true);
-		NDKBridge.basepath = prefs.getString("basepath", null);
+		NDKBridge.basepath = prefs.getString("sysdir", null);
+		NDKBridge.rompath = prefs.getString("romdir", null);
+		NDKBridge.iconpath = prefs.getString("icondir", null);
 
 		if (firstRun == null || firstRun == true || NDKBridge.basepath == null) {
 			AlertDialog alert = new AlertDialog.Builder(M1Android.this)
@@ -146,7 +148,7 @@ public class M1Android extends Activity implements FileBrowser.FBCallback{
 									FileBrowser browser = new FileBrowser(M1Android.this);
 									
 									/* User clicked OK so do some stuff */
-									browser.showBrowserDlg("romdir", M1Android.this);
+									browser.showBrowserDlg("basedir", M1Android.this);
 
 									/*SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(NDKBridge.ctx);
 									preferences = prefs.getAll();
@@ -551,21 +553,7 @@ public class M1Android extends Activity implements FileBrowser.FBCallback{
 				// options returned
 				// stop everything and set options
 				GetPrefs();
-			} else if (requestCode == 65535) {
-				NDKBridge.basepath = data.getStringExtra("com.neko68k.M1.FN");
-				task = new InitM1Task(NDKBridge.ctx);
-				task.execute();
-
-				SharedPreferences prefs = PreferenceManager
-						.getDefaultSharedPreferences(this);
-				preferences = prefs.getAll();
-
-				SharedPreferences.Editor editor = prefs.edit();
-				editor.putBoolean("firstRun", false);
-				editor.putString("basepath", NDKBridge.basepath);
-				editor.commit();
-				Init();
-			}
+			} 
 		}
 	}
 
@@ -623,7 +611,9 @@ public void selected() {
 	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(NDKBridge.ctx);
 	preferences = prefs.getAll();
 	
-	NDKBridge.basepath = (String) preferences.get("romdir");
+	NDKBridge.basepath = (String) preferences.get("sysdir");
+	NDKBridge.rompath = (String) preferences.get("romdir");
+	NDKBridge.iconpath = (String) preferences.get("icondir");
 	task = new InitM1Task(NDKBridge.ctx);
 	task.execute();
 

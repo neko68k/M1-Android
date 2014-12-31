@@ -97,7 +97,9 @@ public class FileBrowser{
 						if(selectedPath!=null){
 							SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ictx);//.getSharedPreferences();
 							SharedPreferences.Editor sped = sp.edit();
-							sped.putString(key, selectedPath);
+							sped.putString("sysdir", selectedPath);
+							sped.putString("romdir",selectedPath+"/m1/roms");
+							sped.putString("icondir",selectedPath+"/m1/icons/");
 							sped.commit();	
 							dialog.dismiss();
 							mCallback.selected();

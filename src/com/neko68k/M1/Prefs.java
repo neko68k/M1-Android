@@ -31,7 +31,7 @@ public class Prefs extends PreferenceActivity implements
 	@Override
 	public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen,
 			final Preference preference) {
-		if (preference.getKey().equals("romdir")||preference.getKey().equals("basedir")) {
+		if (preference.getKey().equals("romdir")||preference.getKey().equals("sysdir")||preference.getKey().equals("icondir")) {
 			browser.showBrowserDlg(preference);
 		}
 		return true;
