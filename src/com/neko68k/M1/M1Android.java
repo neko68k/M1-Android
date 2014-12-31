@@ -32,7 +32,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 @TargetApi(Build.VERSION_CODES.FROYO)
-public class M1Android extends Activity {
+public class M1Android extends Activity implements FileBrowser.FBCallback{
 	ListView trackList;
 	ImageButton nextButton;
 	ImageButton prevButton;
@@ -120,22 +120,24 @@ public class M1Android extends Activity {
 	}
 
 	private void GetPrefs() {
-		SharedPreferences prefs = PreferenceManager
+		final SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(this);
 		preferences = prefs.getAll();
 
 		Boolean firstRun = prefs.getBoolean("firstRun", true);
-		NDKBridge.basepath = prefs.getString("basepath", null);
+		NDKBridge.basepath = prefs.getString("sysdir", null);
+		NDKBridge.rompath = prefs.getString("romdir", null);
+		NDKBridge.iconpath = prefs.getString("icondir", null);
 
 		if (firstRun == null || firstRun == true || NDKBridge.basepath == null) {
 			AlertDialog alert = new AlertDialog.Builder(M1Android.this)
 					.setTitle("First Run")
 					.setMessage(
-							"It looks like this is your first run. Long press on a folder to choose where to install. "
+							"It looks like this is your first run. Please choose where you'd like to install. "
 									+ "For example, select '/sdcard' and I will install to '/sdcard/m1'. "
 									+ "If you already have a folder with the XML, LST and ROMs, choose its parent. For example, if you have "
 									+ "'/sdcard/m1' choose '/sdcard'. "
-									+ "I will not overwrite any files in it. "
+									+ "I will not overwrite any files in it. Custom ROM folders, etc can be set in the Options."
 									+ "\n - Structure is:"
 									+ "\n   .../m1/m1.xml"
 									+ "\n   .../m1/lists" + "\n   .../m1/roms")
@@ -143,14 +145,23 @@ public class M1Android extends Activity {
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
 										int whichButton) {
-									Intent intent = new Intent().setClass(
-											getApplicationContext(),
-											FileBrowser.class);
-									intent.putExtra("title",
-											"Select install directory...");
-									intent.putExtra("dirpick", true);
-									startActivityForResult(intent, 65535);
+									FileBrowser browser = new FileBrowser(M1Android.this);
+									
 									/* User clicked OK so do some stuff */
+									browser.showBrowserDlg("basedir", M1Android.this);
+
+									/*SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(NDKBridge.ctx);
+									preferences = prefs.getAll();
+									
+									NDKBridge.basepath = (String) preferences.get("romdir");
+									task = new InitM1Task(NDKBridge.ctx);
+									task.execute();
+
+									SharedPreferences.Editor editor = prefs.edit();
+									editor.putBoolean("firstRun", false);
+									//editor.putString("basepath", NDKBridge.basepath);
+									editor.commit();
+									Init();*/
 								}
 							})
 					.setNegativeButton("Cancel",
@@ -215,6 +226,8 @@ public class M1Android extends Activity {
 
 		Init();
 	}
+	
+	
 
 	private void Init() {
 		// set up the button handlers
@@ -540,21 +553,7 @@ public class M1Android extends Activity {
 				// options returned
 				// stop everything and set options
 				GetPrefs();
-			} else if (requestCode == 65535) {
-				NDKBridge.basepath = data.getStringExtra("com.neko68k.M1.FN");
-				task = new InitM1Task(NDKBridge.ctx);
-				task.execute();
-
-				SharedPreferences prefs = PreferenceManager
-						.getDefaultSharedPreferences(this);
-				preferences = prefs.getAll();
-
-				SharedPreferences.Editor editor = prefs.edit();
-				editor.putBoolean("firstRun", false);
-				editor.putString("basepath", NDKBridge.basepath);
-				editor.commit();
-				Init();
-			}
+			} 
 		}
 	}
 
@@ -607,5 +606,22 @@ public class M1Android extends Activity {
 
 			return super.onOptionsItemSelected(item);
 		}
+	}
+public void selected() {
+	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(NDKBridge.ctx);
+	preferences = prefs.getAll();
+	
+	NDKBridge.basepath = (String) preferences.get("sysdir");
+	NDKBridge.rompath = (String) preferences.get("romdir");
+	NDKBridge.iconpath = (String) preferences.get("icondir");
+	task = new InitM1Task(NDKBridge.ctx);
+	task.execute();
+
+	SharedPreferences.Editor editor = prefs.edit();
+	editor.putBoolean("firstRun", false);
+	//editor.putString("basepath", NDKBridge.basepath);
+	editor.commit();
+	Init();
+		
 	}
 }

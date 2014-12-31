@@ -670,7 +670,7 @@ TrkT *trklist_load(char *base, char* basepath)
 	#if __WIN32__
 	sprintf(path, "lists\\%s\\%s.xml", lang[cur_lang], base);
 	#else
-	sprintf(path, "%s/m1lists/%s/%s.xml", basepath, lang[cur_lang], base);
+	sprintf(path, "%s/lists/%s/%s.xml", basepath, lang[cur_lang], base);
 	#endif
 
 	f = fopen(path, "r");
@@ -683,7 +683,7 @@ TrkT *trklist_load(char *base, char* basepath)
 	#if __WIN32__
 	sprintf(path, "lists\\%s\\%s.lst", lang[cur_lang], base);
 	#else
-	sprintf(path, "%s/m1/lists/%s/%s.lst", basepath, lang[cur_lang], base);
+	sprintf(path, "%s/lists/%s/%s.lst", basepath, lang[cur_lang], base);
 	#endif
 
 	f = fopen(path, "r");
