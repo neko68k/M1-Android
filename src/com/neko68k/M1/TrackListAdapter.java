@@ -93,7 +93,7 @@ public class TrackListAdapter extends BaseAdapter {
 			btv.setText(mItems.get(position).getText());
 			btv.setTrackNum(mItems.get(position).getTrackNum());
 			btv.setTime(mItems.get(position).getTime());
-			btv.setFave(mItems.get(position).isFave());			
+			//btv.setFave(mItems.get(position).isFave());			
 		}
 		return btv;
 	}

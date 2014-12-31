@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="com.neko68k.M1" android:versionName="3.00" android:versionCode="20141128">
+      package="com.neko68k.M1" android:versionName="3.00" android:versionCode="20141231">
     <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="21"/>   
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     
