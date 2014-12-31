@@ -133,11 +133,11 @@ public class M1Android extends Activity implements FileBrowser.FBCallback{
 			AlertDialog alert = new AlertDialog.Builder(M1Android.this)
 					.setTitle("First Run")
 					.setMessage(
-							"It looks like this is your first run. Long press on a folder to choose where to install. "
+							"It looks like this is your first run. Please choose where you'd like to install. "
 									+ "For example, select '/sdcard' and I will install to '/sdcard/m1'. "
 									+ "If you already have a folder with the XML, LST and ROMs, choose its parent. For example, if you have "
 									+ "'/sdcard/m1' choose '/sdcard'. "
-									+ "I will not overwrite any files in it. "
+									+ "I will not overwrite any files in it. Custom ROM folders, etc can be set in the Options."
 									+ "\n - Structure is:"
 									+ "\n   .../m1/m1.xml"
 									+ "\n   .../m1/lists" + "\n   .../m1/roms")
