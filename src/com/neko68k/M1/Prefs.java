@@ -1,7 +1,5 @@
 package com.neko68k.M1;
 
-import java.io.File;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -9,9 +7,6 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 public class Prefs extends PreferenceActivity implements
@@ -42,7 +37,7 @@ public class Prefs extends PreferenceActivity implements
 	@Override
 	public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen,
 			final Preference preference) {
-		if (preference.getKey().equals("romdir")) {
+		if (preference.getKey().equals("romdir")||preference.getKey().equals("basedir")) {
 			browser.showBrowserDlg(preference);
 		}
 		return true;
