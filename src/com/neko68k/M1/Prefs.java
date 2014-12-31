@@ -18,12 +18,16 @@ public class Prefs extends PreferenceActivity implements
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		Preference romdirpref;
+		Preference pref;
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.preferences);
 		browser = new FileBrowser(getApplicationContext());
-		romdirpref = this.getPreferenceManager().findPreference("romdir");
-		romdirpref.setSummary(romdirpref.getSharedPreferences().getString("romdir", ""));
+		pref = this.getPreferenceManager().findPreference("romdir");
+		pref.setSummary(pref.getSharedPreferences().getString("romdir", ""));
+		pref = this.getPreferenceManager().findPreference("sysdir");
+		pref.setSummary(pref.getSharedPreferences().getString("sysdir", ""));
+		pref = this.getPreferenceManager().findPreference("icondir");
+		pref.setSummary(pref.getSharedPreferences().getString("icondir", ""));
 		setResult(RESULT_OK);
 
 	}
