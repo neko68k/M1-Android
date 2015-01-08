@@ -8,6 +8,12 @@ android {
         applicationId "com.neko68k.M1"
         minSdkVersion 8
         targetSdkVersion 21
+<<<<<<< HEAD
+=======
+        dependencies {
+            compile "com.android.support:support-v4:18.0.+"
+        }
+>>>>>>> master
         compileOptions {
             sourceCompatibility JavaVersion.VERSION_1_5
             targetCompatibility JavaVersion.VERSION_1_5
@@ -15,6 +21,11 @@ android {
 
         ndk {
             moduleName "M1"
+<<<<<<< HEAD
+=======
+            ldLibs "log"
+            cFlags "-c -O2 -fno-strict-aliasing -fPIC -D__GNU__ -DSOUND_OUTPUT=1 -DHAS_K054539 -DHAS_YM2612=1 -DHAS_YM3438=1 -DHAS_YM2203=1 -DHAS_YM2610=1 -DHAS_YM2610B=1 -DINLINE=\"static __inline__\" -DHAS_YM3812=1 -DHAS_YM3526=1 -DHAS_M65C02=1 -DLSB_FIRST=1 -DHAS_M6803=1 -DHAS_M6808=1 -DHAS_ADSP2105=1 -DHAS_ES5505=1 -DHAS_ES5506=1 -DHAS_K005289=1 -DHAS_SN76496=1 -DHAS_K007232=1 -DHAS_NAMCO=1 -DHAS_CEM3394=1 -DHAS_YMZ280B=1 -DHAS_AY8910=1 -DHAS_DAC=1 -DHAS_SEGAPCM=1 -DHAS_OKIM6295=1 -DHAS_TMS5220=1 -DHAS_ADPCM=1 -DHAS_K051649=1 -DHAS_YM2151_ALT=1 -DHAS_RF5C68=1 -DHAS_QSOUND=1 -DHAS_UPD7759=1 -DHAS_MULTIPCM=1 -DHAS_YMF278B=1 -DHAS_MSM5232=1 -DHAS_K053260=1 -DHAS_POKEY=1 -DHAS_HC55516=1 -DHAS_IREMGA20=1 -DHAS_MSM5205=1 -DHAS_C140=1 -DHAS_BSMT2000=1 -DHAS_HD63701=1 -DHAS_CUSTOM=1 -DHAS_ADSP2100=1 -DHAS_ADSP2101=1 -DHAS_ADSP2115=1 -DHAS_YMF262=1 -DHAS_YM2413=1 -DHAS_YM2608=1 -DHAS_VLM5030=1 -DHAS_MPEG=1 -DHAS_N7751=1 -DHAS_PIC16C54=1 -DHAS_PIC16C55=1 -DHAS_PIC16C56=1 -DHAS_PIC16C57=1 -DHAS_PIC16C58=1 -DHAS_C352=1 -DHAS_YMF271=1 -DHAS_SCSP=1 -DHAS_Y8950=1 -DHAS_ADSP2104=1 -DPATHSEP=\"/\" -DPS2=0 -DM1=1 -DUNIX=1 -DNDEBUG=1 -Wall -DUSE_Z80 -I${project.buildDir}/../src/main/jni/cpu -I${project.buildDir}/../src/main/jni/sound -I${project.buildDir}/../src/main/jni/boards -I${project.buildDir}/../src/main/jni/mpeg -I${project.buildDir}/../src/main/jni/expat -I${project.buildDir}/../src/main/jni/zlib"
+>>>>>>> master
         }
     }
 

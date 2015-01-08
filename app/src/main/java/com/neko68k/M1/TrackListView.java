@@ -45,7 +45,7 @@ public class TrackListView extends LinearLayout {
 		addView(trackNum, layout);
 		addView(mText, rightlayout);
 		addView(time, layout);
-		addView(fave, layout);
+		//addView(fave, layout);
 	}
 
 	public void setText(String words) {

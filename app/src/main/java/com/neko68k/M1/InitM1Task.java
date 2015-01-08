@@ -50,10 +50,10 @@ public class InitM1Task extends AsyncTask<Void, Void, Void> {
 	protected Void doInBackground(Void... unused) {
 		String outpath = null;
 		Game game;
-		File xml = new File(NDKBridge.basepath + "/m1/m1.xml");
+		File xml = new File(NDKBridge.basepath + "/m1.xml");
 		if (xml.exists() == false) {			
 			try {
-				outpath = NDKBridge.basepath + "/m1/";
+				outpath = NDKBridge.basepath;
 				File m1dir = new File(outpath);
 				m1dir.mkdirs();
 			} catch (Exception e1) {
@@ -61,10 +61,10 @@ public class InitM1Task extends AsyncTask<Void, Void, Void> {
 				e1.printStackTrace();
 			}
 
-			Unzip(outpath, R.raw.m1xml20111011);
+			Unzip(outpath+"/", R.raw.m1xml20111011);
 
 			try {
-				outpath = NDKBridge.basepath + "/m1/lists/";
+				outpath = NDKBridge.basepath + "/lists/";
 				File m1dir = new File(outpath);
 				m1dir.mkdirs();
 			} catch (Exception e1) {
@@ -74,7 +74,7 @@ public class InitM1Task extends AsyncTask<Void, Void, Void> {
 			Unzip(outpath, R.raw.lists);
 
 			try {
-				outpath = NDKBridge.basepath + "/m1/roms/";
+				outpath = NDKBridge.basepath + "/roms/";
 				File m1dir = new File(outpath);
 				m1dir.mkdirs();
 			} catch (Exception e1) {
@@ -83,7 +83,7 @@ public class InitM1Task extends AsyncTask<Void, Void, Void> {
 			}
 			
 			try {
-				outpath = NDKBridge.basepath + "/m1/icons/";
+				outpath = NDKBridge.basepath + "/icons/";
 				File m1dir = new File(outpath);
 				m1dir.mkdirs();
 			} catch (Exception e1) {

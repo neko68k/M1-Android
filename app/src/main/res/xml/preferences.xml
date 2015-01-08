@@ -12,11 +12,6 @@
                         android:defaultValue="true"
                         android:summary="Reset normalization between songs"
                         android:key="resetNormPref" />
-              <!--   <CheckBoxPreference
-                        android:title="Use Lists"
-                        android:defaultValue="true"
-                        android:summary="Use list files if available."
-                        android:key="listPref" /> -->
                 <ListPreference
                         android:title="List Language"
                         android:summary="Select the language for list files."
@@ -34,9 +29,20 @@
                         android:key="listLenPref" />
                 <TimePickerPreference
                         android:title="Default Song Length"
-                        
                         android:summary="Time to wait before skipping songs, in seconds."
                         android:key="defLenPref" />
+                <Preference
+                    android:title="System Folder"
+                    android:key="sysdir"
+                    />
+                <Preference
+                    android:title="ROM Folder"
+                    android:key="romdir"
+                    />
+                <Preference
+                    android:title="Icon Folder"
+                    android:key="icondir"
+                    />
 		</PreferenceCategory>
 
 </PreferenceScreen>

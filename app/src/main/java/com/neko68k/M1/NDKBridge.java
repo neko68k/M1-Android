@@ -170,14 +170,15 @@ public class NDKBridge {
 	static int mixrate;
 	static String xmlPath;
 	static String listPath;
-	static String romPath;
+	static String rompath = null;
+	static String iconpath = null;
 	static String basepath = null;
 	static boolean loadError = false;
 	static PlayerService playerService = new PlayerService();
 	static String m1error;
 	static Context ctx;
 	static int cur;
-
+	static Boolean forceRescan = false;
 
 	public static void RomLoadErr() {
 		// this flag prevents it from attempting to start playing
@@ -188,7 +189,10 @@ public class NDKBridge {
 	public static void GenericError(String instring) {
 		// pop a notification that says something bad happened
 		m1error = instring;
-		Toast.makeText(ctx, NDKBridge.m1error, Toast.LENGTH_SHORT).show();
+        //Error: No games or couldn't find m1.xml!
+        if(!m1error.contentEquals("Error: No games or couldn't find m1.xml!")) {
+            Toast.makeText(ctx, NDKBridge.m1error, Toast.LENGTH_SHORT).show();
+        }
 	}
 
 	public static void Silence() {
@@ -207,15 +211,14 @@ public class NDKBridge {
 	}
 
 	public static void initM1() {
-		nativeInit(basepath);
+		nativeInit(basepath, rompath);
 	}
 
 	public static Bitmap getIcon() {
 		Bitmap bm = null;
 		// v = params[0];
 
-		File file = new File(basepath
-				+ "/m1/icons/"
+		File file = new File(iconpath
 				+ game.romname + ".ico");
 		FileInputStream inputStream;
 		try {
@@ -225,7 +228,7 @@ public class NDKBridge {
 		} catch (FileNotFoundException e) {
 			// check for parent(and clone) romsets
 			// if none set default icon
-			file = new File(basepath + "/m1/icons/"
+			file = new File(iconpath
 					+ getInfoStr(NDKBridge.M1_SINF_PARENTNAME, cur)
 					+ ".ico");
 			try {
@@ -235,7 +238,7 @@ public class NDKBridge {
 
 			} catch (FileNotFoundException e1) {
 				// TODO Auto-generated catch block
-				file = new File(basepath + "/m1/icons/!MAMu_0.145u4.ico");
+				file = new File(iconpath+"!MAMu_0.145u4.ico");
 				try {
 					inputStream = new FileInputStream(file);
 					bm = BitmapFactory.decodeStream(inputStream);
@@ -268,8 +271,7 @@ public class NDKBridge {
 		Bitmap bm = null;
 		// v = params[0];
 
-		File file = new File(basepath
-				+ "/m1/icons/"
+		File file = new File(iconpath
 				+ romname + ".ico");
 		FileInputStream inputStream;
 		try {
@@ -279,7 +281,7 @@ public class NDKBridge {
 		} catch (FileNotFoundException e) {
 			// check for parent(and clone) romsets
 			// if none set default icon
-			file = new File(basepath + "/m1/icons/"
+			file = new File(iconpath
 					+ getInfoStr(NDKBridge.M1_SINF_PARENTNAME, romnum)
 					+ ".ico");
 			try {
@@ -289,7 +291,7 @@ public class NDKBridge {
 
 			} catch (FileNotFoundException e1) {
 				// TODO Auto-generated catch block
-				file = new File(basepath + "/m1/icons/!MAMu_0.145u4.ico");
+				file = new File(iconpath+"!MAMu_0.145u4.ico");
 				try {
 					inputStream = new FileInputStream(file);
 					bm = BitmapFactory.decodeStream(inputStream);
@@ -318,7 +320,7 @@ public class NDKBridge {
 		return (Bitmap.createScaledBitmap(bm, 128, 128, false));
 	}
 
-	public static native void nativeInit(String basepath);
+	public static native void nativeInit(String basepath, String rompath);
 
 	public static native void nativeClose();
 
