@@ -1,0 +1,93 @@
+-- Merging decision tree log ---
+manifest
+ADDED from AndroidManifest.xml:2:1
+	xmlns:android
+		ADDED from AndroidManifest.xml:2:11
+	package
+		ADDED from AndroidManifest.xml:3:7
+		INJECTED from AndroidManifest.xml:0:0
+		INJECTED from AndroidManifest.xml:0:0
+	android:versionName
+		ADDED from AndroidManifest.xml:3:32
+	android:versionCode
+		ADDED from AndroidManifest.xml:3:59
+		INJECTED from AndroidManifest.xml:0:0
+		INJECTED from AndroidManifest.xml:0:0
+uses-sdk
+ADDED from AndroidManifest.xml:4:5
+	android:targetSdkVersion
+		ADDED from AndroidManifest.xml:4:41
+		INJECTED from AndroidManifest.xml:0:0
+		INJECTED from AndroidManifest.xml:0:0
+	android:minSdkVersion
+		ADDED from AndroidManifest.xml:4:15
+		INJECTED from AndroidManifest.xml:0:0
+		INJECTED from AndroidManifest.xml:0:0
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from AndroidManifest.xml:5:5
+	android:name
+		ADDED from AndroidManifest.xml:5:22
+application
+ADDED from AndroidManifest.xml:8:5
+	android:label
+		ADDED from AndroidManifest.xml:8:55
+	android:allowBackup
+		ADDED from AndroidManifest.xml:8:88
+	android:icon
+		ADDED from AndroidManifest.xml:8:18
+activity#com.neko68k.M1.M1Android
+ADDED from AndroidManifest.xml:9:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:11:19
+	android:label
+		ADDED from AndroidManifest.xml:10:19
+	android:name
+		ADDED from AndroidManifest.xml:9:19
+	android:launchMode
+		ADDED from AndroidManifest.xml:12:19
+intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
+ADDED from AndroidManifest.xml:14:13
+action#android.intent.action.MAIN
+ADDED from AndroidManifest.xml:15:17
+	android:name
+		ADDED from AndroidManifest.xml:15:25
+category#android.intent.category.LAUNCHER
+ADDED from AndroidManifest.xml:16:17
+	android:name
+		ADDED from AndroidManifest.xml:16:27
+activity#com.neko68k.M1.FileBrowser
+ADDED from AndroidManifest.xml:19:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:20:10
+	android:label
+		ADDED from AndroidManifest.xml:19:61
+	android:name
+		ADDED from AndroidManifest.xml:19:19
+activity#com.neko68k.M1.Prefs
+ADDED from AndroidManifest.xml:21:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:21:55
+	android:name
+		ADDED from AndroidManifest.xml:21:19
+activity#com.neko68k.M1.GameListFragment
+ADDED from AndroidManifest.xml:22:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:22:66
+	android:name
+		ADDED from AndroidManifest.xml:22:19
+activity#com.neko68k.M1.GameListActivity
+ADDED from AndroidManifest.xml:23:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:23:66
+	android:name
+		ADDED from AndroidManifest.xml:23:19
+activity#com.neko68k.M1.OptionsActivity
+ADDED from AndroidManifest.xml:24:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:24:65
+	android:name
+		ADDED from AndroidManifest.xml:24:19
+service#com.neko68k.M1.PlayerService
+ADDED from AndroidManifest.xml:25:3
+	android:name
+		ADDED from AndroidManifest.xml:25:12

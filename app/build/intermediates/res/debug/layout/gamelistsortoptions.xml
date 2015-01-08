@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <CheckBox
+            android:id="@+id/EnableSort"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:text="Enable Sort" />
+
+        <Spinner
+            android:id="@+id/Sort"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5" />
+    </LinearLayout>
+    
+    <CheckBox
+            android:id="@+id/EnableFaves"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enable Faves" />
+
+    <CheckBox
+        android:id="@+id/EnableFilter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enable Filter" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <com.neko68k.M1.MultiSelectSpinner
+            android:id="@+id/Mfg"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5" />
+
+        <com.neko68k.M1.MultiSelectSpinner
+            android:id="@+id/Board"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <com.neko68k.M1.MultiSelectSpinner
+            android:id="@+id/Year"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5" />
+
+        <com.neko68k.M1.MultiSelectSpinner
+            android:id="@+id/CPU"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <com.neko68k.M1.MultiSelectSpinner
+            android:id="@+id/Sound1"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5" />
+
+        <com.neko68k.M1.MultiSelectSpinner
+            android:id="@+id/Sound2"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <com.neko68k.M1.MultiSelectSpinner
+            android:id="@+id/Sound3"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5" />
+
+        <com.neko68k.M1.MultiSelectSpinner
+            android:id="@+id/Sound4"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5" />
+    </LinearLayout>
+
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/apply"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:text="Apply"
+            android:visibility="invisible" />
+        
+        <Button
+            android:id="@+id/reset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:text="Reset"
+            android:visibility="invisible" />
+
+    </LinearLayout>
+    
+
+</LinearLayout><!-- From: file:/home/neko/proj/M1-Android.AS/app/src/main/res/layout/gamelistsortoptions.xml -->
