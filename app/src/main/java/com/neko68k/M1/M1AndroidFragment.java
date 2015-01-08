@@ -35,25 +35,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 
-public class M1AndroidFragment extends Fragment implements MusicFocusable{
-	ListView trackList;
-	ImageButton nextButton;
-	ImageButton prevButton;
-	ImageButton restButton;
-	ImageButton playButton;
-	TextView trackNum;
-	TextView playTime;
-	TextView board;
-	TextView hardware;
-	TextView mfg;
-	TextView song;
-	TextView title;
-	TextView year;
-	Timer updateTimer;
-	ImageView icon;
+public class M1AndroidFragment extends Fragment{
 
-	ArrayList<TrackList> listItems = new ArrayList<TrackList>();
-	TrackListAdapter adapter;
+
+
+
+
 
 	private Handler mHandler = new Handler();
 	// public PlayerService playerService = new PlayerService();
@@ -78,62 +65,13 @@ public class M1AndroidFragment extends Fragment implements MusicFocusable{
 
 	InitM1Task task;
 	
-	// ***** Remote Control Stuff ***** //
-	public static final String ACTION_TOGGLE_PLAYBACK =
-            "com.neko68k.M1.action.TOGGLE_PLAYBACK";
-    public static final String ACTION_PLAY = "com.neko68k.M1.action.PLAY";
-    public static final String ACTION_PAUSE = "com.neko68k.M1.action.PAUSE";
-    public static final String ACTION_STOP = "com.neko68k.M1.action.STOP";
-    public static final String ACTION_SKIP = "com.neko68k.M1.action.SKIP";
-    public static final String ACTION_REWIND = "com.neko68k.M1.action.REWIND";
-    public static final String ACTION_URL = "com.neko68k.M1.action.URL";
 
-    RemoteControlClientCompat mRemoteControlClientCompat;
-    ComponentName mMediaButtonReceiverComponent;
-    AudioFocusHelper mAudioFocusHelper = null;
-    public static final float DUCK_VOLUME = 0.1f;
-    AudioFocus mAudioFocus = AudioFocus.NoFocusNoDuck;
-    AudioManager mAudioManager;
-    
-    enum AudioFocus {
-        NoFocusNoDuck,    // we don't have audio focus, and can't duck
-        NoFocusCanDuck,   // we don't have focus, but can play at a low volume ("ducking")
-        Focused           // we have full audio focus
-    }
-    // ***** End Remote Control Stuff ***** //
     
 	// private PlayerService playerService;
     
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    	TrackList item;
-        View v = inflater.inflate(R.layout.main, container, false);
-        trackList = (ListView) v.findViewById(R.id.listView1);
-		nextButton = (ImageButton) v.findViewById(R.id.next);
-		prevButton = (ImageButton) v.findViewById(R.id.prev);
-		restButton = (ImageButton) v.findViewById(R.id.rest);
-		playButton = (ImageButton) v.findViewById(R.id.play);
-		trackNum = (TextView) v.findViewById(R.id.trackNum);
-		playTime = (TextView) v.findViewById(R.id.playTime);
-		board = (TextView) v.findViewById(R.id.board);
-		hardware = (TextView) v.findViewById(R.id.hardware);
-		mfg = (TextView) v.findViewById(R.id.mfg);
-		song = (TextView) v.findViewById(R.id.song);
-		title = (TextView) v.findViewById(R.id.title);
-		year = (TextView) v.findViewById(R.id.year);
-		icon = (ImageView) v.findViewById(R.id.icon);
+
 		
-		Context ctx = getActivity();
-		NDKBridge.ctx = ctx;
-		
-		mMediaButtonReceiverComponent = new ComponentName(ctx, MusicIntentReceiver.class);
-		
-		
-		mAudioManager = (AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
-		
-		if (android.os.Build.VERSION.SDK_INT >= 8)
-            mAudioFocusHelper = new AudioFocusHelper(ctx, this);
-        else
-            mAudioFocus = AudioFocus.Focused; // no focus feature, so we always "have" audio focus
+
 
 		
 		if (inited == false) {
@@ -152,33 +90,7 @@ public class M1AndroidFragment extends Fragment implements MusicFocusable{
 		// set up the button handlers
 		// NEXT
 
-		nextButton.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				processSkipRequest();
-			}
-		});
-		// PREV
-		prevButton.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				processRewindRequest();
-			}
-		});
-		// STOP
-		restButton.setOnClickListener(new View.OnClickListener() {
-			// need to to something with this. it basically kills
-			// the game now and thats kind of unfriendly
-			public void onClick(View v) {
-								
-				NDKBridge.restSong();
-				NDKBridge.playtime = 0;
-			}
-		});
-		// PLAY
-		playButton.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				processTogglePlaybackRequest();
-			}
-		});
+
 		setHasOptionsMenu(true);
         return v;
     }
@@ -442,28 +354,9 @@ public class M1AndroidFragment extends Fragment implements MusicFocusable{
 		//updateRemoteMetadata();
 	}
 
-	private OnItemClickListener mMessageClickedHandler = new OnItemClickListener() {
-		public void onItemClick(AdapterView<?> parent, View v, int position,
-				long id) {
-			if (mIsBound) {
-				NDKBridge.jumpSong(position);
-				NDKBridge.playerService.setNoteText();
-				if (mRemoteControlClientCompat != null)
-					updateRemoteMetadata();
-				if (listLen)
-					NDKBridge.getSongLen();
-				else
-					NDKBridge.songLen = NDKBridge.defLen;
-			}
-		}
-	};
 
-	private OnItemClickListener mDoNothing = new OnItemClickListener() {
-		public void onItemClick(AdapterView<?> parent, View v, int position,
-				long id) {
-			// NDKBridge.jumpSong(position);
-		}
-	};
+
+
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -593,64 +486,7 @@ public class M1AndroidFragment extends Fragment implements MusicFocusable{
                                  // restart in case it's killed.
 	}*/
 	
-	public void onLostAudioFocus(boolean canDuck) {
-        //Toast.makeText(getApplicationContext(), "lost audio focus." + (canDuck ? "can duck" :
-            //"no duck"), Toast.LENGTH_SHORT).show();
-        mAudioFocus = canDuck ? AudioFocus.NoFocusCanDuck : AudioFocus.NoFocusNoDuck;
-        // start/restart/pause media player with new focus settings
-        if (mIsBound && playing)
-            configAndStartMediaPlayer();
-    }
-	
-	public void onGainedAudioFocus() {
-        //Toast.makeText(getApplicationContext(), "gained audio focus.", Toast.LENGTH_SHORT).show();
-        mAudioFocus = AudioFocus.Focused;
-        // restart media player with new focus settings
-        if (playing)
-            configAndStartMediaPlayer();
-    
-    }
-	
-	void configAndStartMediaPlayer() {
-        if (mAudioFocus == AudioFocus.NoFocusNoDuck) {
-            // If we don't have audio focus and can't duck, we have to pause, even if mState
-            // is State.Playing. But we stay in the Playing state so that we know we have to resume
-            // playback once we get the focus back.
-               	if (playing == true) {
-					if (paused == false) {
-						NDKBridge.pause();
-						playButton.setImageResource(R.drawable.ic_action_play);
-						NDKBridge.playerService.pause();
-						paused = true;
-					}
-				}
-        }
-        else if (mAudioFocus == AudioFocus.NoFocusCanDuck)
-        	NDKBridge.playerService.setVolume(DUCK_VOLUME, DUCK_VOLUME);  // we'll be relatively quiet
-        else
-        	NDKBridge.playerService.setVolume(1.0f, 1.0f); // we can be loud
-        if (playing == true) {
-			if (paused == true) {
-				playButton.setImageResource(R.drawable.ic_action_pause);
-				NDKBridge.unPause();
-				NDKBridge.playerService.unpause();
-				paused = false;
-				updateRemoteMetadata();
-			} 
-        }
-    }
 
-	void giveUpAudioFocus() {
-        if (mAudioFocus == AudioFocus.Focused && mAudioFocusHelper != null
-                                && mAudioFocusHelper.abandonFocus())
-            mAudioFocus = AudioFocus.NoFocusNoDuck;
-    }
-	
-	void tryToGetAudioFocus() {
-        if (mAudioFocus != AudioFocus.Focused && mAudioFocusHelper != null
-                        && mAudioFocusHelper.requestFocus())
-            mAudioFocus = AudioFocus.Focused;
-    }
 	
 	/*protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
