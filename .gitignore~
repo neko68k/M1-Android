@@ -12,9 +12,3 @@
 *.cache
 gen/com/neko68k/M1/BuildConfig.java
 project.properties
-.gradle
-/local.properties
-/.idea/workspace.xml
-/.idea/libraries
-.DS_Store
-/build
