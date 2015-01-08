@@ -1,2 +1,0 @@
-/home/neko/proj/M1-Android.AS/app/build/intermediates/classes/release
-/home/neko/proj/M1-Android.AS/app/build/intermediates/pre-dexed/release/support-v4-18.0.0-83325f366c51088434a4068ce5788999b2a48ed7.jar
