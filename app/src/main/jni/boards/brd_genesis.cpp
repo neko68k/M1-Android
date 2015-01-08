@@ -7,9 +7,9 @@
 static unsigned char z80_ram[0x2000];
 
 // sound driver include handlers
-#include "gen_inc_gems.cpp"
-#include "gen_inc_soundimages.cpp"
-#include "gen_inc_smpsz80.cpp"
+#include "gen_inc_gems.h"
+#include "gen_inc_soundimages.h"
+#include "gen_inc_smpsz80.h"
 
 static void Gen_Init(long srate);
 static void Gen_SendCmd(int cmda, int cmdb);

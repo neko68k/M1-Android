@@ -352,10 +352,10 @@ int Java_com_neko68k_M1_NDKBridge_simpleAudit(JNIEnv* env, jobject thiz, int i){
 	if(testFile!=NULL){
 		fclose(testFile);
 		free(fullZipName);
-		__android_log_print(ANDROID_LOG_INFO, "M1Android", "%s OK!\n", zipName);
+		__android_log_print(ANDROID_LOG_INFO, "M1Android", "$s/%s OK!\n", rompath,zipName);
 		return 1;
 	}
-	__android_log_print(ANDROID_LOG_INFO, "M1Android", "%s NOT-OK!\n", zipName);
+	__android_log_print(ANDROID_LOG_INFO, "M1Android", "%s/%s NOT-OK!\n", rompath,zipName);
 	return 0;
 }
 
@@ -366,7 +366,7 @@ void Java_com_neko68k_M1_NDKBridge_SetOption( JNIEnv*  env, jobject thiz, int op
 }
 
 // TODO: fix this shit up to take a jstring arg that is the rompath
-void Java_com_neko68k_M1_NDKBridge_nativeInit( JNIEnv*  env, jobject thiz, jstring basepath)
+void Java_com_neko68k_M1_NDKBridge_nativeInit( JNIEnv*  env, jobject thiz, jstring basepath, jstring rpath)
 {
 		FILE *cnf = NULL;
 		m1snd_setoption(M1_OPT_RETRIGGER, 0);
@@ -377,6 +377,7 @@ void Java_com_neko68k_M1_NDKBridge_nativeInit( JNIEnv*  env, jobject thiz, jstri
 		m1snd_setoption(M1_OPT_SAMPLERATE, 44100);
 		__android_log_print(ANDROID_LOG_INFO, "M1Android", "Starting init...");
 		const char *nbasepath = (*env)->GetStringUTFChars(env, basepath, 0);
+		const char *nrompath = (*env)->GetStringUTFChars(env, rpath, 0);
 		m1snd_init(NULL, m1ui_message, nbasepath);
 		max_games = m1snd_get_info_int(M1_IINF_TOTALGAMES, 0);
 
@@ -400,12 +401,14 @@ void Java_com_neko68k_M1_NDKBridge_nativeInit( JNIEnv*  env, jobject thiz, jstri
 			
 			
 			rompath = (char *)malloc(512);
-			sprintf(rompath, "%s/m1/roms/", nbasepath);
+			//sprintf(rompath, "%s", nrompath);
+			strcpy(rompath, nrompath);
 //			strcpy(rompath, "/sdcard/m1/roms;");	// default rompath
 			wavpath = (char *)malloc(512);
 			sprintf(wavpath, "%s/m1/wave;", nbasepath);
 			//strcpy(wavpath, "/sdcard/m1/wave;");	// default wavepath
 			(*env)->ReleaseStringUTFChars(env, basepath, nbasepath);
+			(*env)->ReleaseStringUTFChars(env, rpath, nrompath);
 			__android_log_print(ANDROID_LOG_INFO, "M1Android", "Init done.\n");
 		/*}
 		else

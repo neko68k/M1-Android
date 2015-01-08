@@ -133,7 +133,7 @@ static m6502_Regs m6502;
 /***************************************************************
  * include the opcode macros, functions and tables
  ***************************************************************/
-#include "t6502.c"
+#include "t6502.c.h"
 
 #if (HAS_M6510)
 #include "t6510.c"
@@ -148,7 +148,7 @@ static m6502_Regs m6502;
 #include "opsc02.h"
 
 #if (HAS_M65C02)
-#include "t65c02.c"
+#include "t65c02.c.h"
 #endif
 
 #if (HAS_M65SC02)

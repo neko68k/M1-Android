@@ -131,7 +131,7 @@ UINT8	H6280_debug_mmr[8];
 #include "h6280ops.h"
 
 /* include the opcode macros, functions and function pointer tables */
-#include "tblh6280.c"
+#include "tblh6280.h"
 
 /*****************************************************************************/
 void h6280_init(void)

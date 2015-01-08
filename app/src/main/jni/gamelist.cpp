@@ -393,7 +393,7 @@ int gamelist_load(char *basepath)
 	numgames = 0;
 	games = (M1GameT *)NULL;	// realloc() will become malloc() if ptr is NULL, which is handy
 	char *xmlpath = (char *)malloc(512);
-	sprintf(xmlpath, "%s/m1/m1.xml\0", basepath);
+	sprintf(xmlpath, "%s/m1.xml\0", basepath);
 	f = fopen(xmlpath, "r");
 	if (!f)
 	{

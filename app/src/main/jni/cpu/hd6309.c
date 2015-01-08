@@ -333,7 +333,7 @@ static UINT8 *index_cycle;
 #define EXTLONG(lng) {EXTENDED;lng.w.h=RM16(EAD);lng.w.l=RM16(EAD+2);}
 
 /* includes the static function prototypes and other tables */
-#include "6309tbl.c"
+#include "6309tbl.c.h"
 
 /* macros for branch instructions */
 #define BRANCH(f) { 					\
@@ -774,7 +774,7 @@ unsigned hd6309_dasm(char *buffer, unsigned pc)
 }
 
 /* includes the actual opcode implementations */
-#include "6309ops.c"
+#include "6309ops.c.h"
 
 int hd6309_getcycles(void)
 {

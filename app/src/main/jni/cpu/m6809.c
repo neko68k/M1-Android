@@ -669,10 +669,10 @@ unsigned m6809_dasm(char *buffer, unsigned pc)
 }
 
 /* includes the static function prototypes and the master opcode table */
-#include "6809tbl.c"
+#include "6809tbl.c.h"
 
 /* includes the actual opcode implementations */
-#include "6809ops.c"
+#include "6809ops.c.h"
 
 /* execute instructions on this CPU until icount expires */
 int m6809_execute(int cycles)	/* NS 970908 */

@@ -38,7 +38,7 @@
 #define FM_DELAY    2   // delay in number of slots processed before samples are written to the FM ring buffer
 
 // include the LFO handling code
-#include "scsplfo.c"
+#include "scsplfo.h"
 
 /*
     SCSP features 32 programmable slots

@@ -288,7 +288,7 @@ sb_charMatches(const ENCODING *enc, const char *p, int c)
 #endif
 
 #define PREFIX(ident) normal_ ## ident
-#include "xmltok_impl.c"
+#include "xmltok_impl2.h"
 
 #undef MINBPC
 #undef BYTE_TYPE
@@ -685,7 +685,7 @@ little2_isNmstrtMin(const ENCODING *enc, const char *p)
 #define IS_NMSTRT_CHAR(enc, p, n) (0)
 #define IS_NMSTRT_CHAR_MINBPC(enc, p) LITTLE2_IS_NMSTRT_CHAR_MINBPC(enc, p)
 
-#include "xmltok_impl.c"
+#include "xmltok_impl2.h"
 
 #undef MINBPC
 #undef BYTE_TYPE
@@ -824,7 +824,7 @@ big2_isNmstrtMin(const ENCODING *enc, const char *p)
 #define IS_NMSTRT_CHAR(enc, p, n) (0)
 #define IS_NMSTRT_CHAR_MINBPC(enc, p) BIG2_IS_NMSTRT_CHAR_MINBPC(enc, p)
 
-#include "xmltok_impl.c"
+#include "xmltok_impl2.h"
 
 #undef MINBPC
 #undef BYTE_TYPE
@@ -1603,7 +1603,7 @@ initScan(const ENCODING **encodingTable,
 
 #define NS(x) x
 #define ns(x) x
-#include "xmltok_ns.c"
+#include "xmltok_ns.h"
 #undef NS
 #undef ns
 
@@ -1612,7 +1612,7 @@ initScan(const ENCODING **encodingTable,
 #define NS(x) x ## NS
 #define ns(x) x ## _ns
 
-#include "xmltok_ns.c"
+#include "xmltok_ns.h"
 
 #undef NS
 #undef ns

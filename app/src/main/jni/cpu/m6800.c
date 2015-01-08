@@ -540,10 +540,10 @@ static void check_timer_event(void)
 }
 
 /* include the opcode prototypes and function pointer tables */
-#include "6800tbl.c"
+#include "6800tbl.c.h"
 
 /* include the opcode functions */
-#include "6800ops.c"
+#include "6800ops.c.h"
 
 /****************************************************************************
  * Reset registers to their initial values

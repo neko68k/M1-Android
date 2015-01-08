@@ -1,6 +1,7 @@
 #ifndef __M1SDR_ANDROID_H__
 #define __M1SDR_ANDROID_H__
 
+#include <jni.h>
 #include "osddefs.h"
 #include "oss.h"
 
