@@ -144,10 +144,10 @@ public class M1AndroidFragment extends Fragment implements MusicFocusable{
 			trackList.setOnItemClickListener(mMessageClickedHandler);
 			trackList.setFocusable(true);
 			GetPrefs();
-			if (NDKBridge.basepath != null) {
+			/*if (NDKBridge.basepath != null) {
 				task = new InitM1Task(NDKBridge.ctx);
 				task.execute();
-			}			
+			}*/
 		}
 		// set up the button handlers
 		// NEXT
@@ -183,52 +183,61 @@ public class M1AndroidFragment extends Fragment implements MusicFocusable{
         return v;
     }
 
-	private void GetPrefs() {
-		SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(NDKBridge.ctx);
-		preferences = prefs.getAll();
+    private void GetPrefs() {
+        SharedPreferences prefs = PreferenceManager
+                .getDefaultSharedPreferences(NDKBridge.ctx);
+        preferences = prefs.getAll();
 
-		Boolean firstRun = prefs.getBoolean("firstRun", true);
-		NDKBridge.basepath = prefs.getString("basepath", null);
+        Boolean firstRun = prefs.getBoolean("firstRun", true);
+        NDKBridge.basepath = prefs.getString("basepath", null);
 
-		if (firstRun == null || firstRun == true || NDKBridge.basepath == null) {
-			AlertDialog alert = new AlertDialog.Builder(NDKBridge.ctx)
-					.setTitle("First Run")
-					.setMessage(
-							"It looks like this is your first run. Long press on a folder to choose where to install. "
-									+ "For example, select '/sdcard' and I will install to '/sdcard/m1'. "
-									+ "If you already have a folder with the XML, LST and ROMs, choose its parent. For example, if you have "
-									+ "'/sdcard/m1' choose '/sdcard'. "
-									+ "I will not overwrite any files in it. "
-									+ "\n - Structure is:"
-									+ "\n   .../m1/m1.xml"
-									+ "\n   .../m1/lists" + "\n   .../m1/roms")
-					.setPositiveButton("OK",
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int whichButton) {
-									Intent intent = new Intent().setClass(
-											NDKBridge.ctx,
-											FileBrowser.class);
-									intent.putExtra("title",
-											"Select install directory...");
-									intent.putExtra("dirpick", true);
-									startActivityForResult(intent, 65535);
+        if (firstRun == null || firstRun == true || NDKBridge.basepath == null) {
+            AlertDialog alert = new AlertDialog.Builder(NDKBridge.ctx)
+                    .setTitle("First Run")
+                    .setMessage(
+                            "It looks like this is your first run. Please choose where you'd like to install. "
+                                    + "For example, select '/sdcard' and I will install to '/sdcard/m1'. "
+                                    + "If you already have a folder with the XML, LST and ROMs, choose its parent. For example, if you have "
+                                    + "'/sdcard/m1' choose '/sdcard'. "
+                                    + "I will not overwrite any files in it. Custom ROM folders, etc can be set in the Options."
+                                    + "\n - Structure is:"
+                                    + "\n   .../m1/m1.xml"
+                                    + "\n   .../m1/lists" + "\n   .../m1/roms")
+                    .setPositiveButton("OK",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,
+                                                    int whichButton) {
+                                    FileBrowser browser = new FileBrowser(NDKBridge.ctx);
+
 									/* User clicked OK so do some stuff */
-								}
-							})
-					.setNegativeButton("Cancel",
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int whichButton) {
+                                    browser.showBrowserDlg("basedir", NDKBridge.ctx);
+
+									/*SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(NDKBridge.ctx);
+									preferences = prefs.getAll();
+
+									NDKBridge.basepath = (String) preferences.get("romdir");
+									task = new InitM1Task(NDKBridge.ctx);
+									task.execute();
+
+									SharedPreferences.Editor editor = prefs.edit();
+									editor.putBoolean("firstRun", false);
+									//editor.putString("basepath", NDKBridge.basepath);
+									editor.commit();
+									Init();*/
+                                }
+                            })
+                    .setNegativeButton("Cancel",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,
+                                                    int whichButton) {
 
 									/* User clicked Cancel so do some stuff */
-								}
-							}).create();
-			alert.show();
-		}
-		
-		
+                                }
+                            }).create();
+            alert.show();
+        }
+
+
 
 		normalize = (Boolean) preferences.get("normPref");
 
@@ -277,7 +286,7 @@ public class M1AndroidFragment extends Fragment implements MusicFocusable{
 			listLen = false;
 		}
 
-		
+
 	}
 	
 	private void updateRemoteMetadata(){
@@ -827,4 +836,5 @@ public class M1AndroidFragment extends Fragment implements MusicFocusable{
 			return super.onOptionsItemSelected(item);
 		}
 	}
+
 }

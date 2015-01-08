@@ -1,22 +1,28 @@
 package com.neko68k.M1;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ToggleButton;
 
+import java.util.Map;
+
 public class FragmentControl extends FragmentActivity implements
-		GameListFrag.OnItemSelectedListener, GameListOptionsFrag.OnOptionsChanged {
+		GameListFrag.OnItemSelectedListener, GameListOptionsFrag.OnOptionsChanged, FileBrowser.FBCallback{
 
 	private static boolean filtered = false;
 	private static boolean sorted = false;
 	private static int sortType = 0;
 	private static boolean faves = false;
-	
+    InitM1Task task;
+    Map<String, ?> preferences;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -47,6 +53,8 @@ public class FragmentControl extends FragmentActivity implements
 		}
 
 	}
+
+
 	
 	public static boolean isFaves(){
 		return faves;
@@ -158,4 +166,21 @@ public class FragmentControl extends FragmentActivity implements
 		finish();
 
 	}
+    public void selected() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(NDKBridge.ctx);
+        preferences = prefs.getAll();
+
+        NDKBridge.basepath = (String) preferences.get("sysdir");
+        NDKBridge.rompath = (String) preferences.get("romdir");
+        NDKBridge.iconpath = (String) preferences.get("icondir");
+        task = new InitM1Task(NDKBridge.ctx);
+        task.execute();
+
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean("firstRun", false);
+        //editor.putString("basepath", NDKBridge.basepath);
+        editor.commit();
+        //Init();
+
+    }
 }

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- linearlayout for horizontal placement of player buttons -->
+
+<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" >
+
+    <ImageButton
+        android:id="@+id/prev"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_weight="0.025"
+        android:src="@drawable/ic_action_previous"
+        android:textSize="18sp" />
+
+    <ImageButton
+        android:id="@+id/play"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_weight="0.025"
+        android:src="@drawable/ic_action_play"
+        android:textSize="18sp" />
+
+    <ImageButton
+        android:id="@+id/rest"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_weight="0.025"
+        android:src="@drawable/ic_action_replay"
+        android:textSize="18sp" />
+
+    <ImageButton
+        android:id="@+id/next"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_weight="0.025"
+        android:src="@drawable/ic_action_next"
+        android:textSize="18sp" />
+</LinearLayout>

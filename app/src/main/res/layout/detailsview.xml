@@ -1,0 +1,95 @@
+
+
+<!-- linearlayout for vertical placement of icon and all text objects -->
+
+<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" >
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+    </ImageView>
+
+    <!-- linearlayout for vertical placement of all text objects -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minLines="2"
+            android:text="No game loaded " >
+        </TextView>
+
+        <TextView
+            android:id="@+id/year"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Year: " >
+        </TextView>
+
+        <TextView
+            android:id="@+id/mfg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Maker: " >
+        </TextView>
+
+        <TextView
+            android:id="@+id/board"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Board: " >
+        </TextView>
+
+        <TextView
+            android:id="@+id/hardware"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minLines="2"
+            android:text="Hardware: " >
+        </TextView>
+
+        <!-- linearlayout for horizontal command and time text -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/trackNum"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.025"
+                android:text="Command: " >
+            </TextView>
+
+            <TextView
+                android:id="@+id/playTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.025"
+                android:text="Time: " >
+            </TextView>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/song"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minLines="2"
+            android:text="Song: " >
+        </TextView>
+
+
+    </LinearLayout>
+
+</LinearLayout>
