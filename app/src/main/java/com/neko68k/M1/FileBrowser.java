@@ -4,238 +4,232 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import android.R;
-import android.app.ListActivity;
-import android.content.Intent;
-import android.os.Bundle;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnShowListener;
+import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class FileBrowser extends ListActivity {
 
-	private enum DISPLAYMODE {
-		ABSOLUTE, RELATIVE;
-	}
 
-	private final DISPLAYMODE displayMode = DISPLAYMODE.RELATIVE;
-	private List<String> directoryEntries = new ArrayList<String>();
-	private File currentDirectory = Environment.getExternalStorageDirectory();
-	private boolean dirpick;
-	private int savenum;
+public class FileBrowser{
+    private List<String> directoryEntries = new ArrayList<String>();
+    private File currentDirectory = Environment.getExternalStorageDirectory();
 
-	/** Called when the activity is first created. */
-	@Override
-	public void onCreate(Bundle icicle) {
+    ArrayAdapter<String> directoryList;
+    Context ctx;
 
-		super.onCreate(icicle);
+    AlertDialog dialog;
+    ListView list;
 
-		// setContentView() gets called within the next line,
-		// so we do not need it here.
-		// File roots[] = File.listRoots();
-		Intent intent = getIntent();
-		dirpick = intent.getBooleanExtra("dirpick", false);
-		String title = intent.getStringExtra("title");
-		savenum = intent.getIntExtra("savenum", 0);
-		if (title != null)
-			this.setTitle(title);
-		final ListView lv = getListView();
-		lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			public void onItemClick(AdapterView<?> av, View v, int pos, long id) {
-				onListItemClick(lv, v, pos, id);
-			}
-		});
-		if (dirpick) {
-			lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-				public boolean onItemLongClick(AdapterView<?> av, View v,
-						int pos, long id) {
-					onListItemLongClick(lv, v, pos, id);
-					return false;
-				}
-			});
-		}
+    public interface FBCallback{
+        public void selected();
+    }
 
-		browseToRoot();
-	}
+    public FileBrowser(){
 
-	/**
-	 * This function browses to the root-directory of the file-system.
-	 */
-	private void browseToRoot() {
-		// browseTo(Environment.getExternalStorageDirectory());
-		browseTo(new File("/mnt"));
-	}
+    }
 
-	/**
-	 * This function browses up one level according to the field:
-	 * currentDirectory
-	 */
-	private void upOneLevel() {
-		if (this.currentDirectory.getParent() != null)
-			this.browseTo(this.currentDirectory.getParentFile());
-	}
+    public void showBrowserDlg(final Preference preference){
+        final AlertDialog.Builder builder = new AlertDialog.Builder(preference.getContext());
 
-	private void browseTo(final File aDirectory) {
-		String fn = null;
-		File files[] = null;
-		if (aDirectory.isDirectory()) {
-			this.currentDirectory = aDirectory;
-			try {
-				files = aDirectory.listFiles();
-			} catch (SecurityException e) {
-				Toast.makeText(this, "Permission denied.", Toast.LENGTH_SHORT)
-						.show();
-				return;
-			}
-			fill(files);
-		} else {
-			if (!dirpick) {
-				Intent i = new Intent();
-				try {
-					fn = new String(aDirectory.getAbsolutePath());
-				} catch (SecurityException e) {
-					fn = null;
-				}
-				i.putExtra("com.neko68k.M1.FN", fn);
-				// startActivity(i);
-				setResult(RESULT_OK, i);
-				finish();
-			}
+        builder.setTitle("Select Folder");
+        list = new ListView(preference.getContext());
+        list.setOnItemClickListener(new OnItemClickListener() {
 
-		}
-	}
+            public void onItemClick(AdapterView<?> arg0, View arg1,
+                                    int arg2, long arg3) {
+                String selectedFileString = (String) (list.getItemAtPosition(arg2));;
+                if (selectedFileString.equals("(Select this folder)")) {
+                    String selectedPath = getCurrent();
+                    if(selectedPath!=null){
+                        SharedPreferences sp = preference.getSharedPreferences();
+                        SharedPreferences.Editor sped = sp.edit();
+                        sped.putString(preference.getKey(), selectedPath);
+                        sped.commit();
+                        dialog.dismiss();
+                        preference.setSummary(selectedPath);
+                        if(preference.getKey()!="icondir"){
+                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(NDKBridge.ctx);
+                            Map<String, ?> preferences = prefs.getAll();
 
-	private void fill(File[] files) {
-		this.directoryEntries.clear();
+                            NDKBridge.basepath = (String) preferences.get("sysdir");
+                            NDKBridge.rompath = (String) preferences.get("romdir");
+                            NDKBridge.iconpath = (String) preferences.get("icondir");
+                            SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
+                            GameListOpenHelper.wipeTables(db);
+                            InitM1Task task = new InitM1Task(NDKBridge.ctx);
+                            task.execute();
+                        }
+                        return;
+                    }
+                } else if (selectedFileString.equals("(Go up)")) {
+                    upOneLevel();
+                } else {
+                    File clickedFile = null;
+                    clickedFile = new File(getCurrent()+selectedFileString);
+                    if (clickedFile != null){
+                        browseTo(clickedFile);
+                    }
+                }
+            }
+        });
+        builder.setView(list);
 
-		// Add the "." and the ".." == 'Up one level'
-		try {
-			Thread.sleep(10);
-		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		// this.directoryEntries.add(".");
-		// String test = this.currentDirectory.getAbsolutePath();
-		if (this.currentDirectory.getParent() != null)
-			// if(this.currentDirectory.getParent()!="/") //TODO: fix this
-			this.directoryEntries.add("..");
+        list.setAdapter(directoryList);
 
-		switch (this.displayMode) {
-		case ABSOLUTE:
-			for (File file : files) {
-				// String ext = file.getName().substring(extOfs,
-				// file.getName().length());
-				this.directoryEntries.add(file.getPath());
-			}
-			break;
-		case RELATIVE: // On relative Mode, we have to add the current-path to
-						// the beginning
-			int currentPathStringLenght = this.currentDirectory
-					.getAbsolutePath().length();
-			for (File file : files) {
-				if (file.isDirectory()) {
-					this.directoryEntries.add(file.getAbsolutePath().substring(
-							currentPathStringLenght)
-							+ "/");
-				} else {
-					if (!dirpick) {
-						int extOfs = file.getName().lastIndexOf(".");
-						if (extOfs != -1) {
-							String ext = file.getName().substring(extOfs,
-									file.getName().length());
-							if (ext.contentEquals(".mcd")
-									|| ext.contentEquals(".MCD")
-									|| ext.contentEquals(".mcr")
-									|| ext.contentEquals(".MCR")
-									|| ext.contentEquals(".GME")
-									|| ext.contentEquals(".gme")) {
-								this.directoryEntries.add(file
-										.getAbsolutePath().substring(
-												currentPathStringLenght));
-							}
-						}
-					}
-				}
-			}
-			break;
-		}
-		Collections.sort(this.directoryEntries);
+        dialog = builder.create();
+        dialog.show();
 
-		ArrayAdapter<String> directoryList = new ArrayAdapter<String>(this,
-				R.layout.simple_list_item_1, this.directoryEntries);
+    }
 
-		this.setListAdapter(directoryList);
-	}
+    public void showBrowserDlg(final String key, final Context ictx){
 
-	protected void onListItemLongClick(ListView l, View v, int position, long id) {
+        final FBCallback mCallback = (FBCallback)NDKBridge.ctx;
 
-		String fn = new String(this.currentDirectory.getAbsolutePath());
+        final AlertDialog.Builder builder = new AlertDialog.Builder(ictx);
 
-		int selectionRowID = (int) position;// (int)
-											// this.getSelectedItemPosition();
-		String selectedFileString = this.directoryEntries.get(selectionRowID);
+        builder.setTitle("Select Folder");
+        list = new ListView(ictx);
+        list.setOnItemClickListener(new OnItemClickListener() {
 
-		if (!selectedFileString.equals("..") && !selectedFileString.equals(".")) {
-			File clickedFile = null;
-			switch (this.displayMode) {
-			case RELATIVE:
-				try {
-					clickedFile = new File(
-							this.currentDirectory.getAbsolutePath()
-									+ this.directoryEntries.get(selectionRowID));
-				} catch (SecurityException e) {
-					clickedFile = null;
-				}
-				break;
-			case ABSOLUTE:
-				try {
-					clickedFile = new File(
-							this.directoryEntries.get(selectionRowID));
-				} catch (SecurityException e) {
-					clickedFile = null;
-				}
-				break;
-			}
-			if (clickedFile != null && clickedFile.isDirectory()) {
-				fn = clickedFile.getAbsolutePath();
-				Intent i = new Intent().putExtra("com.neko68k.M1.FN", fn);
-				i.putExtra("savenum", savenum);
-				// startActivity(i);
-				setResult(RESULT_OK, i);
-				finish();
-			}
-		}
-	}
+            public void onItemClick(AdapterView<?> arg0, View arg1,
+                                    int arg2, long arg3) {
+                String selectedFileString = (String) (list.getItemAtPosition(arg2));;
+                if (selectedFileString.equals("(Select this folder)")) {
+                    String selectedPath = getCurrent();
+                    if(selectedPath!=null){
+                        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ictx);//.getSharedPreferences();
+                        SharedPreferences.Editor sped = sp.edit();
+                        sped.putString("sysdir", selectedPath+"/m1");
+                        sped.putString("romdir",selectedPath+"/m1/roms");
+                        sped.putString("icondir",selectedPath+"/m1/icons/");
+                        sped.commit();
+                        dialog.dismiss();
+                        mCallback.selected();
 
-	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
-		int selectionRowID = (int) position;// (int)
-											// this.getSelectedItemPosition();
-		String selectedFileString = this.directoryEntries.get(selectionRowID);
-		if (selectedFileString.equals(".")) {
-			// Refresh
-			this.browseTo(this.currentDirectory);
-		} else if (selectedFileString.equals("..")) {
-			this.upOneLevel();
-		} else {
-			File clickedFile = null;
-			switch (this.displayMode) {
-			case RELATIVE:
-				clickedFile = new File(this.currentDirectory.getAbsolutePath()
-						+ this.directoryEntries.get(selectionRowID));
-				break;
-			case ABSOLUTE:
-				clickedFile = new File(
-						this.directoryEntries.get(selectionRowID));
-				break;
-			}
-			if (clickedFile != null)
-				this.browseTo(clickedFile);
-		}
-	}
+                        return;
+                    }
+                } else if (selectedFileString.equals("(Go up)")) {
+                    upOneLevel();
+                } else {
+                    File clickedFile = null;
+                    clickedFile = new File(getCurrent()+selectedFileString);
+                    if (clickedFile != null){
+                        browseTo(clickedFile);
+                    }
+                }
+            }
+        });
+        builder.setView(list);
+        list.setAdapter(directoryList);
+
+        dialog = builder.create();
+        dialog.show();
+
+    }
+
+
+    /** Called when the activity is first created. */
+    public FileBrowser(Context ictx) {
+        ctx = ictx;
+
+        directoryList = new ArrayAdapter<String>(ctx,
+                R.layout.simple_list_item_1, this.directoryEntries);
+
+        browseToRoot();
+    }
+
+    public String getCurrent(){
+        return (this.currentDirectory.getAbsolutePath());
+    }
+
+    public String getStringAtOfs(long l){
+        return(this.directoryEntries.get((int) l));
+    }
+
+    public ArrayAdapter<String> getAdapter(){
+        return(directoryList);
+    }
+
+    /**
+     * This function browses to the root-directory of the file-system.
+     */
+    public void browseToRoot() {
+        browseTo(new File("/mnt"));
+    }
+
+    /**
+     * This function browses up one level according to the field:
+     * currentDirectory
+     */
+    public void upOneLevel() {
+        if (this.currentDirectory.getParent() != null)
+            this.browseTo(this.currentDirectory.getParentFile());
+    }
+
+    public void browseTo(final File aDirectory) {
+
+        File files[] = null;
+        if (aDirectory.isDirectory()) {
+            this.currentDirectory = aDirectory;
+            try {
+                files = aDirectory.listFiles();
+            } catch (Exception e) {
+                Toast.makeText(ctx, "Permission denied.", Toast.LENGTH_SHORT)
+                        .show();
+                return;
+            }
+            fill(files);
+
+        }
+    }
+
+    private void fill(File[] files) {
+        this.directoryEntries.clear();
+
+        // Add the "." and the ".." == 'Up one level'
+        try {
+            Thread.sleep(10);
+        } catch (InterruptedException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+        this.directoryEntries.add("(Select this folder)");
+        if (this.currentDirectory.getParent() != null)
+            this.directoryEntries.add("(Go up)");
+
+        // On relative Mode, we have to add the current-path to
+        // the beginning
+        int currentPathStringLength = this.currentDirectory
+                .getAbsolutePath().length();
+        for (File file : files) {
+            if (file.isDirectory()) {
+                this.directoryEntries.add(file.getAbsolutePath().substring(
+                        currentPathStringLength)
+                        + "/");
+            }
+        }
+
+        Collections.sort(this.directoryEntries);
+        directoryList.notifyDataSetChanged();
+    }
+
+    public List<String> getEntries(){
+        return (directoryEntries);
+    }
 }
