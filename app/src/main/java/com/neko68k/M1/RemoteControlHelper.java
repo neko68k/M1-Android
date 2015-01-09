@@ -15,8 +15,10 @@ package com.neko68k.M1;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import android.media.AudioManager;
 import android.util.Log;
+
 import java.lang.reflect.Method;
 /**
  * Contains methods to handle registering/unregistering remote control clients.  These methods only

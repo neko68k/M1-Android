@@ -1,9 +1,13 @@
 package com.neko68k.M1;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -20,8 +24,10 @@ public class FragmentControl extends FragmentActivity implements
 	private static boolean sorted = false;
 	private static int sortType = 0;
 	private static boolean faves = false;
+    boolean mIsBound = false;
     InitM1Task task;
     Map<String, ?> preferences;
+    public PlayerService playerService = new PlayerService();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -54,7 +60,30 @@ public class FragmentControl extends FragmentActivity implements
 
 	}
 
+    // service connection stuff
+    private ServiceConnection mConnection = new ServiceConnection() {
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            NDKBridge.playerService = ((PlayerService.LocalBinder) service)
+                    .getService();
+        }
 
+        public void onServiceDisconnected(ComponentName className) {
+            NDKBridge.playerService = null;
+        }
+    };
+
+    void doBindService() {
+        NDKBridge.ctx.bindService(new Intent(NDKBridge.ctx, PlayerService.class),
+                mConnection, Context.BIND_AUTO_CREATE);
+        mIsBound = true;
+    }
+
+    void doUnbindService() {
+        if (mIsBound) {
+            NDKBridge.ctx.unbindService(mConnection);
+            mIsBound = false;
+        }
+    }
 	
 	public static boolean isFaves(){
 		return faves;

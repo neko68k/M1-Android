@@ -1,8 +1,5 @@
 package com.neko68k.M1;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Activity;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -14,6 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.Spinner;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameListOptionsActivity extends Fragment{
 	private MultiSelectSpinner cpulist;

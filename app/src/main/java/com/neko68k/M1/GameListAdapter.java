@@ -1,13 +1,13 @@
 package com.neko68k.M1;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class GameListAdapter extends BaseAdapter {
 	/** Remember our context so we can use it when constructing views. */

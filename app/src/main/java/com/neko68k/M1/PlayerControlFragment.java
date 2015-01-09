@@ -16,7 +16,10 @@ public class PlayerControlFragment extends Fragment {
     ImageButton restButton;
     ImageButton playButton;
 
+
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.playcontrols, container, false);
         nextButton = (ImageButton) v.findViewById(R.id.next);
         prevButton = (ImageButton) v.findViewById(R.id.prev);
         restButton = (ImageButton) v.findViewById(R.id.rest);
@@ -24,13 +27,13 @@ public class PlayerControlFragment extends Fragment {
 
         nextButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                processSkipRequest();
+                //processSkipRequest();
             }
         });
         // PREV
         prevButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                processRewindRequest();
+                //processRewindRequest();
             }
         });
         // STOP
@@ -46,8 +49,9 @@ public class PlayerControlFragment extends Fragment {
         // PLAY
         playButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                processTogglePlaybackRequest();
+               // processTogglePlaybackRequest();
             }
         });
+        return v;
     }
 }

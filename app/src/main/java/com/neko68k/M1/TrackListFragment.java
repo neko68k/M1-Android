@@ -16,16 +16,16 @@ public class TrackListFragment extends ListFragment {
     private AdapterView.OnItemClickListener mMessageClickedHandler = new AdapterView.OnItemClickListener() {
         public void onItemClick(AdapterView<?> parent, View v, int position,
                                 long id) {
-            if (mIsBound) {
+            //if (mIsBound) {
                 NDKBridge.jumpSong(position);
                 NDKBridge.playerService.setNoteText();
-                if (mRemoteControlClientCompat != null)
+               /* if (mRemoteControlClientCompat != null)
                     updateRemoteMetadata();
                 if (listLen)
                     NDKBridge.getSongLen();
-                else
+                else*/
                     NDKBridge.songLen = NDKBridge.defLen;
-            }
+           // }
         }
     };
 

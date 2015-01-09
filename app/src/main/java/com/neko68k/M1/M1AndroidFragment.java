@@ -1,38 +1,20 @@
 package com.neko68k.M1;
 
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.PendingIntent;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
-import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
+
+import java.util.Map;
+import java.util.TimerTask;
 
 
 public class M1AndroidFragment extends Fragment{
@@ -43,8 +25,8 @@ public class M1AndroidFragment extends Fragment{
 
 
 	private Handler mHandler = new Handler();
-	// public PlayerService playerService = new PlayerService();
-	boolean mIsBound = false;
+	//
+
 
 	boolean paused = false;
 	boolean playing = false;
@@ -74,26 +56,27 @@ public class M1AndroidFragment extends Fragment{
 
 
 		
-		if (inited == false) {
+		/*if (inited == false) {
 			item = new TrackList("No game loaded");
 			listItems.add(item);
 			adapter = new TrackListAdapter(ctx, listItems);
 			trackList.setAdapter(adapter);
 			trackList.setOnItemClickListener(mMessageClickedHandler);
 			trackList.setFocusable(true);
-			GetPrefs();
-			/*if (NDKBridge.basepath != null) {
+
+			if (NDKBridge.basepath != null) {
 				task = new InitM1Task(NDKBridge.ctx);
 				task.execute();
-			}*/
-		}
+			}
+		}*/
+
 		// set up the button handlers
 		// NEXT
 
 
-		setHasOptionsMenu(true);
-        return v;
-    }
+		//setHasOptionsMenu(true);
+        //return v;
+    //}
 
     private void GetPrefs() {
         SharedPreferences prefs = PreferenceManager
@@ -201,158 +184,9 @@ public class M1AndroidFragment extends Fragment{
 
 	}
 	
-	private void updateRemoteMetadata(){
-		// Use the media button APIs (if available) to register ourselves for media button
-        // events
-		tryToGetAudioFocus();
-        MediaButtonHelper.registerMediaButtonEventReceiverCompat(
-                mAudioManager, mMediaButtonReceiverComponent);
-        // Use the remote control APIs (if available) to set the playback state
-        if (mRemoteControlClientCompat == null) {
-            Intent intent = new Intent(Intent.ACTION_MEDIA_BUTTON);
-            intent.setComponent(mMediaButtonReceiverComponent);
-            mRemoteControlClientCompat = new RemoteControlClientCompat(
-                    PendingIntent.getBroadcast(NDKBridge.ctx /*context*/,
-                            0 /*requestCode, ignored*/, intent /*intent*/, 0 /*flags*/));
-            RemoteControlHelper.registerRemoteControlClient(mAudioManager,
-                    mRemoteControlClientCompat);
-        }
-        mRemoteControlClientCompat.setPlaybackState(
-                RemoteControlClientCompat.PLAYSTATE_PLAYING);
-        mRemoteControlClientCompat.setTransportControlFlags(
-                RemoteControlClientCompat.FLAG_KEY_MEDIA_PLAY |
-                RemoteControlClientCompat.FLAG_KEY_MEDIA_PAUSE |
-                RemoteControlClientCompat.FLAG_KEY_MEDIA_NEXT |
-                RemoteControlClientCompat.FLAG_KEY_MEDIA_PREVIOUS);
-        // Update the remote controls
-        int cmdNum = NDKBridge
-				.getInfoInt(NDKBridge.M1_IINF_TRACKCMD, (NDKBridge.getInfoInt(
-						NDKBridge.M1_IINF_CURSONG, 0) << 16 | NDKBridge
-						.getInfoInt(NDKBridge.M1_IINF_CURGAME, 0)));
-		String text = NDKBridge.getInfoStr(NDKBridge.M1_SINF_TRKNAME, cmdNum << 16
-				| NDKBridge.getInfoInt(NDKBridge.M1_IINF_CURGAME, 0));
-        mRemoteControlClientCompat.editMetadata(true)
-                .putString(RemoteControlClientCompat.MetadataEditorCompat.METADATA_KEY_ARTIST, NDKBridge.game.getMfg())
-                .putString(RemoteControlClientCompat.MetadataEditorCompat.METADATA_KEY_ALBUM, NDKBridge.game.getTitle())
-                .putString(RemoteControlClientCompat.MetadataEditorCompat.METADATA_KEY_TITLE, text)
-                .putLong(RemoteControlClientCompat.MetadataEditorCompat.METADATA_KEY_DURATION,
-                        NDKBridge.songLen)
-                // TODO: fetch real item artwork
-                //.putBitmap(
-                //        RemoteControlClientCompat.MetadataEditorCompat.METADATA_KEY_ARTWORK,
-                //        mDummyAlbumArt)
-                .apply();
-	}
-	
-	private void processSkipRequest(){
-		if (playing == true) {
-			if (paused == false) {
-				int i = NDKBridge.next();
-				trackNum.setText("Track: " + (i));
 
-				NDKBridge.playerService.setNoteText();
-				NDKBridge.playtime = 0;
-				if (listLen)
-					NDKBridge.getSongLen();
-				else
-					NDKBridge.songLen = NDKBridge.defLen;
-				trackList.smoothScrollToPosition(i);
-				//if (mRemoteControlClientCompat != null)
-					updateRemoteMetadata();
-			}
-		}
-	}
 	
-	
-	private void processRewindRequest(){
-		if (playing == true) {
-			if (paused == false) {
-				int i = NDKBridge.prevSong();
-				trackNum.setText("Track: " + (i));
-				NDKBridge.playerService.setNoteText();
-				NDKBridge.playtime = 0;
-				if (listLen)
-					NDKBridge.getSongLen();
-				else
-					NDKBridge.songLen = NDKBridge.defLen;
-				trackList.smoothScrollToPosition(i);
-				//if (mRemoteControlClientCompat != null)
-					updateRemoteMetadata();
-			}
-		}
-	}
-	
-	private void processPlayRequest(){
-		if (playing == true) {
-			if (paused == true) {
-				tryToGetAudioFocus();
-				//playButton.setText("Pause");
-				playButton.setImageResource(R.drawable.ic_action_pause);
-				NDKBridge.unPause();
-				// ad.UnPause();
-				NDKBridge.playerService.unpause();
-				paused = false;
-				// Tell any remote controls that our playback state is 'playing'.
-		        if (mRemoteControlClientCompat != null) {
-		            mRemoteControlClientCompat
-		                    .setPlaybackState(RemoteControlClientCompat.PLAYSTATE_PLAYING);//);
-		            //updateRemoteMetadata();
-		        }       
-			}
-		}
-	
-	}
-	
-	private void processPauseRequest(){
-		if (playing == true) {
-			if (paused == false) {
-				NDKBridge.pause();
-				//playButton.setText("Play");
-				playButton.setImageResource(R.drawable.ic_action_play);
-				// ad.PlayPause();
-				NDKBridge.playerService.pause();
-				paused = true;
-				// Tell any remote controls that our playback state is 'paused'.
-		        if (mRemoteControlClientCompat != null) {
-		            mRemoteControlClientCompat
-		                    .setPlaybackState(RemoteControlClientCompat.PLAYSTATE_PAUSED);
-		            //updateRemoteMetadata();
-		        }
-			}
-		}
-	}
-	
-	private void processTogglePlaybackRequest(){
-		if (playing == true) {
-			if (paused == true) {
-				tryToGetAudioFocus();
-				//playButton.setText("Pause");
-				playButton.setImageResource(R.drawable.ic_action_pause);
-				NDKBridge.unPause();
-				// ad.UnPause();
-				NDKBridge.playerService.unpause();
-				paused = false;
-				// Tell any remote controls that our playback state is 'playing'.
-		        if (mRemoteControlClientCompat != null) {
-		            mRemoteControlClientCompat
-		                    .setPlaybackState(RemoteControlClientCompat.PLAYSTATE_PLAYING);
-		        }
-			} else if (paused == false) {
-				NDKBridge.pause();
-				//playButton.setText("Play");
-				playButton.setImageResource(R.drawable.ic_action_play);
-				// ad.PlayPause();
-				NDKBridge.playerService.pause();
-				paused = true;
-				// Tell any remote controls that our playback state is 'paused'.
-		        if (mRemoteControlClientCompat != null) {
-		            mRemoteControlClientCompat
-		                    .setPlaybackState(RemoteControlClientCompat.PLAYSTATE_PAUSED);
-		        }
-			}
-		}
-		//updateRemoteMetadata();
-	}
+
 
 
 
@@ -365,7 +199,7 @@ public class M1AndroidFragment extends Fragment{
 		
 	}
 
-	private Runnable mUpdateTimeTask = new Runnable() {
+	/*private Runnable mUpdateTimeTask = new Runnable() {
 		public void run() {
 			// update stuff here
 			((Activity) NDKBridge.ctx).runOnUiThread(new Runnable() {
@@ -443,32 +277,9 @@ public class M1AndroidFragment extends Fragment{
 				mHandler.postDelayed(mUpdateTimeTask, 100);
 			}
 		}
-	};
+	};*/
 
-	// service connection stuff
-	private ServiceConnection mConnection = new ServiceConnection() {
-		public void onServiceConnected(ComponentName className, IBinder service) {
-			NDKBridge.playerService = ((PlayerService.LocalBinder) service)
-					.getService();
-		}
 
-		public void onServiceDisconnected(ComponentName className) {
-			NDKBridge.playerService = null;
-		}
-	};
-
-	void doBindService() {
-		NDKBridge.ctx.bindService(new Intent(NDKBridge.ctx, PlayerService.class),
-				mConnection, Context.BIND_AUTO_CREATE);
-		mIsBound = true;
-	}
-
-	void doUnbindService() {
-		if (mIsBound) {
-			NDKBridge.ctx.unbindService(mConnection);
-			mIsBound = false;
-		}
-	}
 	
 	/*@Override
 	protected void onNewIntent(Intent intent) {

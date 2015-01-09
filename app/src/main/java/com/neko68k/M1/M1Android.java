@@ -1,10 +1,5 @@
 package com.neko68k.M1;
 
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -30,6 +25,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 @TargetApi(Build.VERSION_CODES.FROYO)
 public class M1Android extends Activity implements FileBrowser.FBCallback{

@@ -1,5 +1,10 @@
 package com.neko68k.M1;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.os.AsyncTask;
+import android.util.Log;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -11,12 +16,6 @@ import java.util.Map;
 import java.util.zip.CRC32;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.os.AsyncTask;
-import android.os.Environment;
-import android.util.Log;
 
 public class InitM1Task extends AsyncTask<Void, Void, Void> {
 	ProgressDialog dialog;

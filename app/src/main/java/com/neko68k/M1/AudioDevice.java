@@ -11,6 +11,14 @@ public class AudioDevice extends Thread {
 	private boolean playing = false;
 	private boolean paused = false;
 
+    public boolean isPlaying(){
+        return playing;
+    }
+
+    public boolean isPaused(){
+        return paused;
+    }
+
 	public AudioDevice(String threadName) {
 		setName(threadName);
 		int minSize = AudioTrack.getMinBufferSize(44100,

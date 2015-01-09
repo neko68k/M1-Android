@@ -15,10 +15,12 @@ package com.neko68k.M1;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import android.app.PendingIntent;
 import android.graphics.Bitmap;
 import android.os.Looper;
 import android.util.Log;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 /**

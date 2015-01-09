@@ -6,9 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.Timer;
@@ -31,7 +29,7 @@ public class MainDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         
         //TrackList item;
-        //View v = inflater.inflate(R.layout.main, container, false);
+        View v = inflater.inflate(R.layout.detailsview, container, false);
         //trackList = (ListView) v.findViewById(R.id.listView1);
 
         trackNum = (TextView) v.findViewById(R.id.trackNum);
@@ -46,5 +44,6 @@ public class MainDetailFragment extends Fragment {
 
         Context ctx = getActivity();
         NDKBridge.ctx = ctx;
+        return v;
     }
 }
