@@ -11,16 +11,16 @@
         android:layout_height="match_parent"
         android:orientation="vertical" android:baselineAligned="false"
         android:layout_weight=".5">
-    <fragment
+    <FrameLayout
         android:id="@+id/details"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_weight=".2"
 
         tools:layout="@layout/detailsview"
         />
 
-    <fragment
+    <FrameLayout
         android:id="@+id/playercontrols"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -28,10 +28,10 @@
 
         tools:layout="@layout/playcontrols" />
     </LinearLayout>
-    <fragment
+    <FrameLayout
         android:id="@+id/tracklist"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight=".5"
-        ></fragment>
+        />
 </LinearLayout>

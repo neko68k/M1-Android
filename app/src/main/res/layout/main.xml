@@ -6,27 +6,27 @@
     android:orientation="vertical" android:baselineAligned="false">
 
 
-    <fragment
+    <FrameLayout
         android:id="@+id/details"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_weight=".35"
 
         tools:layout="@layout/detailsview"
         />
 
-    <fragment
+    <FrameLayout
         android:id="@+id/playercontrols"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_weight=".50"
 
         tools:layout="@layout/playcontrols" />
 
-    <fragment
+    <FrameLayout
         android:id="@+id/tracklist"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight=".5"
-        ></fragment>
+        android:layout_weight=".25"
+        />
 </LinearLayout>

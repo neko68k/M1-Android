@@ -17,14 +17,14 @@ public class TrackListFragment extends ListFragment {
         public void onItemClick(AdapterView<?> parent, View v, int position,
                                 long id) {
             //if (mIsBound) {
-                NDKBridge.jumpSong(position);
-                NDKBridge.playerService.setNoteText();
+                //NDKBridge.jumpSong(position);
+                //NDKBridge.playerService.setNoteText();
                /* if (mRemoteControlClientCompat != null)
                     updateRemoteMetadata();
                 if (listLen)
                     NDKBridge.getSongLen();
                 else*/
-                    NDKBridge.songLen = NDKBridge.defLen;
+                    //NDKBridge.songLen = NDKBridge.defLen;
            // }
         }
     };
