@@ -25,15 +25,10 @@ public class TrackListFragment extends ListFragment {
         final ListView lv = getListView();
         lv.setOnItemClickListener(mDoNothing);
 
-        TrackList item = new TrackList("No game loaded");
-        //listItems.add("No game loaded");
-        listItems.add(item);
+        listItems.add(new TrackList("No game loaded"));
         adapter = new TrackListAdapter(getActivity(), listItems);
 
-
-
         this.setListAdapter(adapter);
-
     }
 
     private AdapterView.OnItemClickListener mMessageClickedHandler = new AdapterView.OnItemClickListener() {
