@@ -1,8 +1,13 @@
 package com.neko68k.M1;
 
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 
@@ -12,6 +17,24 @@ import java.util.ArrayList;
 public class TrackListFragment extends ListFragment {
     ArrayList<TrackList> listItems = new ArrayList<TrackList>();
     TrackListAdapter adapter;
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+
+
+        final ListView lv = getListView();
+        lv.setOnItemClickListener(mDoNothing);
+
+        TrackList item = new TrackList("No game loaded");
+        //listItems.add("No game loaded");
+        listItems.add(item);
+        adapter = new TrackListAdapter(getActivity(), listItems);
+
+
+
+        this.setListAdapter(adapter);
+
+    }
 
     private AdapterView.OnItemClickListener mMessageClickedHandler = new AdapterView.OnItemClickListener() {
         public void onItemClick(AdapterView<?> parent, View v, int position,

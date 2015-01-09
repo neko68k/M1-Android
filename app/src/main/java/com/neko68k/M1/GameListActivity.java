@@ -36,33 +36,33 @@ public class GameListActivity extends ListFragment {
 		inflater.inflate(R.menu.gamelistmenu, menu);
 	}
 
-	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		SQLiteDatabase db = NDKBridge.m1db.getReadableDatabase();
-		Cursor c = GameListOpenHelper.getAllTitles(db);
-		Context cxt = getActivity();
-		GameListCursorAdapter adapter = new GameListCursorAdapter(cxt,
-				R.layout.gamelist_detailed,
-				c, new String[] { "title",
-						"year", "mfg", "sys", "soundhw" }, new int[] { R.id.title,
-						R.id.year, R.id.mfg, R.id.board, R.id.hardware });
 
-		final ListView lv = getListView();
-		lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			public void onItemClick(AdapterView<?> av, View v, int pos, long id) {
-				onListItemClick(lv, v, pos, id);
-			}
-		});
-		
-		
-		this.setListAdapter(adapter);
-		if(GameListFragment.isFiltered()||GameListFragment.isSorted()||GameListFragment.isFaves()){
-			lv.setFastScrollEnabled(false);	
-		} else {
-			lv.setFastScrollEnabled(true);
-		}
 		//db.close();
+        @Override
+        public void onViewCreated(View view, Bundle savedInstanceState) {
+            SQLiteDatabase db = NDKBridge.m1db.getReadableDatabase();
+            Cursor c = GameListOpenHelper.getAllTitles(db);
+            Context cxt = getActivity();
+            GameListCursorAdapter adapter = new GameListCursorAdapter(cxt,
+                    R.layout.gamelist_detailed,
+                    c, new String[] { "title",
+                    "year", "mfg", "sys", "soundhw" }, new int[] { R.id.title,
+                    R.id.year, R.id.mfg, R.id.board, R.id.hardware });
 
+            final ListView lv = getListView();
+            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                public void onItemClick(AdapterView<?> av, View v, int pos, long id) {
+                    onListItemClick(lv, v, pos, id);
+                }
+            });
+
+
+            this.setListAdapter(adapter);
+            if(GameListFragment.isFiltered()||GameListFragment.isSorted()||GameListFragment.isFaves()){
+                lv.setFastScrollEnabled(false);
+            } else {
+                lv.setFastScrollEnabled(true);
+            }
 	}
 @Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
