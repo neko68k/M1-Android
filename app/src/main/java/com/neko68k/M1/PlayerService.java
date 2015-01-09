@@ -30,6 +30,7 @@ public class PlayerService extends Service implements MusicFocusable {
     public static final String ACTION_SKIP = "com.neko68k.M1.action.SKIP";
     public static final String ACTION_REWIND = "com.neko68k.M1.action.REWIND";
     public static final String ACTION_URL = "com.neko68k.M1.action.URL";
+    public static final String ACTION_RESTART = "com.neko68k.M1.action.RESTART";
 
     RemoteControlClientCompat mRemoteControlClientCompat;
     ComponentName mMediaButtonReceiverComponent;
@@ -137,6 +138,7 @@ public class PlayerService extends Service implements MusicFocusable {
             else if (action.equals(ACTION_SKIP)) processSkipRequest();
                 //else if (action.equals(ACTION_STOP)) processStopRequest();
             else if (action.equals(ACTION_REWIND)) processRewindRequest();
+            else if (action.equals(ACTION_RESTART)) processRewindRequest();
         }
 
         return START_NOT_STICKY; // Means we started the service, but don't want it to

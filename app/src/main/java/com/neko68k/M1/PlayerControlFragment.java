@@ -1,5 +1,6 @@
 package com.neko68k.M1;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -27,28 +28,30 @@ public class PlayerControlFragment extends Fragment {
 
         nextButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                getActivity().startActivity(new Intent(PlayerService.ACTION_SKIP));
                 //processSkipRequest();
             }
         });
         // PREV
         prevButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                getActivity().startActivity(new Intent(PlayerService.ACTION_REWIND));
                 //processRewindRequest();
             }
         });
-        // STOP
+        // REST
         restButton.setOnClickListener(new View.OnClickListener() {
-            // need to to something with this. it basically kills
-            // the game now and thats kind of unfriendly
             public void onClick(View v) {
 
-                NDKBridge.restSong();
-                NDKBridge.playtime = 0;
+                //NDKBridge.restSong();
+                getActivity().startActivity(new Intent(PlayerService.ACTION_RESTART));
+                //NDKBridge.playtime = 0;
             }
         });
         // PLAY
         playButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                getActivity().startActivity(new Intent(PlayerService.ACTION_TOGGLE_PLAYBACK));
                // processTogglePlaybackRequest();
             }
         });

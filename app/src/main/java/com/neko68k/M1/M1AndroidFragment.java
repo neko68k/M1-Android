@@ -9,9 +9,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 
 import java.util.Map;
 import java.util.TimerTask;
@@ -47,7 +50,9 @@ public class M1AndroidFragment extends Fragment{
 
 	InitM1Task task;
 	
-
+    Fragment detailfrag;
+    Fragment playerfrag;
+    Fragment listfrag;
     
 	// private PlayerService playerService;
     
@@ -77,6 +82,16 @@ public class M1AndroidFragment extends Fragment{
 		//setHasOptionsMenu(true);
         //return v;
     //}
+
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        //TrackList item;
+
+        View v = inflater.inflate(R.layout.main, container, false);
+        //detailfrag = (Fragment) v.findViewById(R.id.details);
+
+        return v;
+    }
 
     private void GetPrefs() {
         SharedPreferences prefs = PreferenceManager

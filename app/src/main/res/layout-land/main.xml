@@ -5,20 +5,33 @@
     android:layout_height="match_parent"
     android:orientation="horizontal" android:baselineAligned="false">
 
+    <LinearLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" android:baselineAligned="false"
+        android:layout_weight=".5">
     <fragment
-        android:id="@+id/titles"
+        android:id="@+id/details"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        class="com.example.android.apis.app.FragmentLayout$TrackListView"
+
+        tools:layout="@layout/detailsview"
         />
 
     <fragment
-        android:id="@+id/player"
+        android:id="@+id/playercontrols"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        class="com.example.android.apis.app.FragmentLayout$TrackListView"
-        />
 
+        tools:layout="@layout/playcontrols" />
+    </LinearLayout>
+    <fragment
+        android:id="@+id/tracklist"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight=".5"
+        ></fragment>
 </LinearLayout>

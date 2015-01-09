@@ -1,6 +1,7 @@
 package com.neko68k.M1;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.Toast;
@@ -192,7 +193,7 @@ public class NDKBridge {
 	}
 
 	public static void Silence() {
-		//ctx.startActivity(new Intent(M1AndroidFragment.ACTION_SKIP));
+		ctx.startActivity(new Intent(PlayerService.ACTION_SKIP));
 		// playerService.setNoteText();
 
 		// if we are to skip songs when we here silence, this is where we do it

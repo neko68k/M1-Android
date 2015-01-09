@@ -1,45 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical" android:baselineAligned="false">
 
 
-
-    
-
-
-<ListView
-        android:id="@+id/listView1"
+    <fragment
+        android:id="@+id/details"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+
+        tools:layout="@layout/detailsview"
+        />
+
+    <fragment
+        android:id="@+id/playercontrols"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+
+        tools:layout="@layout/playcontrols" />
+
+    <fragment
+        android:id="@+id/tracklist"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight=".5"
+        ></fragment>
 </LinearLayout>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
