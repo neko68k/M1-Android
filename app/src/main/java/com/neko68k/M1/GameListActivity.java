@@ -8,7 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ToggleButton;
 
-public class GameListFragment extends FragmentActivity implements
+public class GameListActivity extends FragmentActivity implements
 		GameListFrag.OnItemSelectedListener, GameListOptionsActivity.OnOptionsChanged {
 
 	private static boolean filtered = false;

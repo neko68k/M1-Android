@@ -59,13 +59,13 @@ public class GameListOptionsActivity extends Fragment{
 		favesEnabled = (CheckBox) view.findViewById(R.id.EnableFaves);
 		sortedSpinner = (Spinner) view.findViewById(R.id.Sort);
 		
-		if(GameListFragment.isFiltered()){
+		if(GameListActivity.isFiltered()){
 			filterEnabled.setChecked(true);
 		}
-		if(GameListFragment.isSorted()){
+		if(GameListActivity.isSorted()){
 			sortedEnabled.setChecked(true);
 		}
-		if(GameListFragment.isFaves()){
+		if(GameListActivity.isFaves()){
 			favesEnabled.setChecked(true);
 		}
 		
@@ -84,7 +84,7 @@ public class GameListOptionsActivity extends Fragment{
 		ArrayAdapter<String> _proxyAdapter = new ArrayAdapter<String>(NDKBridge.ctx, android.R.layout.simple_spinner_item, sortList);
 		sortedSpinner.setAdapter(_proxyAdapter);
 		
-		sortedSpinner.setSelection(GameListFragment.getSortType());
+		sortedSpinner.setSelection(GameListActivity.getSortType());
 		
 		SQLiteDatabase db = NDKBridge.m1db.getReadableDatabase();
 		Cursor cpuCursor = GameListOpenHelper.getAllExtra(db, GameListOpenHelper.CPU_TABLE, GameListOpenHelper.KEY_CPU);
