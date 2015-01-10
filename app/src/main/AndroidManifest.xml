@@ -29,7 +29,7 @@
     	    android:screenOrientation="portrait"/>
         <activity android:name="com.neko68k.M1.Prefs" android:screenOrientation="portrait"/>
         <activity android:name="com.neko68k.M1.GameListFragment" android:screenOrientation="portrait"/>
-        <activity android:name="com.neko68k.M1.GameListActivity" android:screenOrientation="portrait"/>
+        <activity android:name="com.neko68k.M1.GameListFrag" android:screenOrientation="portrait"/>
 
 		<service android:name="com.neko68k.M1.PlayerService" />
 		

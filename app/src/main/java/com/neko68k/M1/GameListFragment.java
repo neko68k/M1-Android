@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.ToggleButton;
 
 public class GameListFragment extends FragmentActivity implements
-		GameListActivity.OnItemSelectedListener, GameListOptionsActivity.OnOptionsChanged {
+		GameListFrag.OnItemSelectedListener, GameListOptionsActivity.OnOptionsChanged {
 
 	private static boolean filtered = false;
 	private static boolean sorted = false;
@@ -33,7 +33,7 @@ public class GameListFragment extends FragmentActivity implements
 			}
 
 			// Create a new Fragment to be placed in the activity layout
-			GameListActivity firstFragment = new GameListActivity();
+			GameListFrag firstFragment = new GameListFrag();
 
 			// In case this activity was started with special instructions from
 			// an

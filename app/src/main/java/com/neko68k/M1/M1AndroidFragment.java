@@ -479,7 +479,7 @@ public class M1AndroidFragment extends Fragment{
 		case R.id.open:
 
 			NDKBridge.loadError = false; 
-			intent = new Intent(NDKBridge.ctx, GameListActivity.class);
+			intent = new Intent(NDKBridge.ctx, GameListFrag.class);
 			startActivityForResult(intent, 1);
 			return true;
 		case R.id.options:
