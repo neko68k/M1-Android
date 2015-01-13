@@ -219,6 +219,11 @@ public class PlayerService extends Service implements MusicFocusable {
         if(!NDKBridge.loadError){
             ad = new AudioDevice("deviceThread");
             play();
+            updateRemoteMetadata();
+            if (mRemoteControlClientCompat != null) {
+                mRemoteControlClientCompat
+                        .setPlaybackState(RemoteControlClientCompat.PLAYSTATE_PLAYING);
+            }
         }
 
 
@@ -237,8 +242,8 @@ public class PlayerService extends Service implements MusicFocusable {
                 //else
                     NDKBridge.songLen = NDKBridge.defLen;
                 //trackList.smoothScrollToPosition(i);
-                //if (mRemoteControlClientCompat != null)
-                //updateRemoteMetadata();
+                if (mRemoteControlClientCompat != null)
+                updateRemoteMetadata();
             }
         }
     }
@@ -256,8 +261,8 @@ public class PlayerService extends Service implements MusicFocusable {
                 //else
                     NDKBridge.songLen = NDKBridge.defLen;
                 //trackList.smoothScrollToPosition(i);
-                //if (mRemoteControlClientCompat != null)
-                //updateRemoteMetadata();
+                if (mRemoteControlClientCompat != null)
+                updateRemoteMetadata();
             }
         }
     }
@@ -399,10 +404,10 @@ public class PlayerService extends Service implements MusicFocusable {
 		}
 
 		contentIntent = PendingIntent.getActivity(this, 0, new Intent(this,
-				M1AndroidFragment.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+				FragmentControl.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
 				| Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
 
-		Intent notificationIntent = new Intent(this, M1AndroidFragment.class);
+		Intent notificationIntent = new Intent(this, FragmentControl.class);
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
 				notificationIntent, 0);
 		notification.contentIntent = contentIntent;
