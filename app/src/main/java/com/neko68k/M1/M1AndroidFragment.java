@@ -207,12 +207,7 @@ public class M1AndroidFragment extends Fragment{
 
 
 
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		
-		inflater.inflate(R.menu.menu, menu);
-		
-	}
+
 
 	/*private Runnable mUpdateTimeTask = new Runnable() {
 		public void run() {

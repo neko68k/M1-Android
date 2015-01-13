@@ -1,14 +1,24 @@
 package com.neko68k.M1;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.Map;
 import java.util.Timer;
 
 /**
@@ -25,6 +35,8 @@ public class MainDetailFragment extends Fragment {
     TextView year;
     Timer updateTimer;
     ImageView icon;
+    Map<String, ?> preferences;
+
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         
@@ -44,6 +56,86 @@ public class MainDetailFragment extends Fragment {
 
         Context ctx = getActivity();
         NDKBridge.ctx = ctx;
+        setHasOptionsMenu(true);
+        FirstRun(ctx);
         return v;
+    }
+
+    private void FirstRun(final Context ctx) {
+        SharedPreferences prefs = PreferenceManager
+                .getDefaultSharedPreferences(ctx);
+        preferences = prefs.getAll();
+        //Context ctx = getApplicationContext();
+        Boolean firstRun = prefs.getBoolean("firstRun", true);
+        NDKBridge.basepath = prefs.getString("basepath", null);
+
+        if (firstRun == null || firstRun == true || NDKBridge.basepath == null) {
+            AlertDialog alert = new AlertDialog.Builder(ctx)
+                    .setTitle("First Run")
+                    .setMessage(
+                            "It looks like this is your first run. Please choose where you'd like to install. "
+                                    + "For example, select '/sdcard' and I will install to '/sdcard/m1'. "
+                                    + "If you already have a folder with the XML, LST and ROMs, choose its parent. For example, if you have "
+                                    + "'/sdcard/m1' choose '/sdcard'. "
+                                    + "I will not overwrite any files in it. Custom ROM folders, etc can be set in the Options."
+                                    + "\n - Structure is:"
+                                    + "\n   .../m1/m1.xml"
+                                    + "\n   .../m1/lists" + "\n   .../m1/roms")
+                    .setPositiveButton("OK",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,
+                                                    int whichButton) {
+                                    FileBrowser browser = new FileBrowser(ctx);
+
+									/* User clicked OK so do some stuff */
+                                    browser.showBrowserDlg("basedir", ctx);
+                                }
+                            })
+                    .setNegativeButton("Cancel",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,
+                                                    int whichButton) {
+
+									/* User clicked Cancel so do some stuff */
+                                }
+                            }).create();
+            alert.show();
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+        inflater.inflate(R.menu.menu, menu);
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
+        InitM1Task task;
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.open:
+
+                NDKBridge.loadError = false;
+                intent = new Intent(NDKBridge.ctx, GameListActivity.class);
+                startActivityForResult(intent, 1);
+                return true;
+            case R.id.options:
+                intent = new Intent(NDKBridge.ctx, Prefs.class);
+                startActivityForResult(intent, 2);
+                return true;
+            case R.id.rescan:
+                SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
+                GameListOpenHelper.wipeTables(db);
+                task = new InitM1Task(NDKBridge.ctx);
+                task.execute();
+                return true;
+
+            default:
+
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

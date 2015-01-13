@@ -28,14 +28,14 @@ public class PlayerControlFragment extends Fragment {
 
         nextButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                getActivity().startActivity(new Intent(PlayerService.ACTION_SKIP));
+                getActivity().startService(new Intent(PlayerService.ACTION_SKIP, null, getActivity().getApplicationContext(), PlayerService.class));
                 //processSkipRequest();
             }
         });
         // PREV
         prevButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                getActivity().startActivity(new Intent(PlayerService.ACTION_REWIND));
+                getActivity().startService(new Intent(PlayerService.ACTION_REWIND, null, getActivity().getApplicationContext(), PlayerService.class));
                 //processRewindRequest();
             }
         });
@@ -44,14 +44,14 @@ public class PlayerControlFragment extends Fragment {
             public void onClick(View v) {
 
                 //NDKBridge.restSong();
-                getActivity().startActivity(new Intent(PlayerService.ACTION_RESTART));
+                getActivity().startService(new Intent(PlayerService.ACTION_RESTART, null, getActivity().getApplicationContext(), PlayerService.class));
                 //NDKBridge.playtime = 0;
             }
         });
         // PLAY
         playButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                getActivity().startActivity(new Intent(PlayerService.ACTION_TOGGLE_PLAYBACK));
+                getActivity().startService(new Intent(PlayerService.ACTION_TOGGLE_PLAYBACK, null, getActivity().getApplicationContext(), PlayerService.class));
                // processTogglePlaybackRequest();
             }
         });

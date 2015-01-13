@@ -129,7 +129,7 @@ public class PlayerService extends Service implements MusicFocusable {
             mAudioFocus = AudioFocus.Focused;
     }
 
-    protected int onNewIntent(Intent intent) {
+    /*protected int onNewIntent(Intent intent) {
         String action = intent.getAction();
         if(action != null){
             if (action.equals(ACTION_TOGGLE_PLAYBACK)) processTogglePlaybackRequest();
@@ -143,7 +143,7 @@ public class PlayerService extends Service implements MusicFocusable {
 
         return START_NOT_STICKY; // Means we started the service, but don't want it to
         // restart in case it's killed.
-    }
+    }*/
 
     private void updateRemoteMetadata(){
         // Use the media button APIs (if available) to register ourselves for media button
@@ -190,12 +190,22 @@ public class PlayerService extends Service implements MusicFocusable {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
+        String action = intent.getAction();
+        if(action != null){
+            if (action.equals(ACTION_TOGGLE_PLAYBACK)) processTogglePlaybackRequest();
+            else if (action.equals(ACTION_PLAY)) processPlayRequest();
+            else if (action.equals(ACTION_PAUSE)) processPauseRequest();
+            else if (action.equals(ACTION_SKIP)) processSkipRequest();
+                //else if (action.equals(ACTION_STOP)) processStopRequest();
+            else if (action.equals(ACTION_REWIND)) processRewindRequest();
+            else if (action.equals(ACTION_RESTART)) processRewindRequest();
+        }
 		return START_STICKY;
 	}
 
     private void processSkipRequest(){
         if (ad.isPlaying()) {
-            if (ad.isPaused()) {
+            if (!ad.isPaused()) {
                 int i = NDKBridge.next();
                 //trackNum.setText("Track: " + (i));
 
@@ -215,7 +225,7 @@ public class PlayerService extends Service implements MusicFocusable {
 
     private void processRewindRequest(){
         if (ad.isPlaying()) {
-            if (ad.isPaused()) {
+            if (!ad.isPaused()) {
                 int i = NDKBridge.prevSong();
                 //trackNum.setText("Track: " + (i));
                 setNoteText();
@@ -254,7 +264,7 @@ public class PlayerService extends Service implements MusicFocusable {
 
     private void processPauseRequest(){
         if (ad.isPlaying()) {
-            if (ad.isPaused()) {
+            if (!ad.isPaused()) {
                 //NDKBridge.pause();
                 //playButton.setText("Play");
                 //playButton.setImageResource(R.drawable.ic_action_play);
