@@ -100,7 +100,7 @@ public class M1UpdateThread extends Thread {
 		}
 
 		if (stopped == true) {
-			NDKBridge.stop();
+			//NDKBridge.stop();
 			clearBuffers();
 			if (quit == true) {
 				playing = false;

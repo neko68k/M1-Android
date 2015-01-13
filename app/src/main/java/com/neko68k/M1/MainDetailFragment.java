@@ -36,6 +36,7 @@ public class MainDetailFragment extends Fragment {
     Timer updateTimer;
     ImageView icon;
     Map<String, ?> preferences;
+    boolean inited = false;
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -57,9 +58,21 @@ public class MainDetailFragment extends Fragment {
         Context ctx = getActivity();
         NDKBridge.ctx = ctx;
         setHasOptionsMenu(true);
+        if(savedInstanceState!=null)
+            inited = savedInstanceState.getBoolean("inited");
         FirstRun(ctx);
         return v;
     }
+
+    @Override
+    public void onSaveInstanceState (Bundle outState){
+        outState.putBoolean("inited", inited);
+    }
+
+   /* @Override
+    public void onRestoreInstanceState (Bundle inState){
+        inited = inState.getBoolean("inited");
+    }*/
 
     private void FirstRun(final Context ctx) {
         SharedPreferences prefs = PreferenceManager
@@ -67,7 +80,9 @@ public class MainDetailFragment extends Fragment {
         preferences = prefs.getAll();
         //Context ctx = getApplicationContext();
         Boolean firstRun = prefs.getBoolean("firstRun", true);
-        NDKBridge.basepath = prefs.getString("basepath", null);
+        NDKBridge.basepath = prefs.getString("sysdir", null);
+        NDKBridge.rompath = (String) preferences.get("romdir");
+        NDKBridge.iconpath = (String) preferences.get("icondir");
 
         if (firstRun == null || firstRun == true || NDKBridge.basepath == null) {
             AlertDialog alert = new AlertDialog.Builder(ctx)
@@ -100,6 +115,13 @@ public class MainDetailFragment extends Fragment {
                                 }
                             }).create();
             alert.show();
+        }
+        else{
+            if(!inited) {
+                inited = true;
+                InitM1Task task = new InitM1Task(NDKBridge.ctx);
+                task.execute();
+            }
         }
     }
 

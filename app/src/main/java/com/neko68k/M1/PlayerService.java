@@ -196,12 +196,16 @@ public class PlayerService extends Service implements MusicFocusable {
             else if (action.equals(ACTION_PLAY)) processPlayRequest();
             else if (action.equals(ACTION_PAUSE)) processPauseRequest();
             else if (action.equals(ACTION_SKIP)) processSkipRequest();
-                //else if (action.equals(ACTION_STOP)) processStopRequest();
+            else if (action.equals(ACTION_STOP)) processStopRequest();
             else if (action.equals(ACTION_REWIND)) processRewindRequest();
             else if (action.equals(ACTION_RESTART)) processRewindRequest();
         }
 		return START_STICKY;
 	}
+
+    private void processStopRequest(){
+        stop();
+    }
 
     private void processSkipRequest(){
         if (ad.isPlaying()) {
@@ -243,7 +247,7 @@ public class PlayerService extends Service implements MusicFocusable {
 
     private void processPlayRequest(){
         if (ad.isPlaying()) {
-            if (ad.isPaused()) {
+            //if (ad.isPaused()) {
                 tryToGetAudioFocus();
                 //playButton.setText("Pause");
                 //playButton.setImageResource(R.drawable.ic_action_pause);
@@ -257,7 +261,7 @@ public class PlayerService extends Service implements MusicFocusable {
                             .setPlaybackState(RemoteControlClientCompat.PLAYSTATE_PLAYING);//);
                     //updateRemoteMetadata();
                 }
-            }
+            //}
         }
 
     }
@@ -395,6 +399,12 @@ public class PlayerService extends Service implements MusicFocusable {
 		stopForeground(true);
 
 	}
+
+    @Override
+    public boolean onUnbind(Intent intent) {
+        stop();
+        return false;
+    }
 
 	@Override
 	public IBinder onBind(Intent intent) {

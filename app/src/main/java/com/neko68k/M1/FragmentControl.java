@@ -105,14 +105,14 @@ public class FragmentControl extends FragmentActivity implements
             if (requestCode == 65537) {
 
 
-                //if (playing == true) {
+                //if () {
 
                 //    playing = false;
                 //    paused = true;
                     //NDKBridge.playerService.stop();
                 if (mIsBound)
                 {
-                    startService(new Intent(PlayerService.ACTION_STOP));
+                    startService(new Intent(PlayerService.ACTION_STOP, null, this, PlayerService.class));
                     doUnbindService();
                     NDKBridge.playtime = 0;
                 }
@@ -182,15 +182,15 @@ public class FragmentControl extends FragmentActivity implements
                     }*/
                     if (!mIsBound) {
                         doBindService();
-                    } else {
+                    } //else {
                         /*if (listLen)
                             NDKBridge.getSongLen();
                         else
                             NDKBridge.songLen = NDKBridge.defLen;*/
                         //NDKBridge.playerService.play();
-                        startService(new Intent(PlayerService.ACTION_TOGGLE_PLAYBACK, null, this, PlayerService.class));
+                        //startService(new Intent(PlayerService.ACTION_PLAY, null, this, PlayerService.class));
 
-                    }
+                    //}
                     //playing = true;
                     //paused = false;
                 } else {
@@ -276,11 +276,11 @@ public class FragmentControl extends FragmentActivity implements
         super.onDestroy();
         //if (playing == true) {
            // NDKBridge.playerService.stop();
-            doUnbindService();
+        //    doUnbindService();
         //}
-        NDKBridge.nativeClose();
+        //NDKBridge.nativeClose();
 
-        this.finish();
+        //this.finish();
     }
 
     /*@Override

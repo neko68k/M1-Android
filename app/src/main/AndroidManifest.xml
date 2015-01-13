@@ -27,9 +27,9 @@
         </activity>
         <activity android:name="com.neko68k.M1.FileBrowser" android:label="@string/app_name"
     	    android:screenOrientation="portrait"/>
-        <activity android:name="com.neko68k.M1.Prefs" android:screenOrientation="portrait"/>
-        <activity android:name=".GameListActivity" android:screenOrientation="portrait"/>
-        <activity android:name="com.neko68k.M1.GameListFrag" android:screenOrientation="portrait"/>
+        <activity android:name="com.neko68k.M1.Prefs" />
+        <activity android:name=".GameListActivity" />
+        <activity android:name="com.neko68k.M1.GameListFrag"/>
 
 		<service android:name="com.neko68k.M1.PlayerService" />
 		
