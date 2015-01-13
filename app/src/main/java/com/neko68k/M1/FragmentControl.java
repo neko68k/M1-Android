@@ -110,14 +110,18 @@ public class FragmentControl extends FragmentActivity implements
                 //    playing = false;
                 //    paused = true;
                     //NDKBridge.playerService.stop();
-                if (mIsBound)
+                if (!mIsBound)
                 {
-                    startService(new Intent(PlayerService.ACTION_STOP, null, this, PlayerService.class));
-                    doUnbindService();
-                    NDKBridge.playtime = 0;
+                    //doBindService();
+
                 }
 
-                NDKBridge.nativeLoadROM(NDKBridge.game.index);
+                startService(new Intent(PlayerService.ACTION_LOAD, null, this, PlayerService.class).putExtra("gameid", NDKBridge.game.index));
+                //doUnbindService();
+                NDKBridge.playtime = 0;
+
+
+                //NDKBridge.nativeLoadROM(NDKBridge.game.index);
 
                 if (!NDKBridge.loadError) {
                     NDKBridge.playtime = 0;
@@ -180,9 +184,7 @@ public class FragmentControl extends FragmentActivity implements
                         trackList.setOnItemClickListener(mDoNothing);
                         adapter.notifyDataSetChanged();
                     }*/
-                    if (!mIsBound) {
-                        doBindService();
-                    } //else {
+                     //else {
                         /*if (listLen)
                             NDKBridge.getSongLen();
                         else

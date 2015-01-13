@@ -18,6 +18,7 @@
                 <action android:name="com.neko68k.M1.action.SKIP" />
                 <action android:name="com.neko68k.M1.action.REWIND" />
                 <action android:name="com.neko68k.M1.action.STOP" />
+                <action android:name="com.neko68k.M1.action.LOAD" />
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
             <intent-filter>

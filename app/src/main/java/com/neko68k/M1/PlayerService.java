@@ -19,7 +19,7 @@ import android.widget.RemoteViews;
 
 public class PlayerService extends Service implements MusicFocusable {
 	String text;
-	Notification notification = null;
+	static Notification notification = null;
 	PendingIntent contentIntent;
 
     // ***** Remote Control Stuff ***** //
@@ -31,6 +31,7 @@ public class PlayerService extends Service implements MusicFocusable {
     public static final String ACTION_REWIND = "com.neko68k.M1.action.REWIND";
     public static final String ACTION_URL = "com.neko68k.M1.action.URL";
     public static final String ACTION_RESTART = "com.neko68k.M1.action.RESTART";
+    public static final String ACTION_LOAD = "com.neko68k.M1.action.LOAD";
 
     RemoteControlClientCompat mRemoteControlClientCompat;
     ComponentName mMediaButtonReceiverComponent;
@@ -46,7 +47,7 @@ public class PlayerService extends Service implements MusicFocusable {
     }
     // ***** End Remote Control Stuff ***** //
 
-	AudioDevice ad = new AudioDevice("deviceThread");
+	AudioDevice ad = null;
 
 	public class LocalBinder extends Binder {
 		PlayerService getService() {
@@ -67,7 +68,7 @@ public class PlayerService extends Service implements MusicFocusable {
             mAudioFocusHelper = new AudioFocusHelper(ctx, this);
         else
             mAudioFocus = AudioFocus.Focused; // no focus feature, so we always "have" audio focus
-		play();
+		//play();
 	}
 
     public void onLostAudioFocus(boolean canDuck) {
@@ -199,12 +200,28 @@ public class PlayerService extends Service implements MusicFocusable {
             else if (action.equals(ACTION_STOP)) processStopRequest();
             else if (action.equals(ACTION_REWIND)) processRewindRequest();
             else if (action.equals(ACTION_RESTART)) processRewindRequest();
+            else if (action.equals(ACTION_LOAD)) processLoadRequest(intent.getIntExtra("gameid", -1));
         }
 		return START_STICKY;
 	}
 
     private void processStopRequest(){
         stop();
+    }
+
+    private void processLoadRequest(int gameid){
+        if(ad !=null&&ad.isPlaying()){
+            //stop();
+            ad.PlayStop();
+            NDKBridge.stop();
+        }
+        NDKBridge.nativeLoadROM(gameid);
+        if(!NDKBridge.loadError){
+            ad = new AudioDevice("deviceThread");
+            play();
+        }
+
+
     }
 
     private void processSkipRequest(){
@@ -221,7 +238,7 @@ public class PlayerService extends Service implements MusicFocusable {
                     NDKBridge.songLen = NDKBridge.defLen;
                 //trackList.smoothScrollToPosition(i);
                 //if (mRemoteControlClientCompat != null)
-                updateRemoteMetadata();
+                //updateRemoteMetadata();
             }
         }
     }
@@ -240,7 +257,7 @@ public class PlayerService extends Service implements MusicFocusable {
                     NDKBridge.songLen = NDKBridge.defLen;
                 //trackList.smoothScrollToPosition(i);
                 //if (mRemoteControlClientCompat != null)
-                updateRemoteMetadata();
+                //updateRemoteMetadata();
             }
         }
     }
@@ -340,10 +357,8 @@ public class PlayerService extends Service implements MusicFocusable {
 
 	public void play() {
 
-		if (notification == null)
-			notification = new Notification(R.drawable.icon, "",
-					System.currentTimeMillis());
-		new Intent(this, M1AndroidFragment.class);
+
+		//new Intent(this, M1AndroidFragment.class);
 
 		setNoteText();
 
@@ -351,7 +366,9 @@ public class PlayerService extends Service implements MusicFocusable {
 	}
 
 	public void setNoteText() {
-
+        if (notification == null)
+            notification = new Notification(R.drawable.icon, "",
+                    System.currentTimeMillis());
 		notification.flags |= Notification.FLAG_NO_CLEAR;
 		RemoteViews contentView = new RemoteViews(getPackageName(),
 				R.layout.custom_notification);
@@ -393,10 +410,10 @@ public class PlayerService extends Service implements MusicFocusable {
 		startForeground(1337, notification);
 	}
 
-	// @Override
-	public void onDestory() {
+	//@Override
+    public void onDestory() {
 		ad.PlayQuit();
-		stopForeground(true);
+		//stopForeground(true);
 
 	}
 

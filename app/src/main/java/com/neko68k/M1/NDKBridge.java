@@ -193,7 +193,7 @@ public class NDKBridge {
 	}
 
 	public static void Silence() {
-		ctx.startActivity(new Intent(PlayerService.ACTION_SKIP, null, ctx, PlayerService.class));
+		//ctx.startActivity(new Intent(PlayerService.ACTION_SKIP, null, ctx, PlayerService.class));
 		// playerService.setNoteText();
 
 		// if we are to skip songs when we here silence, this is where we do it
@@ -202,7 +202,7 @@ public class NDKBridge {
 	public static int next() {
 		playtime = 0;
 		int i = nextSong();
-		playerService.setNoteText();
+		//playerService.setNoteText();
 		
 		return i;
 	}
