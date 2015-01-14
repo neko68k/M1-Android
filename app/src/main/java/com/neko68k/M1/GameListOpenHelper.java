@@ -229,9 +229,9 @@ public class GameListOpenHelper {
 		+" board.syshash=gamelist.syshash AND "
 		+" gamelist.romavail = 1";
 		
-		if(FragmentControl.isFiltered()){
+		if(GameListActivity.isFiltered()){
 				filters.clear();
-				if(FragmentControl.isFaves()){
+				if(GameListActivity.isFaves()){
 					filters.add(" gamelist.fave=1 ");
 				}
 				if(cpulist!=0){
@@ -271,7 +271,7 @@ public class GameListOpenHelper {
 					}
 				}					
 			} else {
-				if(FragmentControl.isFaves()){
+				if(GameListActivity.isFaves()){
 					query+=" WHERE gamelist.fave=1 ";
 				}
 			}

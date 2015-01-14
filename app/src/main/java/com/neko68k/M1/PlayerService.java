@@ -104,9 +104,9 @@ public class PlayerService extends Service implements MusicFocusable {
             }
         }
         else if (mAudioFocus == AudioFocus.NoFocusCanDuck)
-            NDKBridge.playerService.setVolume(DUCK_VOLUME, DUCK_VOLUME);  // we'll be relatively quiet
+            setVolume(DUCK_VOLUME, DUCK_VOLUME);  // we'll be relatively quiet
         else
-            NDKBridge.playerService.setVolume(1.0f, 1.0f); // we can be loud
+            setVolume(1.0f, 1.0f); // we can be loud
         if (ad.isPlaying()) {
             if (ad.isPaused()) {
                 //playButton.setImageResource(R.drawable.ic_action_pause);
@@ -130,21 +130,7 @@ public class PlayerService extends Service implements MusicFocusable {
             mAudioFocus = AudioFocus.Focused;
     }
 
-    /*protected int onNewIntent(Intent intent) {
-        String action = intent.getAction();
-        if(action != null){
-            if (action.equals(ACTION_TOGGLE_PLAYBACK)) processTogglePlaybackRequest();
-            else if (action.equals(ACTION_PLAY)) processPlayRequest();
-            else if (action.equals(ACTION_PAUSE)) processPauseRequest();
-            else if (action.equals(ACTION_SKIP)) processSkipRequest();
-                //else if (action.equals(ACTION_STOP)) processStopRequest();
-            else if (action.equals(ACTION_REWIND)) processRewindRequest();
-            else if (action.equals(ACTION_RESTART)) processRewindRequest();
-        }
 
-        return START_NOT_STICKY; // Means we started the service, but don't want it to
-        // restart in case it's killed.
-    }*/
 
     private void updateRemoteMetadata(){
         // Use the media button APIs (if available) to register ourselves for media button
@@ -191,22 +177,30 @@ public class PlayerService extends Service implements MusicFocusable {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-        String action = intent.getAction();
-        if(action != null){
-            if (action.equals(ACTION_TOGGLE_PLAYBACK)) processTogglePlaybackRequest();
-            else if (action.equals(ACTION_PLAY)) processPlayRequest();
-            else if (action.equals(ACTION_PAUSE)) processPauseRequest();
-            else if (action.equals(ACTION_SKIP)) processSkipRequest();
-            else if (action.equals(ACTION_STOP)) processStopRequest();
-            else if (action.equals(ACTION_REWIND)) processRewindRequest();
-            else if (action.equals(ACTION_RESTART)) processRewindRequest();
-            else if (action.equals(ACTION_LOAD)) processLoadRequest(intent.getIntExtra("gameid", -1));
+        if(intent!=null) {
+            String action = intent.getAction();
+            if (action != null) {
+                if (action.equals(ACTION_TOGGLE_PLAYBACK)) processTogglePlaybackRequest();
+                else if (action.equals(ACTION_PLAY)) processPlayRequest();
+                else if (action.equals(ACTION_PAUSE)) processPauseRequest();
+                else if (action.equals(ACTION_SKIP)) processSkipRequest();
+                else if (action.equals(ACTION_STOP)) processStopRequest();
+                else if (action.equals(ACTION_REWIND)) processRewindRequest();
+                else if (action.equals(ACTION_RESTART)) processRestartRequest();
+                else if (action.equals(ACTION_LOAD))
+                    processLoadRequest(intent.getIntExtra("gameid", -1));
+            }
         }
 		return START_STICKY;
 	}
 
     private void processStopRequest(){
         stop();
+    }
+
+
+    private void processRestartRequest(){
+        NDKBridge.restSong();
     }
 
     private void processLoadRequest(int gameid){
