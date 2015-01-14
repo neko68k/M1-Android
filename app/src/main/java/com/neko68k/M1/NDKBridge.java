@@ -159,7 +159,7 @@ public class NDKBridge {
 	// ////////////////////////// END ENUMS
 
 	static GameDatabaseHelper m1db;
-	static Game game;
+	static Game game = null;
 	static int defLen;
 	static int songLen;
 	static boolean inited = false;
@@ -174,7 +174,7 @@ public class NDKBridge {
 	static PlayerService playerService = new PlayerService();
 	static String m1error;
 	static Context ctx;
-	static int cur;
+	static int cur = -1;
 	static Boolean forceRescan = false;
 
 	public static void RomLoadErr() {

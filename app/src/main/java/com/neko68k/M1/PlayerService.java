@@ -32,6 +32,7 @@ public class PlayerService extends Service implements MusicFocusable {
     public static final String ACTION_URL = "com.neko68k.M1.action.URL";
     public static final String ACTION_RESTART = "com.neko68k.M1.action.RESTART";
     public static final String ACTION_LOAD = "com.neko68k.M1.action.LOAD";
+    public static final String ACTION_JUMP = "com.neko68k.M1.action.JUMP";
 
     RemoteControlClientCompat mRemoteControlClientCompat;
     ComponentName mMediaButtonReceiverComponent;
@@ -187,6 +188,7 @@ public class PlayerService extends Service implements MusicFocusable {
                 else if (action.equals(ACTION_STOP)) processStopRequest();
                 else if (action.equals(ACTION_REWIND)) processRewindRequest();
                 else if (action.equals(ACTION_RESTART)) processRestartRequest();
+                else if (action.equals(ACTION_JUMP)) processSongJump(intent.getIntExtra("tracknum", 1));
                 else if (action.equals(ACTION_LOAD))
                     processLoadRequest(intent.getIntExtra("gameid", -1));
             }
@@ -198,6 +200,11 @@ public class PlayerService extends Service implements MusicFocusable {
         stop();
     }
 
+    private void processSongJump(int tracknum){
+        NDKBridge.jumpSong(tracknum);
+        //setNoteText();
+        //updateRemoteMetadata();
+    }
 
     private void processRestartRequest(){
         NDKBridge.restSong();
@@ -207,7 +214,7 @@ public class PlayerService extends Service implements MusicFocusable {
     private void processLoadRequest(int gameid){
         if(ad !=null&&ad.isPlaying()){
             //stop();
-            ad.PlayStop();
+            ad.PlayQuit();
             NDKBridge.stop();
         }
         NDKBridge.nativeLoadROM(gameid);
@@ -219,6 +226,7 @@ public class PlayerService extends Service implements MusicFocusable {
                 mRemoteControlClientCompat
                         .setPlaybackState(RemoteControlClientCompat.PLAYSTATE_PLAYING);
             }
+            getApplicationContext().startActivity(new Intent(FragmentControl.ACTION_LOAD_COMPLETE, null, getApplicationContext(), FragmentControl.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         }
 
 

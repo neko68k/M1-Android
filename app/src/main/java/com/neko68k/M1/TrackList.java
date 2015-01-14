@@ -1,7 +1,10 @@
 package com.neko68k.M1;
 
 
-public class TrackList implements Comparable<TrackList> {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class TrackList implements Comparable<TrackList>, Parcelable {
 
 	private String trackNum = "";
 	private String mText = "";
@@ -62,4 +65,37 @@ public class TrackList implements Comparable<TrackList> {
 		else
 			throw new IllegalArgumentException();
 	}
+
+    public int describeContents() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeString(trackNum);
+        out.writeString(mText);
+        out.writeString(time);
+        out.writeByte((byte) (fave ? 1 : 0));
+        out.writeByte((byte) (mSelectable ? 1 : 0));
+    }
+
+    public TrackList(Parcel in){
+        trackNum = in.readString();
+        mText = in.readString();
+        time = in.readString();
+        fave = in.readByte() != 0;
+        mSelectable = in.readByte() != 0;
+    }
+
+    public static final Parcelable.Creator<TrackList> CREATOR = new Parcelable.Creator<TrackList>() {
+        // @Override
+        public TrackList createFromParcel(Parcel source) {
+            return new TrackList(source);
+        }
+
+        // @Override
+        public TrackList[] newArray(int size) {
+            return new TrackList[size];
+        }
+    };
 }

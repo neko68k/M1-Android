@@ -61,7 +61,8 @@ public class MainDetailFragment extends Fragment {
         if(savedInstanceState!=null) {
             inited = savedInstanceState.getBoolean("inited");
             NDKBridge.game = savedInstanceState.getParcelable("game");
-            updateDetails();
+            if(inited&&NDKBridge.game!=null)
+                updateDetails();
         }
         FirstRun(ctx);
         return v;
@@ -74,6 +75,7 @@ public class MainDetailFragment extends Fragment {
         mfg.setText("Maker: " + NDKBridge.game.mfg);
         year.setText("Year: " + NDKBridge.game.year);
         hardware.setText("Hardware: " + NDKBridge.game.soundhw);
+
     }
 
     @Override
@@ -82,10 +84,6 @@ public class MainDetailFragment extends Fragment {
         outState.putParcelable("game", NDKBridge.game);
     }
 
-   /* @Override
-    public void onRestoreInstanceState (Bundle inState){
-        inited = inState.getBoolean("inited");
-    }*/
 
     private void FirstRun(final Context ctx) {
         SharedPreferences prefs = PreferenceManager

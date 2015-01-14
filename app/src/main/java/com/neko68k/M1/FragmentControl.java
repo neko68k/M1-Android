@@ -24,6 +24,7 @@ import java.util.Map;
 public class FragmentControl extends FragmentActivity implements
 		GameListFrag.OnItemSelectedListener, GameListOptionsFrag.OnOptionsChanged, FileBrowser.FBCallback{
 
+    public static final String ACTION_LOAD_COMPLETE = "com.neko68k.M1.action.TOGGLE_LOAD_COMPLETE";
 	private static boolean filtered = false;
 	private static boolean sorted = false;
 	private static int sortType = 0;
@@ -69,6 +70,24 @@ public class FragmentControl extends FragmentActivity implements
 
 	}
 
+    @Override
+    public void onNewIntent (Intent intent){
+        if(intent!=null) {
+            String action = intent.getAction();
+            if (action != null) {
+                if (action.equals(ACTION_LOAD_COMPLETE)) {
+                    if (!NDKBridge.loadError) {
+                        MainDetailFragment mdf = (MainDetailFragment) getSupportFragmentManager().findFragmentById(R.id.details);
+                        TrackListFragment tlf = (TrackListFragment) getSupportFragmentManager().findFragmentById(R.id.tracklist);
+                        mdf.updateDetails();
+                        tlf.updateTrackList();
+                        NDKBridge.playtime = 0;
+                    }
+                }
+            }
+        }
+    }
+
     // service connection stuff
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder service) {
@@ -104,89 +123,22 @@ public class FragmentControl extends FragmentActivity implements
         if (resultCode == RESULT_OK) {
             if (requestCode == 65537) {
 
-
-                //if () {
-
-                //    playing = false;
-                //    paused = true;
-                    //NDKBridge.playerService.stop();
-                if (!mIsBound)
-                {
-                    //doBindService();
-
-                }
-
                 startService(new Intent(PlayerService.ACTION_LOAD, null, this, PlayerService.class).putExtra("gameid", NDKBridge.game.index));
-
-                //doUnbindService();
                 NDKBridge.playtime = 0;
 
-
-                //NDKBridge.nativeLoadROM(NDKBridge.game.index);
-
                 if (!NDKBridge.loadError) {
-                    MainDetailFragment mdf = (MainDetailFragment)getSupportFragmentManager().findFragmentById(R.id.details);
+                    /*MainDetailFragment mdf = (MainDetailFragment)getSupportFragmentManager().findFragmentById(R.id.details);
+                    TrackListFragment tlf = (TrackListFragment)getSupportFragmentManager().findFragmentById(R.id.tracklist);
                     mdf.updateDetails();
+                    tlf.updateTracklist();
                     NDKBridge.playtime = 0;
-
-                    /*mHandler.post(mUpdateTimeTask);
-                    icon.setImageBitmap(NDKBridge.getIcon());
-                    title.setText(NDKBridge.game.getTitle());
-                    board.setText("Board: " + NDKBridge.game.sys);
-                    mfg.setText("Maker: " + NDKBridge.game.mfg);
-                    year.setText("Year: " + NDKBridge.game.year);
-                    hardware.setText("Hardware: " + NDKBridge.game.soundhw);
-
-                    playButton.setImageResource(R.drawable.ic_action_pause);
+/
 
 
-                    numSongs = NDKBridge.getInfoInt(NDKBridge.M1_IINF_TRACKS,
-                            NDKBridge.getInfoInt(NDKBridge.M1_IINF_CURGAME, 0));
+                    //playButton.setImageResource(R.drawable.ic_action_pause);
 
-                    if (numSongs > 0) {
 
-                        listItems.clear();
-                        for (int i = 0; i < numSongs; i++) {
 
-                            int game = NDKBridge.getInfoInt(
-                                    NDKBridge.M1_IINF_CURGAME, 0);
-                            int cmdNum = NDKBridge.getInfoInt(
-                                    NDKBridge.M1_IINF_TRACKCMD,
-                                    (i << 16 | game));
-                            String song = NDKBridge.getInfoStr(
-                                    NDKBridge.M1_SINF_TRKNAME,
-                                    (cmdNum << 16 | game));
-
-                            int songlen = NDKBridge.getInfoInt(
-                                    NDKBridge.M1_IINF_TRKLENGTH,
-                                    (cmdNum << 16 | game));
-                            if (song != null) {
-                                String tmp;
-                                if (songlen / 60 % 60 < 10)
-                                    tmp = ":0";
-                                else
-                                    tmp = ":";
-                                TrackList item = new TrackList();
-                                item.setText(song);
-                                item.setTime((songlen / 60 / 60) + tmp
-                                        + (songlen / 60 % 60));
-                                item.setTrackNum(i+1+".");
-                                listItems.add(item);
-                            }
-                        }
-
-                        trackList
-                                .setOnItemClickListener(mMessageClickedHandler);
-                        adapter.notifyDataSetChanged();
-                        trackList.setSelection(0);
-
-                    } else {
-                        listItems.clear();
-                        TrackList item = new TrackList("No playlist");
-                        listItems.add(item);
-                        trackList.setOnItemClickListener(mDoNothing);
-                        adapter.notifyDataSetChanged();
-                    }*/
                      //else {
                         /*if (listLen)
                             NDKBridge.getSongLen();
