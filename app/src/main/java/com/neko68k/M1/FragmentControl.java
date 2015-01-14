@@ -117,6 +117,7 @@ public class FragmentControl extends FragmentActivity implements
                 }
 
                 startService(new Intent(PlayerService.ACTION_LOAD, null, this, PlayerService.class).putExtra("gameid", NDKBridge.game.index));
+
                 //doUnbindService();
                 NDKBridge.playtime = 0;
 
@@ -124,6 +125,8 @@ public class FragmentControl extends FragmentActivity implements
                 //NDKBridge.nativeLoadROM(NDKBridge.game.index);
 
                 if (!NDKBridge.loadError) {
+                    MainDetailFragment mdf = (MainDetailFragment)getSupportFragmentManager().findFragmentById(R.id.details);
+                    mdf.updateDetails();
                     NDKBridge.playtime = 0;
 
                     /*mHandler.post(mUpdateTimeTask);

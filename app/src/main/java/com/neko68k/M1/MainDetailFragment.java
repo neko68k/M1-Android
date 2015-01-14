@@ -58,15 +58,28 @@ public class MainDetailFragment extends Fragment {
         Context ctx = getActivity();
         NDKBridge.ctx = ctx;
         setHasOptionsMenu(true);
-        if(savedInstanceState!=null)
+        if(savedInstanceState!=null) {
             inited = savedInstanceState.getBoolean("inited");
+            NDKBridge.game = savedInstanceState.getParcelable("game");
+            updateDetails();
+        }
         FirstRun(ctx);
         return v;
+    }
+
+    public void updateDetails(){
+        icon.setImageBitmap(NDKBridge.getIcon());
+        title.setText(NDKBridge.game.getTitle());
+        board.setText("Board: " + NDKBridge.game.sys);
+        mfg.setText("Maker: " + NDKBridge.game.mfg);
+        year.setText("Year: " + NDKBridge.game.year);
+        hardware.setText("Hardware: " + NDKBridge.game.soundhw);
     }
 
     @Override
     public void onSaveInstanceState (Bundle outState){
         outState.putBoolean("inited", inited);
+        outState.putParcelable("game", NDKBridge.game);
     }
 
    /* @Override
@@ -121,6 +134,8 @@ public class MainDetailFragment extends Fragment {
                 inited = true;
                 InitM1Task task = new InitM1Task(NDKBridge.ctx);
                 task.execute();
+            } else {
+
             }
         }
     }

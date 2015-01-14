@@ -201,6 +201,7 @@ public class PlayerService extends Service implements MusicFocusable {
 
     private void processRestartRequest(){
         NDKBridge.restSong();
+
     }
 
     private void processLoadRequest(int gameid){
