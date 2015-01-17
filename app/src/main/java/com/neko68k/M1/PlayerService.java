@@ -6,6 +6,8 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.widget.RemoteViews;
 //import android.R;
 
@@ -65,9 +67,9 @@ public class PlayerService extends Service {
 
 	public void setNoteText() {
 
-		notification.flags |= Notification.FLAG_NO_CLEAR;
+		/*notification.flags |= Notification.FLAG_NO_CLEAR;
 		RemoteViews contentView = new RemoteViews(getPackageName(),
-				R.layout.custom_notification);
+				R.layout.);
 		contentView.setImageViewResource(R.id.image, R.drawable.ic_launcher);
 		//contentView.setTextViewText(R.id.title, "M1Android");
 
@@ -101,9 +103,36 @@ public class PlayerService extends Service {
 		Intent notificationIntent = new Intent(this, M1Android.class);
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
 				notificationIntent, 0);
-		notification.contentIntent = contentIntent;
+		notification.contentIntent = contentIntent;*/
+        NotificationCompat.Builder mBuilder = null;
+        int cmdNum = NDKBridge
+                .getInfoInt(NDKBridge.M1_IINF_TRACKCMD, (NDKBridge.getInfoInt(
+                        NDKBridge.M1_IINF_CURSONG, 0) << 16 | NDKBridge
+                        .getInfoInt(NDKBridge.M1_IINF_CURGAME, 0)));
+        text = NDKBridge.getInfoStr(NDKBridge.M1_SINF_TRKNAME, cmdNum << 16
+                | NDKBridge.getInfoInt(NDKBridge.M1_IINF_CURGAME, 0));
+        if(text==null) {
+            mBuilder =
+                    new NotificationCompat.Builder(this)
+                            .setSmallIcon(R.drawable.ic_launcher)
+                            .setContentTitle(NDKBridge.getInfoStr(NDKBridge.M1_SINF_VISNAME, NDKBridge.getInfoInt(NDKBridge.M1_IINF_CURGAME, 0)))
+                            .setContentText("No Track List");
+        } else {
+            mBuilder =
+                    new NotificationCompat.Builder(this)
+                            .setSmallIcon(R.drawable.ic_launcher)
+                            .setContentTitle(NDKBridge.getInfoStr(NDKBridge.M1_SINF_VISNAME, NDKBridge.getInfoInt(NDKBridge.M1_IINF_CURGAME, 0)))
+                            .setContentText(text);
+        }
+        // Creates an explicit intent for an Activity in your app
+        Intent resultIntent = new Intent(this, M1Android.class).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-		startForeground(1337, notification);
+        PendingIntent resultPendingIntent =
+                PendingIntent.getActivity(this, 0, resultIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        mBuilder.setContentIntent(resultPendingIntent);
+
+
+		startForeground(1337, mBuilder.build());
 	}
 
 	// @Override
