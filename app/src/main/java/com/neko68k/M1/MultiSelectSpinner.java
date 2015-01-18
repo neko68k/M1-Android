@@ -16,10 +16,6 @@
 
 package com.neko68k.M1;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -30,6 +26,10 @@ import android.util.AttributeSet;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
+
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * A Spinner view that does not dismiss the dialog displayed when the control is "dropped down"
