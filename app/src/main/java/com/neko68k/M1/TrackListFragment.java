@@ -29,22 +29,24 @@ public class TrackListFragment extends ListFragment {
         this.setListAdapter(adapter);
 
         //updateTrackList();
-        /*if(savedInstanceState!=null){
+        if(savedInstanceState!=null){
             boolean inited = savedInstanceState.getBoolean("inited");
-            if(inited) {
+            //if(inited) {
                 listItems = savedInstanceState.getParcelableArrayList("gamelist");
                 trackList.setOnItemClickListener(mMessageClickedHandler);
+                adapter.setListItems(listItems);
                 adapter.notifyDataSetChanged();
+                trackList.setAdapter(adapter);
                 trackList.setSelection(0);
-            }
-        }*/
+            //}
+        }
     }
 
-    /*@Override
+    @Override
     public void onSaveInstanceState (Bundle outState){
         //outState.putBoolean("inited", NDKBridge.inited);
-        //outState.putParcelableArrayList("gamelist", listItems);
-    }*/
+        outState.putParcelableArrayList("gamelist", listItems);
+    }
 
     private AdapterView.OnItemClickListener mMessageClickedHandler = new AdapterView.OnItemClickListener() {
         public void onItemClick(AdapterView<?> parent, View v, int position,
