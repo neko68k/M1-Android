@@ -33,7 +33,7 @@ public class MusicIntentReceiver extends BroadcastReceiver {
             //Toast.makeText(context, "Headphones disconnected.", Toast.LENGTH_SHORT).show();
             // send an intent to our MusicService to telling it to pause the audio
         	//NDKBridge.ctx.startService(new Intent(PlayerService.ACTION_PAUSE));
-            context.startService(new Intent(PlayerService.ACTION_TOGGLE_PLAYBACK, null, context.getApplicationContext(), PlayerService.class));
+            context.startService(new Intent(PlayerService.ACTION_PAUSE, null, context.getApplicationContext(), PlayerService.class));
         } else if (intent.getAction().equals(Intent.ACTION_MEDIA_BUTTON)) {
             KeyEvent keyEvent = (KeyEvent) intent.getExtras().get(Intent.EXTRA_KEY_EVENT);
             if (keyEvent.getAction() != KeyEvent.ACTION_DOWN)
@@ -41,24 +41,30 @@ public class MusicIntentReceiver extends BroadcastReceiver {
             switch (keyEvent.getKeyCode()) {
                 case KeyEvent.KEYCODE_HEADSETHOOK:
                 case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
-                    NDKBridge.ctx.startActivity(new Intent(PlayerService.ACTION_TOGGLE_PLAYBACK));
+                    context.startService(new Intent(PlayerService.ACTION_TOGGLE_PLAYBACK, null, context.getApplicationContext(), PlayerService.class));
+                    //NDKBridge.ctx.startActivity(new Intent(PlayerService.ACTION_TOGGLE_PLAYBACK));
                     break;
                 case 0x0000007e://KeyEvent.KEYCODE_MEDIA_PLAY:
-                	NDKBridge.ctx.startActivity(new Intent(PlayerService.ACTION_PLAY));
+                    context.startService(new Intent(PlayerService.ACTION_PLAY, null, context.getApplicationContext(), PlayerService.class));
+                	//NDKBridge.ctx.startActivity(new Intent(PlayerService.ACTION_PLAY))
                     break;
                 case 0x0000007f://KeyEvent.KEYCODE_MEDIA_PAUSE:
-                	NDKBridge.ctx.startActivity(new Intent(PlayerService.ACTION_PAUSE));
+                    context.startService(new Intent(PlayerService.ACTION_PAUSE, null, context.getApplicationContext(), PlayerService.class));
+                	//NDKBridge.ctx.startActivity(new Intent(PlayerService.ACTION_PAUSE));
                     break;
                 case KeyEvent.KEYCODE_MEDIA_STOP:
-                	NDKBridge.ctx.startActivity(new Intent(PlayerService.ACTION_STOP));
+                    context.startService(new Intent(PlayerService.ACTION_STOP, null, context.getApplicationContext(), PlayerService.class));
+                	//NDKBridge.ctx.startActivity(new Intent(PlayerService.ACTION_STOP));
                     break;
                 case KeyEvent.KEYCODE_MEDIA_NEXT:
-                	NDKBridge.ctx.startActivity(new Intent(PlayerService.ACTION_SKIP));
+                    context.startService(new Intent(PlayerService.ACTION_SKIP, null, context.getApplicationContext(), PlayerService.class));
+                	//NDKBridge.ctx.startActivity(new Intent(PlayerService.ACTION_SKIP));
                     break;
                 case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
                     // TODO: ensure that doing this in rapid succession actually plays the
                     // previous song
-                	NDKBridge.ctx.startActivity(new Intent(PlayerService.ACTION_REWIND));
+                    context.startService(new Intent(PlayerService.ACTION_REWIND, null, context.getApplicationContext(), PlayerService.class));
+                	//NDKBridge.ctx.startActivity(new Intent(PlayerService.ACTION_REWIND));
                     break;
             }
         }

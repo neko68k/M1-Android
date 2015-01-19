@@ -306,7 +306,7 @@ public class PlayerService extends Service implements MusicFocusable {
                 if (mRemoteControlClientCompat != null) {
                     mRemoteControlClientCompat
                             .setPlaybackState(RemoteControlClientCompat.PLAYSTATE_PAUSED);
-                    //updateRemoteMetadata();
+                    updateRemoteMetadata();
                 }
             }
         }
