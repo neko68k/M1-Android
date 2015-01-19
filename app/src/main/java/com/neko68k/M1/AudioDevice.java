@@ -87,6 +87,7 @@ public class AudioDevice extends Thread {
 			if (paused == false) {
 				buffer = theProducer.take_product();
 				track.write(buffer, 0, ((44100 / 60) * 2 * 2));
+
 			}
 		}
 		track.release();

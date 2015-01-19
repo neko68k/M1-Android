@@ -101,7 +101,8 @@ public class FragmentControl extends FragmentActivity implements
 
     @Override
     public void onBackPressed() {
-// do something on back.
+    // do something on back.
+
         if (mIsBound) {
             //NDKBridge.playerService.stop();
             this.stopService(new Intent(PlayerService.ACTION_STOP, null, this.getApplicationContext(), PlayerService.class));

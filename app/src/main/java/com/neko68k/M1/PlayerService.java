@@ -44,7 +44,7 @@ public class PlayerService extends Service implements MusicFocusable {
     public static final float DUCK_VOLUME = 0.1f;
     AudioFocus mAudioFocus = AudioFocus.NoFocusNoDuck;
     AudioManager mAudioManager;
-    NotificationManager mNM;
+
 
     enum AudioFocus {
         NoFocusNoDuck,    // we don't have audio focus, and can't duck
@@ -64,15 +64,14 @@ public class PlayerService extends Service implements MusicFocusable {
 	@Override
 	public void onCreate() {
         Context ctx = getApplicationContext();
-		mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+
         mMediaButtonReceiverComponent = new ComponentName(ctx, MusicIntentReceiver.class);
 
 
-        //mAudioManager = (AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
+        mAudioManager = (AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
 
         if (android.os.Build.VERSION.SDK_INT >= 8) {
             mAudioFocusHelper = new AudioFocusHelper(ctx, this);
-            mAudioManager = mAudioFocusHelper.getAM();
         }
         else
             mAudioFocus = AudioFocus.Focused; // no focus feature, so we always "have" audio focus
@@ -124,7 +123,7 @@ public class PlayerService extends Service implements MusicFocusable {
 
                 unpause();
                 //paused = false;
-                updateRemoteMetadata();
+                //updateRemoteMetadata();
             }
         }
     }
