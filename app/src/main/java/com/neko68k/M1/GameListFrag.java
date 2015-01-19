@@ -45,7 +45,7 @@ public class GameListFrag extends ListFragment {
 				R.layout.gamelist_detailed,
 				c, new String[] { "title",
 						"year", "mfg", "sys", "soundhw" }, new int[] { R.id.title,
-						R.id.year, R.id.mfg, R.id.board, R.id.hardware });
+						R.id.year, R.id.mfg, R.id.board, R.id.hardware }, GameListActivity.getSortType());
 
 		final ListView lv = getListView();
 		lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -53,14 +53,11 @@ public class GameListFrag extends ListFragment {
 				onListItemClick(lv, v, pos, id);
 			}
 		});
-		
-		
-		this.setListAdapter(adapter);
-		if(FragmentControl.isFiltered()||FragmentControl.isSorted()||FragmentControl.isFaves()){
-			lv.setFastScrollEnabled(false);	
-		} else {
-			lv.setFastScrollEnabled(true);
-		}
+
+
+        this.setListAdapter(adapter);
+        adapter.notifyDataSetChanged();
+        lv.setFastScrollEnabled(true);
 		//db.close();
 
 	}

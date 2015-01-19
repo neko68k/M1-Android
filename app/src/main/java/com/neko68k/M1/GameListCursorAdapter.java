@@ -41,7 +41,7 @@ public class GameListCursorAdapter extends SimpleCursorAdapter implements
 	}
 
 	public GameListCursorAdapter(Context context, int layout, Cursor cursor,
-			String[] from, int[] to) {
+			String[] from, int[] to, int sortType) {
 		super(context, layout, cursor, from, to);
 		tblYear = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_YEAR);
 		tblMfg = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_MFG);
@@ -53,11 +53,44 @@ public class GameListCursorAdapter extends SimpleCursorAdapter implements
 		tblId = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_ID);
 		tblFave = cursor.getColumnIndexOrThrow(GameListOpenHelper.KEY_FAVE);
 
-		mAlphabetIndexer = new AlphabetIndexer(cursor,
-				cursor.getColumnIndex(GameListOpenHelper.KEY_TITLE),
-				" ABCDEFGHIJKLMNOPQRTSUVWXYZ");
-		mAlphabetIndexer.setCursor(cursor);// Sets a new cursor as the data set
-											// and resets the cache of indices.
+        String sortColumn = GameListOpenHelper.KEY_TITLE;
+        String sortString = "-(<>?' 0123456789ABCDEFGHIJKLMNOPQRTSUVWXYZ";
+
+        switch(sortType){
+            case 1:
+                sortColumn = GameListOpenHelper.KEY_MFG;
+                break;
+            case 2:
+                sortColumn = GameListOpenHelper.KEY_SYS;
+                break;
+            case 3:
+                sortColumn = GameListOpenHelper.KEY_YEAR;
+                sortString = " ?0123456789";
+                break;
+            case 4:
+                sortColumn = GameListOpenHelper.KEY_CPU;
+                break;
+            case 5:
+                sortColumn = GameListOpenHelper.KEY_SOUND1;
+                break;
+            case 6:
+                sortColumn = GameListOpenHelper.KEY_SOUND2;
+                break;
+            case 7:
+                sortColumn = GameListOpenHelper.KEY_SOUND3;
+                break;
+            case 8:
+                sortColumn = GameListOpenHelper.KEY_SOUND4;
+                break;
+
+        }
+
+
+
+        mAlphabetIndexer = new AlphabetIndexer(cursor,
+                cursor.getColumnIndex(sortColumn),
+                sortString);
+        mAlphabetIndexer.setCursor(cursor);// Sets a new cursor as the data set
 		// TODO Auto-generated constructor stub
 	}
 
