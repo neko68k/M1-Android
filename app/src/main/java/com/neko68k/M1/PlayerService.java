@@ -1,6 +1,7 @@
 package com.neko68k.M1;
 
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ComponentName;
@@ -43,6 +44,7 @@ public class PlayerService extends Service implements MusicFocusable {
     public static final float DUCK_VOLUME = 0.1f;
     AudioFocus mAudioFocus = AudioFocus.NoFocusNoDuck;
     AudioManager mAudioManager;
+    NotificationManager mNM;
 
     enum AudioFocus {
         NoFocusNoDuck,    // we don't have audio focus, and can't duck
@@ -62,7 +64,7 @@ public class PlayerService extends Service implements MusicFocusable {
 	@Override
 	public void onCreate() {
         Context ctx = getApplicationContext();
-		// mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+		mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         mMediaButtonReceiverComponent = new ComponentName(ctx, MusicIntentReceiver.class);
 
 
@@ -155,7 +157,7 @@ public class PlayerService extends Service implements MusicFocusable {
             Intent intent = new Intent(Intent.ACTION_MEDIA_BUTTON);
             intent.setComponent(mMediaButtonReceiverComponent);
             mRemoteControlClientCompat = new RemoteControlClientCompat(
-                    PendingIntent.getBroadcast(NDKBridge.ctx /*context*/,
+                    PendingIntent.getBroadcast(getApplicationContext() /*context*/,
                             0 /*requestCode, ignored*/, intent /*intent*/, 0 /*flags*/));
             RemoteControlHelper.registerRemoteControlClient(mAudioManager,
                     mRemoteControlClientCompat);
@@ -375,8 +377,11 @@ public class PlayerService extends Service implements MusicFocusable {
 	public void stop() {
         NDKBridge.stop();
 		ad.PlayQuit();
-		// mNM.cancelAll();
+		//mNM.cancelAll();
+        giveUpAudioFocus();
+
 		stopForeground(true);
+        stopSelf();
 	}
 
 	public void play() {
@@ -414,21 +419,22 @@ public class PlayerService extends Service implements MusicFocusable {
         Intent resultIntent = new Intent(this, FragmentControl.class).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
         PendingIntent resultPendingIntent =
-                PendingIntent.getActivity(this, 0, resultIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+                PendingIntent.getActivity(this, 0, resultIntent, 0);
         mBuilder.setContentIntent(resultPendingIntent);
 
-
-        startForeground(1337, mBuilder.build());
+        Notification notification = mBuilder.build();
+        //mNM.notify(555, notification);
+        startForeground(1337, notification);
 
 		//startForeground(1337, notification);
 	}
 
 	//@Override
-    public void onDestory() {
-		ad.PlayQuit();
+    //public void onDestory() {
+		//ad.PlayQuit();
 		//stopForeground(true);
 
-	}
+	//}
 
     @Override
     public boolean onUnbind(Intent intent) {

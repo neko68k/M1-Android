@@ -84,6 +84,12 @@ public class MainDetailFragment extends Fragment {
         outState.putParcelable("game", NDKBridge.game);
     }
 
+    /*@Override
+    public void onPause(){
+
+        int test;
+        test = 1;
+    }*/
 
     private void FirstRun(final Context ctx) {
         SharedPreferences prefs = PreferenceManager

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ToggleButton;
 
@@ -40,6 +41,7 @@ public class FragmentControl extends FragmentActivity implements
 			// then we don't need to do anything and should return or else
 			// we could end up with overlapping fragments.
 			if (savedInstanceState != null) {
+
 				return;
 			}
 
@@ -81,6 +83,36 @@ public class FragmentControl extends FragmentActivity implements
         }
     }
 
+    /*@Override
+    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (mIsBound) {
+                //NDKBridge.playerService.stop();
+                //this.startService(new Intent(PlayerService.ACTION_STOP, null, this.getApplicationContext(), PlayerService.class));
+                doUnbindService();
+            }
+            NDKBridge.nativeClose();
+
+            this.finish();
+            return true;
+        }
+        return super.onKeyLongPress(keyCode, event);
+    }*/
+
+    @Override
+    public void onBackPressed() {
+// do something on back.
+        if (mIsBound) {
+            //NDKBridge.playerService.stop();
+            this.stopService(new Intent(PlayerService.ACTION_STOP, null, this.getApplicationContext(), PlayerService.class));
+            doUnbindService();
+        }
+        NDKBridge.nativeClose();
+
+        this.finish();
+        return;
+    }
+
     // service connection stuff
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder service) {
@@ -94,14 +126,14 @@ public class FragmentControl extends FragmentActivity implements
     };
 
     void doBindService() {
-        NDKBridge.ctx.bindService(new Intent(NDKBridge.ctx, PlayerService.class),
+        getApplicationContext().bindService(new Intent(NDKBridge.ctx, PlayerService.class),
                 mConnection, Context.BIND_AUTO_CREATE);
         mIsBound = true;
     }
 
     void doUnbindService() {
         if (mIsBound) {
-            NDKBridge.ctx.unbindService(mConnection);
+            getApplicationContext().unbindService(mConnection);
             mIsBound = false;
         }
     }
@@ -117,48 +149,10 @@ public class FragmentControl extends FragmentActivity implements
             if (requestCode == 65537) {
 
                 startService(new Intent(PlayerService.ACTION_LOAD, null, this, PlayerService.class).putExtra("gameid", NDKBridge.game.index));
+                doBindService();
                 NDKBridge.playtime = 0;
 
-                if (!NDKBridge.loadError) {
-                    /*MainDetailFragment mdf = (MainDetailFragment)getSupportFragmentManager().findFragmentById(R.id.details);
-                    TrackListFragment tlf = (TrackListFragment)getSupportFragmentManager().findFragmentById(R.id.tracklist);
-                    mdf.updateDetails();
-                    tlf.updateTracklist();
-                    NDKBridge.playtime = 0;
-/
 
-
-                    //playButton.setImageResource(R.drawable.ic_action_pause);
-
-
-
-                     //else {
-                        /*if (listLen)
-                            NDKBridge.getSongLen();
-                        else
-                            NDKBridge.songLen = NDKBridge.defLen;*/
-                        //NDKBridge.playerService.play();
-                        //startService(new Intent(PlayerService.ACTION_PLAY, null, this, PlayerService.class));
-
-                    //}
-                    //playing = true;
-                    //paused = false;
-                } else {
-                    /*listItems.clear();
-                    TrackList item = new TrackList("No game loaded");
-                    listItems.add(item);
-                    trackList.setOnItemClickListener(mDoNothing);
-                    adapter.notifyDataSetChanged();
-                    board.setText("");
-                    mfg.setText("");
-                    hardware.setText("");
-                    song.setText("");
-                    playTime.setText("Time:");
-                    trackNum.setText("Track:");
-
-                    title.setText("No game loaded");
-                    playButton.setImageResource(R.drawable.ic_action_play);*/
-                }
             } else if (requestCode == 2) {
                 // options returned
                 // stop everything and set options
@@ -224,6 +218,7 @@ public class FragmentControl extends FragmentActivity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
         //if (playing == true) {
            // NDKBridge.playerService.stop();
         //    doUnbindService();
