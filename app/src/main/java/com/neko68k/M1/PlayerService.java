@@ -406,7 +406,7 @@ public class PlayerService extends Service implements MusicFocusable {
 
         startForeground(1337, mBuilder.build());
 
-		startForeground(1337, notification);
+		//startForeground(1337, notification);
 	}
 
 	//@Override
