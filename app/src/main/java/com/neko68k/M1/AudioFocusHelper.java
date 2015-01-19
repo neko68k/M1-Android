@@ -29,13 +29,20 @@ public class AudioFocusHelper implements AudioManager.OnAudioFocusChangeListener
     AudioManager mAM;
     MusicFocusable mFocusable;
     public AudioFocusHelper(Context ctx, MusicFocusable focusable) {
+        //mAM = imAM;
         mAM = (AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
         mFocusable = focusable;
     }
+
+    public AudioManager getAM(){
+        return mAM;
+    }
+
     /** Requests audio focus. Returns whether request was successful or not. */
     public boolean requestFocus() {
-        return AudioManager.AUDIOFOCUS_REQUEST_GRANTED ==
-            mAM.requestAudioFocus(this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+        //return AudioManager.AUDIOFOCUS_REQUEST_GRANTED ==
+        int result =   mAM.requestAudioFocus(this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+        return (AudioManager.AUDIOFOCUS_REQUEST_GRANTED == result);
     }
     /** Abandons audio focus. Returns whether request was successful or not. */
     public boolean abandonFocus() {

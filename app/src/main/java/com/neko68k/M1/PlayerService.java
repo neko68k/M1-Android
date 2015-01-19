@@ -12,6 +12,7 @@ import android.os.IBinder;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NotificationCompat;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 //import android.R;
 
 // this will handle all the threading and shit
@@ -65,18 +66,23 @@ public class PlayerService extends Service implements MusicFocusable {
         mMediaButtonReceiverComponent = new ComponentName(ctx, MusicIntentReceiver.class);
 
 
-        mAudioManager = (AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
+        //mAudioManager = (AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
 
-        if (android.os.Build.VERSION.SDK_INT >= 8)
+        if (android.os.Build.VERSION.SDK_INT >= 8) {
             mAudioFocusHelper = new AudioFocusHelper(ctx, this);
+            mAudioManager = mAudioFocusHelper.getAM();
+        }
         else
             mAudioFocus = AudioFocus.Focused; // no focus feature, so we always "have" audio focus
+        //tryToGetAudioFocus();
+        //giveUpAudioFocus();
+        //updateRemoteMetadata();
 		//play();
 	}
 
     public void onLostAudioFocus(boolean canDuck) {
-        //Toast.makeText(getApplicationContext(), "lost audio focus." + (canDuck ? "can duck" :
-        //"no duck"), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "lost audio focus." + (canDuck ? "can duck" :
+                "no duck"), Toast.LENGTH_SHORT).show();
         mAudioFocus = canDuck ? AudioFocus.NoFocusCanDuck : AudioFocus.NoFocusNoDuck;
         // start/restart/pause media player with new focus settings
         if (ad.isPlaying())
@@ -84,10 +90,10 @@ public class PlayerService extends Service implements MusicFocusable {
     }
 
     public void onGainedAudioFocus() {
-        //Toast.makeText(getApplicationContext(), "gained audio focus.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "gained audio focus.", Toast.LENGTH_SHORT).show();
         mAudioFocus = AudioFocus.Focused;
         // restart media player with new focus settings
-        if (ad.isPlaying())
+        //if (ad.isPlaying())
             configAndStartMediaPlayer();
 
     }
@@ -129,8 +135,10 @@ public class PlayerService extends Service implements MusicFocusable {
 
     void tryToGetAudioFocus() {
         if (mAudioFocus != AudioFocus.Focused && mAudioFocusHelper != null
-                && mAudioFocusHelper.requestFocus())
+                && mAudioFocusHelper.requestFocus()) {
             mAudioFocus = AudioFocus.Focused;
+            Toast.makeText(getApplicationContext(), "gained audio focus.", Toast.LENGTH_SHORT).show();
+        }
     }
 
 
@@ -138,6 +146,7 @@ public class PlayerService extends Service implements MusicFocusable {
     private void updateRemoteMetadata(){
         // Use the media button APIs (if available) to register ourselves for media button
         // events
+        //giveUpAudioFocus();
         tryToGetAudioFocus();
         MediaButtonHelper.registerMediaButtonEventReceiverCompat(
                 mAudioManager, mMediaButtonReceiverComponent);
@@ -176,6 +185,7 @@ public class PlayerService extends Service implements MusicFocusable {
                         //        RemoteControlClientCompat.MetadataEditorCompat.METADATA_KEY_ARTWORK,
                         //        mDummyAlbumArt)
                 .apply();
+
     }
 
 	@Override
@@ -205,7 +215,7 @@ public class PlayerService extends Service implements MusicFocusable {
     private void processSongJump(int tracknum){
         NDKBridge.jumpSong(tracknum);
         setNoteText();
-        //updateRemoteMetadata();
+        updateRemoteMetadata();
     }
 
     private void processRestartRequest(){
@@ -222,8 +232,8 @@ public class PlayerService extends Service implements MusicFocusable {
         NDKBridge.nativeLoadROM(gameid);
         if(!NDKBridge.loadError){
             ad = new AudioDevice("deviceThread");
-            play();
             updateRemoteMetadata();
+            play();
             if (mRemoteControlClientCompat != null) {
                 mRemoteControlClientCompat
                         .setPlaybackState(RemoteControlClientCompat.PLAYSTATE_PLAYING);
@@ -275,18 +285,19 @@ public class PlayerService extends Service implements MusicFocusable {
     private void processPlayRequest(){
         if (ad.isPlaying()) {
             //if (ad.isPaused()) {
-                tryToGetAudioFocus();
+                //tryToGetAudioFocus();
                 //playButton.setText("Pause");
                 //playButton.setImageResource(R.drawable.ic_action_pause);
                 //NDKBridge.unPause();
                 // ad.UnPause();
+            updateRemoteMetadata();
                 unpause();
                 //paused = false;
                 // Tell any remote controls that our playback state is 'playing'.
                 if (mRemoteControlClientCompat != null) {
                     mRemoteControlClientCompat
                             .setPlaybackState(RemoteControlClientCompat.PLAYSTATE_PLAYING);//);
-                    //updateRemoteMetadata();
+
                 }
             //}
         }
@@ -300,13 +311,14 @@ public class PlayerService extends Service implements MusicFocusable {
                 //playButton.setText("Play");
                 //playButton.setImageResource(R.drawable.ic_action_play);
                 // ad.PlayPause();
+                updateRemoteMetadata();
                 pause();
                 //paused = true;
                 // Tell any remote controls that our playback state is 'paused'.
                 if (mRemoteControlClientCompat != null) {
                     mRemoteControlClientCompat
                             .setPlaybackState(RemoteControlClientCompat.PLAYSTATE_PAUSED);
-                    updateRemoteMetadata();
+
                 }
             }
         }
@@ -315,11 +327,12 @@ public class PlayerService extends Service implements MusicFocusable {
     private void processTogglePlaybackRequest(){
         if (ad.isPlaying()) {
             if (ad.isPaused()) {
-                tryToGetAudioFocus();
+                //tryToGetAudioFocus();
                 //playButton.setText("Pause");
                 //playButton.setImageResource(R.drawable.ic_action_pause);
                 //NDKBridge.unPause();
                 // ad.UnPause();
+                updateRemoteMetadata();
                 unpause();
                 //paused = false;
                 // Tell any remote controls that our playback state is 'playing'.
@@ -332,6 +345,7 @@ public class PlayerService extends Service implements MusicFocusable {
                 //playButton.setText("Play");
                 //playButton.setImageResource(R.drawable.ic_action_play);
                 // ad.PlayPause();
+                updateRemoteMetadata();
                 pause();
                 //paused = true;
                 // Tell any remote controls that our playback state is 'paused'.
