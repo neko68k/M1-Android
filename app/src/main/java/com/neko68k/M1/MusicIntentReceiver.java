@@ -32,7 +32,8 @@ public class MusicIntentReceiver extends BroadcastReceiver {
         if (intent.getAction().equals(android.media.AudioManager.ACTION_AUDIO_BECOMING_NOISY)) {
             //Toast.makeText(context, "Headphones disconnected.", Toast.LENGTH_SHORT).show();
             // send an intent to our MusicService to telling it to pause the audio
-        	NDKBridge.ctx.startActivity(new Intent(PlayerService.ACTION_PAUSE));
+        	//NDKBridge.ctx.startService(new Intent(PlayerService.ACTION_PAUSE));
+            context.startService(new Intent(PlayerService.ACTION_TOGGLE_PLAYBACK, null, context.getApplicationContext(), PlayerService.class));
         } else if (intent.getAction().equals(Intent.ACTION_MEDIA_BUTTON)) {
             KeyEvent keyEvent = (KeyEvent) intent.getExtras().get(Intent.EXTRA_KEY_EVENT);
             if (keyEvent.getAction() != KeyEvent.ACTION_DOWN)

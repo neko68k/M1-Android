@@ -204,7 +204,7 @@ public class PlayerService extends Service implements MusicFocusable {
 
     private void processSongJump(int tracknum){
         NDKBridge.jumpSong(tracknum);
-        //setNoteText();
+        setNoteText();
         //updateRemoteMetadata();
     }
 
