@@ -108,7 +108,7 @@ public class FragmentControl extends FragmentActivity implements
             this.stopService(new Intent(PlayerService.ACTION_STOP, null, this.getApplicationContext(), PlayerService.class));
             doUnbindService();
         }
-        NDKBridge.nativeClose();
+        //NDKBridge.nativeClose();
 
         this.finish();
         return;

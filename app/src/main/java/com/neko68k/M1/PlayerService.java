@@ -374,11 +374,13 @@ public class PlayerService extends Service implements MusicFocusable {
 	}
 
 	public void stop() {
+        ad.PlayQuit();
         NDKBridge.stop();
-		ad.PlayQuit();
+
 		//mNM.cancelAll();
         giveUpAudioFocus();
-
+        NDKBridge.nativeClose();
+        NDKBridge.inited = false;
 		stopForeground(true);
         stopSelf();
 	}

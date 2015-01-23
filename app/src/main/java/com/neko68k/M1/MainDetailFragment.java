@@ -61,6 +61,7 @@ public class MainDetailFragment extends Fragment {
         setHasOptionsMenu(true);
         if(savedInstanceState!=null) {
             inited = savedInstanceState.getBoolean("inited");
+            NDKBridge.inited = inited;
             NDKBridge.game = savedInstanceState.getParcelable("game");
             if(inited&&NDKBridge.game!=null)
                 updateDetails();
