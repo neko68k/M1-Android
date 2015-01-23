@@ -176,6 +176,7 @@ public class NDKBridge {
 	static Context ctx;
 	static int cur = -1;
 	static Boolean forceRescan = false;
+    static final int bmScale = 64;
 
 	public static void RomLoadErr() {
 		// this flag prevents it from attempting to start playing
@@ -262,7 +263,7 @@ public class NDKBridge {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return (Bitmap.createScaledBitmap(bm, 128, 128, false));
+		return (Bitmap.createScaledBitmap(bm, bmScale, bmScale, false));
 	}
 	
 	public static Bitmap getIcon(String romname, int romnum) {
@@ -315,7 +316,7 @@ public class NDKBridge {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return (Bitmap.createScaledBitmap(bm, 128, 128, false));
+		return (Bitmap.createScaledBitmap(bm, bmScale, bmScale, false));
 	}
 
 	public static native void nativeInit(String basepath, String rompath);
