@@ -1,7 +1,6 @@
 package com.neko68k.M1;
 
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ComponentName;
@@ -14,10 +13,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NotificationCompat;
-import android.widget.RemoteViews;
-import android.widget.Toast;
 //import android.R;
 
 // this will handle all the threading and shit
@@ -89,8 +85,8 @@ public class PlayerService extends Service implements MusicFocusable {
 	}
 
     public void onLostAudioFocus(boolean canDuck) {
-        Toast.makeText(getApplicationContext(), "lost audio focus." + (canDuck ? "can duck" :
-                "no duck"), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "lost audio focus." + (canDuck ? "can duck" :
+          //      "no duck"), Toast.LENGTH_SHORT).show();
         mAudioFocus = canDuck ? AudioFocus.NoFocusCanDuck : AudioFocus.NoFocusNoDuck;
         // start/restart/pause media player with new focus settings
         if (ad.isPlaying())
@@ -98,7 +94,7 @@ public class PlayerService extends Service implements MusicFocusable {
     }
 
     public void onGainedAudioFocus() {
-        Toast.makeText(getApplicationContext(), "gained audio focus.", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "gained audio focus.", Toast.LENGTH_SHORT).show();
         mAudioFocus = AudioFocus.Focused;
         // restart media player with new focus settings
         //if (ad.isPlaying())
@@ -145,7 +141,7 @@ public class PlayerService extends Service implements MusicFocusable {
         if (mAudioFocus != AudioFocus.Focused && mAudioFocusHelper != null
                 && mAudioFocusHelper.requestFocus()) {
             mAudioFocus = AudioFocus.Focused;
-            Toast.makeText(getApplicationContext(), "gained audio focus.", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "gained audio focus.", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -230,6 +226,7 @@ public class PlayerService extends Service implements MusicFocusable {
         NDKBridge.jumpSong(tracknum);
         setNoteText();
         updateRemoteMetadata();
+        //mOutMessenger.send(new Message());
     }
 
     private void processRestartRequest(){
@@ -253,6 +250,12 @@ public class PlayerService extends Service implements MusicFocusable {
                         .setPlaybackState(RemoteControlClientCompat.PLAYSTATE_PLAYING);
             }
             getApplicationContext().startActivity(new Intent(FragmentControl.ACTION_LOAD_COMPLETE, null, getApplicationContext(), FragmentControl.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            try {
+                if(mOutMessenger != null)
+                    mOutMessenger.send(Message.obtain(null, NDKBridge.MSG_UPDATE_TRACK));
+            } catch(RemoteException e){
+
+            }
         }
 
 

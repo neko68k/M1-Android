@@ -176,12 +176,11 @@ public class NDKBridge {
 	static String iconpath = null;
 	static String basepath = null;
 	static boolean loadError = false;
-	static PlayerService playerService = new PlayerService();
 	static String m1error;
 	static Context ctx;
 	static int cur = -1;
 	static Boolean forceRescan = false;
-    static final int bmScale = 32;
+    static final int bmScale = 128;
 
 	public static void RomLoadErr() {
 		// this flag prevents it from attempting to start playing

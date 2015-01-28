@@ -13,7 +13,6 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ToggleButton;
 
@@ -82,6 +81,7 @@ public class FragmentControl extends FragmentActivity implements
                         mdf.updateDetails();
                         tlf.updateTrackList();
                         NDKBridge.playtime = 0;
+                        mdf.updateTrack();
                     }
                 }
             }
@@ -140,10 +140,6 @@ public class FragmentControl extends FragmentActivity implements
     // service connection stuff
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder service) {
-
-
-            NDKBridge.playerService = ((PlayerService.LocalBinder) service)
-                    .getService();
             mService = new Messenger(service);
 
             Message msg = Message.obtain(null,
@@ -157,7 +153,7 @@ public class FragmentControl extends FragmentActivity implements
         }
 
         public void onServiceDisconnected(ComponentName className) {
-            NDKBridge.playerService = null;
+            //NDKBridge.playerService = null;
             mService = null;
         }
     };
