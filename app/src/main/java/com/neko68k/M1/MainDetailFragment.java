@@ -70,6 +70,27 @@ public class MainDetailFragment extends Fragment {
         return v;
     }
 
+    public void updateTrack(){
+        int cmdNum = NDKBridge.getInfoInt(
+                NDKBridge.M1_IINF_TRACKCMD, (NDKBridge
+                        .getInfoInt(
+                                NDKBridge.M1_IINF_CURSONG,
+                                0) << 16 | NDKBridge
+                        .getInfoInt(
+                                NDKBridge.M1_IINF_CURGAME,
+                                0)));
+        String text = NDKBridge.getInfoStr(
+                NDKBridge.M1_SINF_TRKNAME,
+                cmdNum << 16
+                        | NDKBridge.getInfoInt(
+                        NDKBridge.M1_IINF_CURGAME,
+                        0));
+        int cursong = NDKBridge.getInfoInt(
+                NDKBridge.M1_IINF_CURSONG, 0) + 1;// M1_IINF_CURSONG;
+        song.setText("Title: " + text);// +track);
+        trackNum.setText("Track: " + cursong);
+    }
+
     public void updateDetails(){
         icon.setImageBitmap(NDKBridge.getIcon());
         title.setText(NDKBridge.game.getTitle());

@@ -9,7 +9,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Binder;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NotificationCompat;
 import android.widget.RemoteViews;
@@ -44,6 +48,9 @@ public class PlayerService extends Service implements MusicFocusable {
     public static final float DUCK_VOLUME = 0.1f;
     AudioFocus mAudioFocus = AudioFocus.NoFocusNoDuck;
     AudioManager mAudioManager;
+
+    final Messenger mMessenger = new Messenger(new IncomingHandler());
+    Messenger mOutMessenger = null;
 
 
     enum AudioFocus {
@@ -148,6 +155,12 @@ public class PlayerService extends Service implements MusicFocusable {
         // Use the media button APIs (if available) to register ourselves for media button
         // events
         //giveUpAudioFocus();
+        try {
+            if(mOutMessenger != null)
+            mOutMessenger.send(Message.obtain(null, NDKBridge.MSG_UPDATE_TRACK));
+        } catch(RemoteException e){
+
+        }
         tryToGetAudioFocus();
         MediaButtonHelper.registerMediaButtonEventReceiverCompat(
                 mAudioManager, mMediaButtonReceiverComponent);
@@ -437,6 +450,26 @@ public class PlayerService extends Service implements MusicFocusable {
 
 	//}
 
+
+
+    class IncomingHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+
+                    case NDKBridge.MSG_REGISTER_CLIENT:
+                        mOutMessenger = msg.replyTo;
+
+                        break;
+                case NDKBridge.MSG_UNREGISTER_CLIENT:
+                    mOutMessenger = null;
+                    break;
+                default:
+                    super.handleMessage(msg);
+            }
+        }
+    }
+
     @Override
     public boolean onUnbind(Intent intent) {
         stop();
@@ -445,7 +478,7 @@ public class PlayerService extends Service implements MusicFocusable {
 
 	@Override
 	public IBinder onBind(Intent intent) {
-		return mBinder;
+		return mMessenger.getBinder();
 	}
 
 	private final IBinder mBinder = new LocalBinder();

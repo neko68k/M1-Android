@@ -6,7 +6,11 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.view.KeyEvent;
@@ -27,6 +31,7 @@ public class FragmentControl extends FragmentActivity implements
     InitM1Task task;
     Map<String, ?> preferences;
     public PlayerService playerService = new PlayerService();
+    Messenger mService = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -114,15 +119,46 @@ public class FragmentControl extends FragmentActivity implements
         return;
     }
 
+    class IncomingHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case NDKBridge.MSG_UPDATE_TIME:
+                    break;
+                case NDKBridge.MSG_UPDATE_TRACK:
+                    MainDetailFragment mdf = (MainDetailFragment) getSupportFragmentManager().findFragmentById(R.id.details);
+                    mdf.updateTrack();
+                    break;
+                default:
+                    super.handleMessage(msg);
+            }
+        }
+    }
+
+    final Messenger mMessenger = new Messenger(new IncomingHandler());
+
     // service connection stuff
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder service) {
+
+
             NDKBridge.playerService = ((PlayerService.LocalBinder) service)
                     .getService();
+            mService = new Messenger(service);
+
+            Message msg = Message.obtain(null,
+                    NDKBridge.MSG_REGISTER_CLIENT);
+            msg.replyTo = mMessenger;
+            try {
+                mService.send(msg);
+            } catch(RemoteException e){
+
+            }
         }
 
         public void onServiceDisconnected(ComponentName className) {
             NDKBridge.playerService = null;
+            mService = null;
         }
     };
 
@@ -135,6 +171,17 @@ public class FragmentControl extends FragmentActivity implements
     void doUnbindService() {
         if (mIsBound) {
             getApplicationContext().unbindService(mConnection);
+            if (mService != null) {
+                try {
+                    Message msg = Message.obtain(null,
+                            NDKBridge.MSG_UNREGISTER_CLIENT);
+                    msg.replyTo = mMessenger;
+                    mService.send(msg);
+                } catch (RemoteException e) {
+                    // There is nothing special we need to do if the service
+                    // has crashed.
+                }
+            }
             mIsBound = false;
         }
     }
@@ -219,14 +266,6 @@ public class FragmentControl extends FragmentActivity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
-        //if (playing == true) {
-           // NDKBridge.playerService.stop();
-        //    doUnbindService();
-        //}
-        //NDKBridge.nativeClose();
-
-        //this.finish();
     }
 
     /*@Override

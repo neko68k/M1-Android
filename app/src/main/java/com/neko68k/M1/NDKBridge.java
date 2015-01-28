@@ -156,6 +156,11 @@ public class NDKBridge {
 											// low 16 bits = chan #, result: 0 =
 											// center, 1 = left, 2 = right)
 
+
+    static final int MSG_UPDATE_TRACK = 1;
+    static final int MSG_UPDATE_TIME = 2;
+    static final int MSG_REGISTER_CLIENT = 3;
+    static final int MSG_UNREGISTER_CLIENT = 4;
 	// ////////////////////////// END ENUMS
 
 	static GameDatabaseHelper m1db;
@@ -176,7 +181,7 @@ public class NDKBridge {
 	static Context ctx;
 	static int cur = -1;
 	static Boolean forceRescan = false;
-    static final int bmScale = 64;
+    static final int bmScale = 32;
 
 	public static void RomLoadErr() {
 		// this flag prevents it from attempting to start playing
