@@ -110,6 +110,11 @@ public class MainDetailFragment extends Fragment {
     }
 
     public void updateTrack(){
+        if(NDKBridge.game == null){
+            song.setText("Title:");
+            trackNum.setText("Track:");
+            return;
+        }
         int cmdNum = NDKBridge.getInfoInt(
                 NDKBridge.M1_IINF_TRACKCMD, (NDKBridge
                         .getInfoInt(
@@ -131,6 +136,15 @@ public class MainDetailFragment extends Fragment {
     }
 
     public void updateDetails(){
+        if(NDKBridge.game == null){
+            icon.setImageBitmap(null);
+            title.setText("");
+            board.setText("Board:");
+            mfg.setText("Maker:");
+            year.setText("Year:");
+            hardware.setText("Hardware");
+            return;
+        }
         icon.setImageBitmap(NDKBridge.getIcon());
         title.setText(NDKBridge.game.getTitle());
         board.setText("Board: " + NDKBridge.game.sys);

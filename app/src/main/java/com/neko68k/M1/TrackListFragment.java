@@ -74,6 +74,11 @@ public class TrackListFragment extends ListFragment {
     };
 
     public void updateTrackList() {
+        if(NDKBridge.game == null){
+            listItems.clear();
+            adapter.notifyDataSetChanged();
+            return;
+        }
         int numSongs = NDKBridge.getInfoInt(NDKBridge.M1_IINF_TRACKS,
                 NDKBridge.getInfoInt(NDKBridge.M1_IINF_CURGAME, 0));
         listItems.clear();

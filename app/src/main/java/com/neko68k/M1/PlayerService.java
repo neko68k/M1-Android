@@ -494,7 +494,7 @@ public class PlayerService extends Service implements MusicFocusable {
 
     @Override
     public boolean onUnbind(Intent intent) {
-        stop();
+        //stop();
         return false;
     }
 

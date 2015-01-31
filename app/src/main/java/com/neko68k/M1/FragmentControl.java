@@ -140,7 +140,13 @@ public class FragmentControl extends FragmentActivity implements
             this.startService(new Intent(PlayerService.ACTION_STOP, null, this.getApplicationContext(), PlayerService.class));
             doUnbindService();
         }
-
+        NDKBridge.game = null;
+        //mdf = (MainDetailFragment) getSupportFragmentManager().findFragmentById(R.id.details);
+        //TrackListFragment tlf = (TrackListFragment) getSupportFragmentManager().findFragmentById(R.id.tracklist);
+        //PlayerControlFragment pcf = (PlayerControlFragment) getSupportFragmentManager().findFragmentById(R.id.playercontrols);
+        //mdf.updateDetails();
+        //mdf.updateTrack();
+        //tlf.updateTrackList();
         this.finish();
         return;
     }
