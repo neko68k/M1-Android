@@ -17,7 +17,31 @@ public class PlayerControlFragment extends Fragment {
     ImageButton restButton;
     ImageButton playButton;
 
+    boolean buttonState = false;
 
+    public void togglePlayButton(){
+        if(buttonState==false){
+            buttonState = true;
+            playButton.setImageResource(R.drawable.ic_action_pause);
+        } else {
+            playButton.setImageResource(R.drawable.ic_action_play);
+            buttonState = false;
+        }
+    }
+
+    public void restoreButtonState(){
+        if(buttonState==true){
+            playButton.setImageResource(R.drawable.ic_action_pause);
+        } else {
+            playButton.setImageResource(R.drawable.ic_action_play);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState){
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putBoolean("state", buttonState);
+    }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.playcontrols, container, false);
@@ -25,6 +49,11 @@ public class PlayerControlFragment extends Fragment {
         prevButton = (ImageButton) v.findViewById(R.id.prev);
         restButton = (ImageButton) v.findViewById(R.id.rest);
         playButton = (ImageButton) v.findViewById(R.id.play);
+
+        if(savedInstanceState!=null){
+            buttonState=savedInstanceState.getBoolean("state");
+            restoreButtonState();
+        }
 
         nextButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -52,7 +81,7 @@ public class PlayerControlFragment extends Fragment {
         playButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 getActivity().startService(new Intent(PlayerService.ACTION_TOGGLE_PLAYBACK, null, getActivity().getApplicationContext(), PlayerService.class));
-               // processTogglePlaybackRequest();
+               togglePlayButton();
             }
         });
         return v;

@@ -67,6 +67,7 @@ public class FragmentControl extends FragmentActivity implements
             PlayerControlFragment playerFragment = new PlayerControlFragment();
             TrackListFragment trackFragment = new TrackListFragment();
             detailFragment.setRetainInstance(true);
+            trackFragment.setRetainInstance(true);
             FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.details, detailFragment).add(R.id.tracklist, trackFragment).
@@ -86,10 +87,12 @@ public class FragmentControl extends FragmentActivity implements
                     if (!NDKBridge.loadError) {
                         mdf = (MainDetailFragment) getSupportFragmentManager().findFragmentById(R.id.details);
                         TrackListFragment tlf = (TrackListFragment) getSupportFragmentManager().findFragmentById(R.id.tracklist);
+                        PlayerControlFragment pcf = (PlayerControlFragment) getSupportFragmentManager().findFragmentById(R.id.playercontrols);
                         mdf.updateDetails();
                         tlf.updateTrackList();
                         NDKBridge.playtime = 0;
                         mdf.updateTrack();
+                        pcf.togglePlayButton();
                     }
                 }
             }
@@ -100,17 +103,16 @@ public class FragmentControl extends FragmentActivity implements
     @Override
     public void onSaveInstanceState(Bundle inBundle){
         super.onSaveInstanceState(inBundle);
-        inBundle.putBoolean("bound", mIsBound);
-        inBundle.putBoolean("inited", NDKBridge.inited);
+
         FragmentManager mFragmentManager = getSupportFragmentManager();
         mFragmentManager.putFragment(inBundle, "main", mFragmentManager.findFragmentById(R.id.details));
+
     }
 
    @Override
     public void onRestoreInstanceState(Bundle inBundle){
        super.onRestoreInstanceState(inBundle);
         if(inBundle!=null){
-            //mIsBound = inBundle.getBoolean("bound");
             doBindService();
         }
     }
