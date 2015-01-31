@@ -19,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.Map;
-import java.util.Timer;
 
 /**
  * Created by neko on 1/8/15.
@@ -33,7 +32,7 @@ public class MainDetailFragment extends Fragment {
     TextView song;
     TextView title;
     TextView year;
-    Timer updateTimer;
+    //Timer updateTimer;
     ImageView icon;
     Map<String, ?> preferences;
     boolean inited = false;
@@ -107,6 +106,10 @@ public class MainDetailFragment extends Fragment {
         }.run();*/
 
         return v;
+    }
+
+    public void updateTimer(long time){
+        playTime.setText(String.valueOf(time));
     }
 
     public void updateTrack(){

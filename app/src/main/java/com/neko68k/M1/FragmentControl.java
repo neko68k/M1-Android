@@ -136,6 +136,8 @@ public class FragmentControl extends FragmentActivity implements
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case NDKBridge.MSG_UPDATE_TIME:
+                    mdf = (MainDetailFragment) getSupportFragmentManager().findFragmentById(R.id.details);
+                    mdf.updateTimer(msg.getData().getLong("time"));
                     break;
                 case NDKBridge.MSG_UPDATE_TRACK:
 

@@ -1,5 +1,6 @@
 package com.neko68k.M1;
 
+import android.content.Intent;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
@@ -10,6 +11,7 @@ public class AudioDevice extends Thread {
 	// short[] buffer = new short[1024];
 	private boolean playing = false;
 	private boolean paused = false;
+    long playtime = 0;
 
     public boolean isPlaying(){
         return playing;
@@ -87,7 +89,8 @@ public class AudioDevice extends Thread {
 			if (paused == false) {
 				buffer = theProducer.take_product();
 				track.write(buffer, 0, ((44100 / 60) * 2 * 2));
-
+                playtime = NDKBridge.getCurTime();
+                NDKBridge.ctx.startService(new Intent(PlayerService.ACTION_UPDATE_TIME, null, NDKBridge.ctx, PlayerService.class).putExtra("time", playtime));
 			}
 		}
 		track.release();

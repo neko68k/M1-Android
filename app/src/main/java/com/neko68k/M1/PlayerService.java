@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Binder;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -38,6 +39,7 @@ public class PlayerService extends Service implements MusicFocusable {
     public static final String ACTION_RESTART = "com.neko68k.M1.action.RESTART";
     public static final String ACTION_LOAD = "com.neko68k.M1.action.LOAD";
     public static final String ACTION_JUMP = "com.neko68k.M1.action.JUMP";
+    public static final String ACTION_UPDATE_TIME = "com.neko68k.M1.action.TIME";
 
     RemoteControlClientCompat mRemoteControlClientCompat;
     ComponentName mMediaButtonReceiverComponent;
@@ -212,12 +214,28 @@ public class PlayerService extends Service implements MusicFocusable {
                 else if (action.equals(ACTION_REWIND)) processRewindRequest();
                 else if (action.equals(ACTION_RESTART)) processRestartRequest();
                 else if (action.equals(ACTION_JUMP)) processSongJump(intent.getIntExtra("tracknum", 1));
+                else if (action.equals(ACTION_UPDATE_TIME)) processUpdateTime(intent.getLongExtra("time", 0));
                 else if (action.equals(ACTION_LOAD))
                     processLoadRequest(intent.getIntExtra("gameid", -1));
             }
         }
 		return START_STICKY;
 	}
+
+    private void processUpdateTime(long time){
+        if(mOutMessenger!=null){
+            Bundle bundle=new Bundle();
+            bundle.putLong("time", time);
+            Message msg = Message.obtain(null, NDKBridge.MSG_UPDATE_TIME);
+            msg.setData(bundle);
+            try {
+
+                mOutMessenger.send(msg);
+            } catch(RemoteException e){
+
+            }
+        }
+    }
 
     private void processStopRequest(){
         stop();
