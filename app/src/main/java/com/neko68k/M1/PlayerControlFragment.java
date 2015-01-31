@@ -37,6 +37,16 @@ public class PlayerControlFragment extends Fragment {
         }
     }
 
+    public void setPlayState(boolean state){
+        if(state==false){
+            buttonState = false;
+            playButton.setImageResource(R.drawable.ic_action_play);
+        } else {
+            playButton.setImageResource(R.drawable.ic_action_pause);
+            buttonState = true;
+        }
+    }
+
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState){
         super.onSaveInstanceState(savedInstanceState);
@@ -52,7 +62,7 @@ public class PlayerControlFragment extends Fragment {
 
         if(savedInstanceState!=null){
             buttonState=savedInstanceState.getBoolean("state");
-            restoreButtonState();
+            //restoreButtonState();
         }
 
         nextButton.setOnClickListener(new View.OnClickListener() {

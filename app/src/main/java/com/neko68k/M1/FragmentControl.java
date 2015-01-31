@@ -92,7 +92,10 @@ public class FragmentControl extends FragmentActivity implements
                         tlf.updateTrackList();
                         NDKBridge.playtime = 0;
                         mdf.updateTrack();
-                        pcf.togglePlayButton();
+
+                        isPlaying=true;
+
+                        pcf.setPlayState(isPlaying);
                     }
                 }
             }
@@ -103,7 +106,7 @@ public class FragmentControl extends FragmentActivity implements
     @Override
     public void onSaveInstanceState(Bundle inBundle){
         super.onSaveInstanceState(inBundle);
-
+        inBundle.putBoolean("playstate", isPlaying);
         FragmentManager mFragmentManager = getSupportFragmentManager();
         mFragmentManager.putFragment(inBundle, "main", mFragmentManager.findFragmentById(R.id.details));
 
@@ -115,6 +118,9 @@ public class FragmentControl extends FragmentActivity implements
         if(inBundle!=null){
             doBindService();
         }
+       PlayerControlFragment pcf = (PlayerControlFragment) getSupportFragmentManager().findFragmentById(R.id.playercontrols);
+       isPlaying = inBundle.getBoolean("playstate");
+       pcf.setPlayState(isPlaying);
     }
 
 
@@ -155,10 +161,10 @@ public class FragmentControl extends FragmentActivity implements
                         mdf.updateTrack();
                     break;
                 case NDKBridge.MSG_TOGGLE_PAUSE:
-                    isPlaying = false;
+                    isPlaying = true;
                     break;
                 case NDKBridge.MSG_TOGGLE_PLAY:
-                    isPlaying = true;
+                    isPlaying = false;
                     break;
                 default:
                     super.handleMessage(msg);
