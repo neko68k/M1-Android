@@ -100,15 +100,20 @@ public class FragmentControl extends FragmentActivity implements
     @Override
     public void onSaveInstanceState(Bundle inBundle){
         super.onSaveInstanceState(inBundle);
+        inBundle.putBoolean("bound", mIsBound);
         inBundle.putBoolean("inited", NDKBridge.inited);
         FragmentManager mFragmentManager = getSupportFragmentManager();
         mFragmentManager.putFragment(inBundle, "main", mFragmentManager.findFragmentById(R.id.details));
     }
 
-   /* @Override
+   @Override
     public void onRestoreInstanceState(Bundle inBundle){
-
-    }*/
+       super.onRestoreInstanceState(inBundle);
+        if(inBundle!=null){
+            //mIsBound = inBundle.getBoolean("bound");
+            doBindService();
+        }
+    }
 
 
 

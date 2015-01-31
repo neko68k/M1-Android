@@ -142,12 +142,7 @@ public class MainDetailFragment extends Fragment {
 
     }
 
-    @Override
-    public void onSaveInstanceState (Bundle outState){
-        super.onSaveInstanceState(outState);
-        outState.putBoolean("inited", inited);
-        outState.putParcelable("game", NDKBridge.game);
-    }
+
 
 
     @Override
