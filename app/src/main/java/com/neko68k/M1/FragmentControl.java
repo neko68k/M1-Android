@@ -68,6 +68,7 @@ public class FragmentControl extends FragmentActivity implements
             TrackListFragment trackFragment = new TrackListFragment();
             detailFragment.setRetainInstance(true);
             trackFragment.setRetainInstance(true);
+            trackFragment.setRetainInstance(true);
             FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.details, detailFragment).add(R.id.tracklist, trackFragment).
@@ -129,6 +130,8 @@ public class FragmentControl extends FragmentActivity implements
        PlayerControlFragment pcf = (PlayerControlFragment) getSupportFragmentManager().findFragmentById(R.id.playercontrols);
        isPlaying = inBundle.getBoolean("playstate");
        pcf.setPlayState(isPlaying);
+       TrackListFragment tlf = (TrackListFragment) getSupportFragmentManager().findFragmentById(R.id.tracklist);
+       tlf.updateTrackList();
     }
 
 
