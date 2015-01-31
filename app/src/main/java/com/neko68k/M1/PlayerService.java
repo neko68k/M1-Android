@@ -253,9 +253,9 @@ public class PlayerService extends Service implements MusicFocusable {
         Boolean listLenPref = (Boolean) preferences.get("listLenPref");
 
         if((listLenPref&&time/10>=playtime)||(!listLenPref&&time>=NDKBridge.songLen)){//&&NDKBridge.songLen!=-1)){
-            NDKBridge.songLen=999999999;
+           // NDKBridge.songLen=999999999;
 
-            processSkipRequest();
+            //processSkipRequest();
         }
     }
 
@@ -345,6 +345,10 @@ public class PlayerService extends Service implements MusicFocusable {
     }
 
     private void processPauseRequest(){
+        if(ad == null){
+            return;
+        }
+
         if (ad.isPlaying()) {
             if (!ad.isPaused()) {
                 updateRemoteMetadata();

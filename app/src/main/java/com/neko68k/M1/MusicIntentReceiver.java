@@ -33,6 +33,7 @@ public class MusicIntentReceiver extends BroadcastReceiver {
             //Toast.makeText(context, "Headphones disconnected.", Toast.LENGTH_SHORT).show();
             // send an intent to our MusicService to telling it to pause the audio
         	//NDKBridge.ctx.startService(new Intent(PlayerService.ACTION_PAUSE));
+
             context.startService(new Intent(PlayerService.ACTION_PAUSE, null, context.getApplicationContext(), PlayerService.class));
         } else if (intent.getAction().equals(Intent.ACTION_MEDIA_BUTTON)) {
             KeyEvent keyEvent = (KeyEvent) intent.getExtras().get(Intent.EXTRA_KEY_EVENT);
