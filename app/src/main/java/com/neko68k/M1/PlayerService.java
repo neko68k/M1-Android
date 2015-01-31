@@ -6,6 +6,7 @@ import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.os.Binder;
 import android.os.Bundle;
@@ -14,7 +15,10 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
+
+import java.util.Map;
 //import android.R;
 
 // this will handle all the threading and shit
@@ -40,6 +44,7 @@ public class PlayerService extends Service implements MusicFocusable {
     public static final String ACTION_LOAD = "com.neko68k.M1.action.LOAD";
     public static final String ACTION_JUMP = "com.neko68k.M1.action.JUMP";
     public static final String ACTION_UPDATE_TIME = "com.neko68k.M1.action.TIME";
+    public static final String ACTION_LISTTIME = "com.neko68k.M1.action.LISTTIME";
 
     RemoteControlClientCompat mRemoteControlClientCompat;
     ComponentName mMediaButtonReceiverComponent;
@@ -47,10 +52,12 @@ public class PlayerService extends Service implements MusicFocusable {
     public static final float DUCK_VOLUME = 0.1f;
     AudioFocus mAudioFocus = AudioFocus.NoFocusNoDuck;
     AudioManager mAudioManager;
+    Map<String, ?> preferences;
+    SharedPreferences pref = null;
 
     final Messenger mMessenger = new Messenger(new IncomingHandler());
     Messenger mOutMessenger = null;
-
+    Boolean listTime = false;
 
     enum AudioFocus {
         NoFocusNoDuck,    // we don't have audio focus, and can't duck
@@ -85,6 +92,7 @@ public class PlayerService extends Service implements MusicFocusable {
         //giveUpAudioFocus();
         //updateRemoteMetadata();
 		//play();
+
 	}
 
     public void onLostAudioFocus(boolean canDuck) {
@@ -215,6 +223,7 @@ public class PlayerService extends Service implements MusicFocusable {
                 else if (action.equals(ACTION_RESTART)) processRestartRequest();
                 else if (action.equals(ACTION_JUMP)) processSongJump(intent.getIntExtra("tracknum", 1));
                 else if (action.equals(ACTION_UPDATE_TIME)) processUpdateTime(intent.getLongExtra("time", 0));
+                else if (action.equals(ACTION_LISTTIME)) setListTime(intent.getBooleanExtra("listtime", false));
                 else if (action.equals(ACTION_LOAD))
                     processLoadRequest(intent.getIntExtra("gameid", -1));
             }
@@ -235,6 +244,23 @@ public class PlayerService extends Service implements MusicFocusable {
 
             }
         }
+        pref = PreferenceManager
+                .getDefaultSharedPreferences(this);
+        preferences = pref.getAll();
+        int playtime = (int) pref.getLong("defLenHours", 0)
+                + (int) pref.getLong("defLenMins", 300)
+                + (int) pref.getLong("defLenSecs", 0);
+        Boolean listLenPref = (Boolean) preferences.get("listLenPref");
+
+        if((listLenPref&&time/10>=playtime)||(!listLenPref&&time>=NDKBridge.songLen)){//&&NDKBridge.songLen!=-1)){
+            NDKBridge.songLen=999999999;
+
+            processSkipRequest();
+        }
+    }
+
+    public void setListTime(Boolean state){
+
     }
 
     private void processStopRequest(){
@@ -284,7 +310,7 @@ public class PlayerService extends Service implements MusicFocusable {
                 int i = NDKBridge.next();
                 setNoteText();
                 NDKBridge.playtime = 0;
-                    NDKBridge.songLen = NDKBridge.defLen;
+                    //NDKBridge.songLen = NDKBridge.defLen;
                 if (mRemoteControlClientCompat != null)
                 updateRemoteMetadata();
             }

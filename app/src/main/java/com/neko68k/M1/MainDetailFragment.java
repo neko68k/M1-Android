@@ -112,9 +112,7 @@ public class MainDetailFragment extends Fragment {
         int seconds = (int)time / 60;
         int minutes = seconds / 60;
         seconds -= minutes * 60;
-        int cursong = NDKBridge.getInfoInt(
-                NDKBridge.M1_IINF_CURSONG, 0) + 1;// M1_IINF_CURSONG;
-        //trackNum.setText("Track: " + cursong);
+        int songLen = 0;
         int game = NDKBridge.getInfoInt(
                 NDKBridge.M1_IINF_CURGAME, 0);
         int cmdNum = NDKBridge.getInfoInt(
@@ -122,25 +120,39 @@ public class MainDetailFragment extends Fragment {
                         .getInfoInt(
                                 NDKBridge.M1_IINF_CURSONG,
                                 0) << 16 | game));
-        NDKBridge.songLen = NDKBridge.getInfoInt(
+        songLen = NDKBridge.getInfoInt(
                 NDKBridge.M1_IINF_TRKLENGTH,
                 (cmdNum << 16 | game));
-        //NDKBridge.songLen = NDKBridge.getInfoInt(NDKBridge.M1_IINF_TRKLENGTH, cursong);
+        Map<String, ?> preferences;
+        SharedPreferences pref = null;
+        pref = PreferenceManager
+                .getDefaultSharedPreferences(NDKBridge.ctx);
+        preferences = pref.getAll();
+        int playtime = (int) pref.getLong("defLenHours", 0)
+                + (int) pref.getLong("defLenMins", 300)
+                + (int) pref.getLong("defLenSecs", 0);
+        Boolean listLenPref = (Boolean) preferences.get("listLenPref");
+        if(!listLenPref){
+            songLen = playtime;
+        } else {
+            songLen = songLen/60;
+        }
+          //  NDKBridge.songLen = songLen;
+
         String tmp;
-        if (NDKBridge.songLen /60% 60< 10)
+        if (songLen % 60< 10)
             tmp = ":0";
         else
             tmp = ":";
         if (seconds < 10) {
 
             playTime.setText("Time: " + minutes + ":0"
-                    + seconds + "/" + NDKBridge.songLen
-                    / 60 /60+ tmp + NDKBridge.songLen /60% 60);
+                    + seconds + "/" + songLen
+                     /60+ tmp + songLen % 60);
         } else
             playTime.setText("Time: " + minutes + ":"
-                    + seconds + "/" + NDKBridge.songLen
-                    / 60 /60+ tmp + NDKBridge.songLen /60% 60);
-        //playTime.setText(String.valueOf(time));
+                    + seconds + "/" + songLen
+                     /60+ tmp + songLen % 60);
     }
 
     public void updateTrack(){

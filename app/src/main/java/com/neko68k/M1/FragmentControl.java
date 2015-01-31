@@ -34,6 +34,7 @@ public class FragmentControl extends FragmentActivity implements
     Messenger mService = null;
     private boolean isPlaying = false;
     private MainDetailFragment mdf=null;
+    private long time = 0;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -58,7 +59,7 @@ public class FragmentControl extends FragmentActivity implements
                     add(R.id.playercontrols, playerFragment).commit();
         }
 
-
+        GetPrefs();
         NDKBridge.ctx = getApplicationContext();
 	}
 
@@ -138,6 +139,7 @@ public class FragmentControl extends FragmentActivity implements
                 case NDKBridge.MSG_UPDATE_TIME:
                     mdf = (MainDetailFragment) getSupportFragmentManager().findFragmentById(R.id.details);
                     mdf.updateTimer(msg.getData().getLong("time"));
+
                     break;
                 case NDKBridge.MSG_UPDATE_TRACK:
 
@@ -212,13 +214,13 @@ public class FragmentControl extends FragmentActivity implements
 
                 startService(new Intent(PlayerService.ACTION_LOAD, null, this, PlayerService.class).putExtra("gameid", NDKBridge.game.index));
                 doBindService();
-                NDKBridge.playtime = 0;
+                //NDKBridge.playtime = 0;
 
 
-            } else if (requestCode == 2) {
+            } else if (requestCode == 65538) {
                 // options returned
                 // stop everything and set options
-                //GetPrefs();
+                GetPrefs();
             }
         }
     }
@@ -226,8 +228,12 @@ public class FragmentControl extends FragmentActivity implements
 
 
 
+    private void GetPrefs() {
+        final SharedPreferences prefs = PreferenceManager
+                .getDefaultSharedPreferences(this);
+        preferences = prefs.getAll();
 
-        /*normalize = (Boolean) preferences.get("normPref");
+        Boolean normalize = (Boolean) preferences.get("normPref");
 
         if (normalize == null)
             NDKBridge.SetOption(NDKBridge.M1_OPT_NORMALIZE, 1);
@@ -236,7 +242,7 @@ public class FragmentControl extends FragmentActivity implements
         else
             NDKBridge.SetOption(NDKBridge.M1_OPT_NORMALIZE, 0);
 
-        resetNorm = (Boolean) preferences.get("resetNormPref");
+        Boolean resetNorm = (Boolean) preferences.get("resetNormPref");
         if (resetNorm == null)
             NDKBridge.SetOption(NDKBridge.M1_OPT_RESETNORMALIZE, 1);
         else if (resetNorm)
@@ -244,7 +250,7 @@ public class FragmentControl extends FragmentActivity implements
         else
             NDKBridge.SetOption(NDKBridge.M1_OPT_RESETNORMALIZE, 0);
 
-        useList = (Boolean) preferences.get("listPref");
+        Boolean useList = (Boolean) preferences.get("listPref");
         if (useList == null)
             NDKBridge.SetOption(NDKBridge.M1_OPT_USELIST, 1);
         else if (useList)
@@ -254,7 +260,7 @@ public class FragmentControl extends FragmentActivity implements
 
         String tmp = (String) preferences.get("langPref");
         if (tmp != null) {
-            lstLang = Integer.valueOf(tmp);
+            int lstLang = Integer.valueOf(tmp);
             NDKBridge.SetOption(NDKBridge.M1_OPT_LANGUAGE, lstLang);
         }
 
@@ -264,15 +270,15 @@ public class FragmentControl extends FragmentActivity implements
 
         NDKBridge.defLen = Integer.valueOf(time);
 
-        listLen = (Boolean) preferences.get("listLenPref");
+        Boolean listLen = (Boolean) preferences.get("listLenPref");
         if (listLen != null) {
             if (!listLen) {
-                NDKBridge.songLen = NDKBridge.defLen;
+                NDKBridge.songLen = NDKBridge.defLen*1000;
             }
         } else {
-            NDKBridge.songLen = NDKBridge.defLen;
-            listLen = false;
-        }*/
+            //NDKBridge.songLen = NDKBridge.defLen;
+        }
+    }
 
 
 
