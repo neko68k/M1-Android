@@ -227,7 +227,6 @@ public class PlayerService extends Service implements MusicFocusable {
         NDKBridge.jumpSong(tracknum);
         setNoteText();
         updateRemoteMetadata();
-        //mOutMessenger.send(new Message());
     }
 
     private void processRestartRequest(){
@@ -237,7 +236,6 @@ public class PlayerService extends Service implements MusicFocusable {
 
     private void processLoadRequest(int gameid){
         if(ad !=null&&ad.isPlaying()){
-            //stop();
             ad.PlayQuit();
             NDKBridge.stop();
         }
@@ -266,15 +264,9 @@ public class PlayerService extends Service implements MusicFocusable {
         if (ad.isPlaying()) {
             if (!ad.isPaused()) {
                 int i = NDKBridge.next();
-                //trackNum.setText("Track: " + (i));
-
                 setNoteText();
                 NDKBridge.playtime = 0;
-                //if (listLen)
-                //    NDKBridge.getSongLen();
-                //else
                     NDKBridge.songLen = NDKBridge.defLen;
-                //trackList.smoothScrollToPosition(i);
                 if (mRemoteControlClientCompat != null)
                 updateRemoteMetadata();
             }
@@ -286,14 +278,9 @@ public class PlayerService extends Service implements MusicFocusable {
         if (ad.isPlaying()) {
             if (!ad.isPaused()) {
                 int i = NDKBridge.prevSong();
-                //trackNum.setText("Track: " + (i));
                 setNoteText();
                 NDKBridge.playtime = 0;
-                //if (listLen)
-                //    NDKBridge.getSongLen();
-                //else
                     NDKBridge.songLen = NDKBridge.defLen;
-                //trackList.smoothScrollToPosition(i);
                 if (mRemoteControlClientCompat != null)
                 updateRemoteMetadata();
             }
@@ -302,22 +289,13 @@ public class PlayerService extends Service implements MusicFocusable {
 
     private void processPlayRequest(){
         if (ad.isPlaying()) {
-            //if (ad.isPaused()) {
-                //tryToGetAudioFocus();
-                //playButton.setText("Pause");
-                //playButton.setImageResource(R.drawable.ic_action_pause);
-                //NDKBridge.unPause();
-                // ad.UnPause();
             updateRemoteMetadata();
                 unpause();
-                //paused = false;
-                // Tell any remote controls that our playback state is 'playing'.
                 if (mRemoteControlClientCompat != null) {
                     mRemoteControlClientCompat
                             .setPlaybackState(RemoteControlClientCompat.PLAYSTATE_PLAYING);//);
 
                 }
-            //}
         }
 
     }
@@ -325,14 +303,8 @@ public class PlayerService extends Service implements MusicFocusable {
     private void processPauseRequest(){
         if (ad.isPlaying()) {
             if (!ad.isPaused()) {
-                //NDKBridge.pause();
-                //playButton.setText("Play");
-                //playButton.setImageResource(R.drawable.ic_action_play);
-                // ad.PlayPause();
                 updateRemoteMetadata();
                 pause();
-                //paused = true;
-                // Tell any remote controls that our playback state is 'paused'.
                 if (mRemoteControlClientCompat != null) {
                     mRemoteControlClientCompat
                             .setPlaybackState(RemoteControlClientCompat.PLAYSTATE_PAUSED);
@@ -345,11 +317,6 @@ public class PlayerService extends Service implements MusicFocusable {
     private void processTogglePlaybackRequest(){
         if (ad.isPlaying()) {
             if (ad.isPaused()) {
-                //tryToGetAudioFocus();
-                //playButton.setText("Pause");
-                //playButton.setImageResource(R.drawable.ic_action_pause);
-                //NDKBridge.unPause();
-                // ad.UnPause();
                 updateRemoteMetadata();
                 unpause();
                 try {
@@ -358,18 +325,12 @@ public class PlayerService extends Service implements MusicFocusable {
                 } catch(RemoteException e){
 
                 }
-                //paused = false;
-                // Tell any remote controls that our playback state is 'playing'.
                 if (mRemoteControlClientCompat != null) {
                     mRemoteControlClientCompat
                             .setPlaybackState(RemoteControlClientCompat.PLAYSTATE_PLAYING);
                 }
                 isPlaying = true;
             } else if (!ad.isPaused()) {
-                //NDKBridge.pause();
-                //playButton.setText("Play");
-                //playButton.setImageResource(R.drawable.ic_action_play);
-                // ad.PlayPause();
                 updateRemoteMetadata();
                 pause();
                 try {
@@ -378,8 +339,6 @@ public class PlayerService extends Service implements MusicFocusable {
                 } catch(RemoteException e){
 
                 }
-                //paused = true;
-                // Tell any remote controls that our playback state is 'paused'.
                 if (mRemoteControlClientCompat != null) {
                     mRemoteControlClientCompat
                             .setPlaybackState(RemoteControlClientCompat.PLAYSTATE_PAUSED);
@@ -387,7 +346,6 @@ public class PlayerService extends Service implements MusicFocusable {
                 isPlaying = false;
             }
         }
-        //updateRemoteMetadata();
     }
 
     public Boolean getPlaying(){
@@ -411,8 +369,6 @@ public class PlayerService extends Service implements MusicFocusable {
 	public void stop() {
         ad.PlayQuit();
         NDKBridge.stop();
-
-		//mNM.cancelAll();
         giveUpAudioFocus();
         NDKBridge.nativeClose();
         NDKBridge.inited = false;
@@ -421,12 +377,7 @@ public class PlayerService extends Service implements MusicFocusable {
 	}
 
 	public void play() {
-
-
-		//new Intent(this, M1AndroidFragment.class);
-
 		setNoteText();
-
 		ad.PlayStart();
 	}
 
@@ -459,20 +410,8 @@ public class PlayerService extends Service implements MusicFocusable {
         mBuilder.setContentIntent(resultPendingIntent);
 
         Notification notification = mBuilder.build();
-        //mNM.notify(555, notification);
         startForeground(1337, notification);
-
-		//startForeground(1337, notification);
 	}
-
-	//@Override
-    //public void onDestory() {
-		//ad.PlayQuit();
-		//stopForeground(true);
-
-	//}
-
-
 
     class IncomingHandler extends Handler {
         @Override

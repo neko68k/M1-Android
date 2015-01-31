@@ -14,7 +14,6 @@ import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.ToggleButton;
 
@@ -41,27 +40,11 @@ public class FragmentControl extends FragmentActivity implements
 		super.onCreate(savedInstanceState);
 
         setContentView(R.layout.main);
-		// Check that the activity is using the layout version with
-		// the fragment_container FrameLayout
-		//if (findViewById(R.id.fragment_container) != null) {
-
-			// However, if we're being restored from a previous state,
-			// then we don't need to do anything and should return or else
-			// we could end up with overlapping fragments.
 			if (savedInstanceState != null) {
-                //NDKBridge.inited = savedInstanceState.getBoolean("inited");
-                FragmentManager mFragmentManager = getSupportFragmentManager();
-                //mFragmentManager.putFragment(inBundle, "main", (MainDetailFragment) mFragmentManager.findFragmentById(R.id.details));
-                mdf = (MainDetailFragment)mFragmentManager.getFragment(savedInstanceState, "main");
-			//	return;
+                mdf = (MainDetailFragment)getSupportFragmentManager().getFragment(savedInstanceState, "main");
+
 			}
 
-			// Create a new Fragment to be placed in the activity layoutra
-
-
-        FragmentManager mFragmentManager = getSupportFragmentManager();
-        //MainDetailFragment fragment = (MainDetailFragment) mFragmentManager.findFragmentById(R.id.details);
-        //mdf=fragment;
         if (mdf == null) {
             MainDetailFragment detailFragment = new MainDetailFragment();
             PlayerControlFragment playerFragment = new PlayerControlFragment();
@@ -69,7 +52,7 @@ public class FragmentControl extends FragmentActivity implements
             detailFragment.setRetainInstance(true);
             trackFragment.setRetainInstance(true);
             trackFragment.setRetainInstance(true);
-            FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.details, detailFragment).add(R.id.tracklist, trackFragment).
                     add(R.id.playercontrols, playerFragment).commit();
@@ -144,12 +127,6 @@ public class FragmentControl extends FragmentActivity implements
             doUnbindService();
         }
         NDKBridge.game = null;
-        //mdf = (MainDetailFragment) getSupportFragmentManager().findFragmentById(R.id.details);
-        //TrackListFragment tlf = (TrackListFragment) getSupportFragmentManager().findFragmentById(R.id.tracklist);
-        //PlayerControlFragment pcf = (PlayerControlFragment) getSupportFragmentManager().findFragmentById(R.id.playercontrols);
-        //mdf.updateDetails();
-        //mdf.updateTrack();
-        //tlf.updateTrackList();
         this.finish();
         return;
     }
@@ -161,20 +138,7 @@ public class FragmentControl extends FragmentActivity implements
                 case NDKBridge.MSG_UPDATE_TIME:
                     break;
                 case NDKBridge.MSG_UPDATE_TRACK:
-                    /*MainDetailFragment detailFragment = new MainDetailFragment();
-                    PlayerControlFragment playerFragment = new PlayerControlFragment();
-                    TrackListFragment trackFragment = new TrackListFragment();
-*/
 
-                    FragmentManager mFragmentManager = getSupportFragmentManager();
-                    MainDetailFragment fragment = (MainDetailFragment) mFragmentManager.findFragmentById(R.id.details);
-
-                      /*                  if (fragment == null) {
-                        //FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-                        getSupportFragmentManager().beginTransaction()
-                                .add(R.id.details, detailFragment).add(R.id.tracklist, trackFragment).
-                                add(R.id.playercontrols, playerFragment).commit();
-                    }*/
                     if(mdf!=null)
                         mdf.updateTrack();
                     break;
@@ -346,20 +310,11 @@ public class FragmentControl extends FragmentActivity implements
 	}
 
 	public void onGameSelected(Game game) {
-		// //Game game = NDKBridge.queryRom(position);
-
-		// LoadROMTask loadTask = new LoadROMTask(this);
-		// loadTask.execute(new Integer(selectionRowID));
-		// game.index= position;
-		
 		Intent i = new Intent();
-		String title = "";// NDKBridge.getGameList(selectionRowID);
-		//i.putExtra("com.neko68k.M1.game", game);
+		String title = "";
 		i.putExtra("com.neko68k.M1.title", title);
 		i.putExtra("com.neko68k.M1.position", game.index);
-		
-		//i.putExtra("com.neko68k.M1.game", game);
-		// startActivity(i);
+
 		NDKBridge.game = game;
 		setResult(RESULT_OK, i);
 		finish();
@@ -377,9 +332,7 @@ public class FragmentControl extends FragmentActivity implements
 
         SharedPreferences.Editor editor = prefs.edit();
         editor.putBoolean("firstRun", false);
-        //editor.putString("basepath", NDKBridge.basepath);
         editor.commit();
-        //Init();
 
     }
 
