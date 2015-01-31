@@ -41,7 +41,6 @@ public class NDKBridge {
 	static final int M1_OPT_FIXEDVOLUME = 9; // 0 = silence, 100 = regular
 												// volume, 300 = 3 times regular
 												// volume
-	//NDKBridge.SetOption(NDKBridge.M1_OPT_FIXEDVOLUME, 50);
 	static final int M1_OPT_POSTVOLUME = 10;
 
 	// types for m1_get_info_str/_ex
@@ -161,6 +160,8 @@ public class NDKBridge {
     static final int MSG_UPDATE_TIME = 2;
     static final int MSG_REGISTER_CLIENT = 3;
     static final int MSG_UNREGISTER_CLIENT = 4;
+    static final int MSG_TOGGLE_PLAY = 5;
+    static final int MSG_TOGGLE_PAUSE = 6;
 	// ////////////////////////// END ENUMS
 
 	static GameDatabaseHelper m1db;

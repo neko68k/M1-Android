@@ -351,6 +351,12 @@ public class PlayerService extends Service implements MusicFocusable {
                 // ad.UnPause();
                 updateRemoteMetadata();
                 unpause();
+                try {
+                    if(mOutMessenger != null)
+                        mOutMessenger.send(Message.obtain(null, NDKBridge.MSG_TOGGLE_PAUSE));
+                } catch(RemoteException e){
+
+                }
                 //paused = false;
                 // Tell any remote controls that our playback state is 'playing'.
                 if (mRemoteControlClientCompat != null) {
@@ -364,6 +370,12 @@ public class PlayerService extends Service implements MusicFocusable {
                 // ad.PlayPause();
                 updateRemoteMetadata();
                 pause();
+                try {
+                    if(mOutMessenger != null)
+                        mOutMessenger.send(Message.obtain(null, NDKBridge.MSG_TOGGLE_PLAY));
+                } catch(RemoteException e){
+
+                }
                 //paused = true;
                 // Tell any remote controls that our playback state is 'paused'.
                 if (mRemoteControlClientCompat != null) {

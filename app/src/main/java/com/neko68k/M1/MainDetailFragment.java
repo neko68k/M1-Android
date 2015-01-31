@@ -1,6 +1,5 @@
 package com.neko68k.M1;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -67,6 +66,46 @@ public class MainDetailFragment extends Fragment {
                 updateDetails();
         }
         FirstRun(ctx);
+
+        /*new Runnable() {
+
+            public void run() {
+                Integer cursong = 0;
+                if (isPlaying == true) {
+                    //  if (paused == false) {
+                    int seconds = NDKBridge.getCurTime() / 60;
+                    if (seconds > NDKBridge.songLen) {
+                        //        trackList.smoothScrollToPosition(NDKBridge
+                        //              .next());
+                        //    if (listLen)
+                        //       NDKBridge.getSongLen();
+                        //  else
+                        //     NDKBridge.songLen = NDKBridge.defLen;
+                        // }
+                        int minutes = seconds / 60;
+                        seconds -= minutes * 60;
+                        cursong = NDKBridge.getInfoInt(
+                                NDKBridge.M1_IINF_CURSONG, 0) + 1;// M1_IINF_CURSONG;
+                        trackNum.setText("Track: " + cursong);
+                        String tmp;
+                        if (NDKBridge.songLen % 60 < 10)
+                            tmp = ":0";
+                        else
+                            tmp = ":";
+                        if (seconds < 10) {
+
+                            playTime.setText("Time: " + minutes + ":0"
+                                    + seconds + "/" + NDKBridge.songLen
+                                    / 60 + tmp + NDKBridge.songLen % 60);
+                        } else
+                            playTime.setText("Time: " + minutes + ":"
+                                    + seconds + "/" + NDKBridge.songLen
+                                    / 60 + tmp + NDKBridge.songLen % 60);
+                    }
+                }
+            }
+        }.run();*/
+
         return v;
     }
 
@@ -103,99 +142,28 @@ public class MainDetailFragment extends Fragment {
 
     }
 
-    /*
-    private Runnable mUpdateTimeTask = new Runnable() {
-        public void run() {
-            // update stuff here
-            ((Activity) NDKBridge.ctx).runOnUiThread(new Runnable() {
-
-                public void run() {
-                    Integer cursong = 0;
-                    if (playing == true) {
-                        if (paused == false) {
-                            int seconds = NDKBridge.getCurTime() / 60;
-                            if (seconds > NDKBridge.songLen) {
-                                trackList.smoothScrollToPosition(NDKBridge
-                                        .next());
-                                if (listLen)
-                                    NDKBridge.getSongLen();
-                                else
-                                    NDKBridge.songLen = NDKBridge.defLen;
-                                updateRemoteMetadata();
-                            }
-                            int minutes = seconds / 60;
-                            seconds -= minutes * 60;
-                            cursong = NDKBridge.getInfoInt(
-                                    NDKBridge.M1_IINF_CURSONG, 0) + 1;// M1_IINF_CURSONG;
-                            trackNum.setText("Track: " + cursong);
-                            String tmp;
-                            if (NDKBridge.songLen % 60 < 10)
-                                tmp = ":0";
-                            else
-                                tmp = ":";
-                            if (seconds < 10) {
-
-                                playTime.setText("Time: " + minutes + ":0"
-                                        + seconds + "/" + NDKBridge.songLen
-                                        / 60 + tmp + NDKBridge.songLen % 60);
-                            } else
-                                playTime.setText("Time: " + minutes + ":"
-                                        + seconds + "/" + NDKBridge.songLen
-                                        / 60 + tmp + NDKBridge.songLen % 60);
-
-                            // int game = m1snd_get_info_int(M1_IINF_CURGAME,
-                            // 0);
-
-                            // jstring track;
-
-                            // cmdNum =
-                            // m1snd_get_info_int(M1_IINF_TRACKCMD,(song<<16|game));
-                            // __android_log_print(ANDROID_LOG_INFO,
-                            // "M1Android", "Cmd: %i", cmdNum);
-
-                            // String track =
-                            // NDKBridge.getInfoStr(NDKBridge.M1_SINF_TRKNAME,
-                            // cursong<<16|NDKBridge.curGame);
-                            int cmdNum = NDKBridge.getInfoInt(
-                                    NDKBridge.M1_IINF_TRACKCMD, (NDKBridge
-                                            .getInfoInt(
-                                                    NDKBridge.M1_IINF_CURSONG,
-                                                    0) << 16 | NDKBridge
-                                            .getInfoInt(
-                                                    NDKBridge.M1_IINF_CURGAME,
-                                                    0)));
-                            String text = NDKBridge.getInfoStr(
-                                    NDKBridge.M1_SINF_TRKNAME,
-                                    cmdNum << 16
-                                            | NDKBridge.getInfoInt(
-                                            NDKBridge.M1_IINF_CURGAME,
-                                            0));
-                            song.setText("Title: " + text);// +track);
-                            //if (mRemoteControlClientCompat != null)
-
-                        }
-                    }
-                }
-            });
-            // retrigger task
-            if (playing == true) {
-                mHandler.postDelayed(mUpdateTimeTask, 100);
-            }
-        }
-    };*/
-
     @Override
     public void onSaveInstanceState (Bundle outState){
+        super.onSaveInstanceState(outState);
         outState.putBoolean("inited", inited);
         outState.putParcelable("game", NDKBridge.game);
     }
 
-    /*@Override
-    public void onPause(){
 
-        int test;
-        test = 1;
-    }*/
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        //if(savedInstanceState!=null) {
+            //inited = savedInstanceState.getBoolean("inited");
+            //NDKBridge.inited = inited;
+            //NDKBridge.game = savedInstanceState.getParcelable("game");
+            if(inited&&NDKBridge.game!=null) {
+                updateDetails();
+                updateTrack();
+            }
+       // }
+    }
 
     private void FirstRun(final Context ctx) {
         SharedPreferences prefs = PreferenceManager
@@ -244,9 +212,11 @@ public class MainDetailFragment extends Fragment {
                 inited = true;
                 InitM1Task task = new InitM1Task(NDKBridge.ctx);
                 task.execute();
-            } else {
-
             }
+
+            //NDKBridge.SetOption(NDKBridge.M1_OPT_NORMALIZE, 0);
+            //NDKBridge.SetOption(NDKBridge.M1_OPT_FIXEDVOLUME, 200);
+
         }
     }
 

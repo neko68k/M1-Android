@@ -13,6 +13,8 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.ToggleButton;
 
@@ -31,12 +33,14 @@ public class FragmentControl extends FragmentActivity implements
     Map<String, ?> preferences;
     public PlayerService playerService = new PlayerService();
     Messenger mService = null;
+    private boolean isPlaying = false;
+    private MainDetailFragment mdf=null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
 
+        setContentView(R.layout.main);
 		// Check that the activity is using the layout version with
 		// the fragment_container FrameLayout
 		//if (findViewById(R.id.fragment_container) != null) {
@@ -45,28 +49,32 @@ public class FragmentControl extends FragmentActivity implements
 			// then we don't need to do anything and should return or else
 			// we could end up with overlapping fragments.
 			if (savedInstanceState != null) {
-
-				return;
+                //NDKBridge.inited = savedInstanceState.getBoolean("inited");
+                FragmentManager mFragmentManager = getSupportFragmentManager();
+                //mFragmentManager.putFragment(inBundle, "main", (MainDetailFragment) mFragmentManager.findFragmentById(R.id.details));
+                mdf = (MainDetailFragment)mFragmentManager.getFragment(savedInstanceState, "main");
+			//	return;
 			}
 
 			// Create a new Fragment to be placed in the activity layoutra
-			MainDetailFragment detailFragment = new MainDetailFragment();
+
+
+        FragmentManager mFragmentManager = getSupportFragmentManager();
+        //MainDetailFragment fragment = (MainDetailFragment) mFragmentManager.findFragmentById(R.id.details);
+        //mdf=fragment;
+        if (mdf == null) {
+            MainDetailFragment detailFragment = new MainDetailFragment();
             PlayerControlFragment playerFragment = new PlayerControlFragment();
             TrackListFragment trackFragment = new TrackListFragment();
-
-			// In case this activity was started with special instructions from
-			// an
-	// Intent, pass the Intent's extras to the fragment as arguments
-			// firstFragment.setArguments(getIntent().getExtras());
-
-			// Add the fragment to the 'fragment_container' FrameLayout
-			getSupportFragmentManager().beginTransaction()
-					.add(R.id.details, detailFragment).add(R.id.tracklist, trackFragment).
+            detailFragment.setRetainInstance(true);
+            FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.details, detailFragment).add(R.id.tracklist, trackFragment).
                     add(R.id.playercontrols, playerFragment).commit();
-        NDKBridge.ctx = getApplicationContext();
-            //FirstRun();
-		//}
+        }
 
+
+        NDKBridge.ctx = getApplicationContext();
 	}
 
     @Override
@@ -76,7 +84,7 @@ public class FragmentControl extends FragmentActivity implements
             if (action != null) {
                 if (action.equals(ACTION_LOAD_COMPLETE)) {
                     if (!NDKBridge.loadError) {
-                        MainDetailFragment mdf = (MainDetailFragment) getSupportFragmentManager().findFragmentById(R.id.details);
+                        mdf = (MainDetailFragment) getSupportFragmentManager().findFragmentById(R.id.details);
                         TrackListFragment tlf = (TrackListFragment) getSupportFragmentManager().findFragmentById(R.id.tracklist);
                         mdf.updateDetails();
                         tlf.updateTrackList();
@@ -88,32 +96,28 @@ public class FragmentControl extends FragmentActivity implements
         }
     }
 
-    /*@Override
-    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (mIsBound) {
-                //NDKBridge.playerService.stop();
-                //this.startService(new Intent(PlayerService.ACTION_STOP, null, this.getApplicationContext(), PlayerService.class));
-                doUnbindService();
-            }
-            NDKBridge.nativeClose();
 
-            this.finish();
-            return true;
-        }
-        return super.onKeyLongPress(keyCode, event);
+    @Override
+    public void onSaveInstanceState(Bundle inBundle){
+        super.onSaveInstanceState(inBundle);
+        inBundle.putBoolean("inited", NDKBridge.inited);
+        FragmentManager mFragmentManager = getSupportFragmentManager();
+        mFragmentManager.putFragment(inBundle, "main", mFragmentManager.findFragmentById(R.id.details));
+    }
+
+   /* @Override
+    public void onRestoreInstanceState(Bundle inBundle){
+
     }*/
+
+
 
     @Override
     public void onBackPressed() {
-    // do something on back.
-
         if (mIsBound) {
-            //NDKBridge.playerService.stop();
             this.stopService(new Intent(PlayerService.ACTION_STOP, null, this.getApplicationContext(), PlayerService.class));
             doUnbindService();
         }
-        //NDKBridge.nativeClose();
 
         this.finish();
         return;
@@ -126,8 +130,28 @@ public class FragmentControl extends FragmentActivity implements
                 case NDKBridge.MSG_UPDATE_TIME:
                     break;
                 case NDKBridge.MSG_UPDATE_TRACK:
-                    MainDetailFragment mdf = (MainDetailFragment) getSupportFragmentManager().findFragmentById(R.id.details);
-                    mdf.updateTrack();
+                    /*MainDetailFragment detailFragment = new MainDetailFragment();
+                    PlayerControlFragment playerFragment = new PlayerControlFragment();
+                    TrackListFragment trackFragment = new TrackListFragment();
+*/
+
+                    FragmentManager mFragmentManager = getSupportFragmentManager();
+                    MainDetailFragment fragment = (MainDetailFragment) mFragmentManager.findFragmentById(R.id.details);
+
+                      /*                  if (fragment == null) {
+                        //FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+                        getSupportFragmentManager().beginTransaction()
+                                .add(R.id.details, detailFragment).add(R.id.tracklist, trackFragment).
+                                add(R.id.playercontrols, playerFragment).commit();
+                    }*/
+                    if(mdf!=null)
+                        mdf.updateTrack();
+                    break;
+                case NDKBridge.MSG_TOGGLE_PAUSE:
+                    isPlaying = false;
+                    break;
+                case NDKBridge.MSG_TOGGLE_PLAY:
+                    isPlaying = true;
                     break;
                 default:
                     super.handleMessage(msg);
@@ -153,7 +177,6 @@ public class FragmentControl extends FragmentActivity implements
         }
 
         public void onServiceDisconnected(ComponentName className) {
-            //NDKBridge.playerService = null;
             mService = null;
         }
     };
@@ -174,8 +197,6 @@ public class FragmentControl extends FragmentActivity implements
                     msg.replyTo = mMessenger;
                     mService.send(msg);
                 } catch (RemoteException e) {
-                    // There is nothing special we need to do if the service
-                    // has crashed.
                 }
             }
             mIsBound = false;
@@ -263,70 +284,6 @@ public class FragmentControl extends FragmentActivity implements
     protected void onDestroy() {
         super.onDestroy();
     }
-
-    /*@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle item selection
-		Intent intent;
-		InitM1Task task;
-		FragmentTransaction transaction;
-		
-		switch (item.getItemId()) {
-		case R.id.open:
-
-			NDKBridge.loadError = false; 
-			//intent = new Intent(NDKBridge.ctx, GameListActivity.class);
-			//startActivityForResult(intent, 1);
-			
-			GameListFrag glfFragment = new GameListFrag();
-			transaction = getSupportFragmentManager()
-					.beginTransaction();
-			transaction.replace(R.id.fragment_container, glfFragment);
-			transaction.addToBackStack(null);
-
-            /*
-            NDKBridge.loadError = false;
-			intent = new Intent(this, GameListFragment.class);
-			startActivityForResult(intent, 1);
-			return true;
-
-
-			// Commit the transaction
-			transaction.commit();
-			return true;
-		case R.id.options:
-			intent = new Intent(NDKBridge.ctx, Prefs.class);
-			startActivityForResult(intent, 2);
-			return true;			
-		case R.id.rescan:
-			SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
-			GameListOpenHelper.wipeTables(db);
-			task = new InitM1Task(NDKBridge.ctx);
-			task.execute();
-			return true;
-		case R.id.sortOptions:
-			GameListOptionsFrag newFragment = new GameListOptionsFrag();
-			// args.putInt(GameListOptionsActivity.ARG_POSITION, position);
-			// newFragment.setArguments(args);
-
-			transaction = getSupportFragmentManager()
-					.beginTransaction();
-
-			// Replace whatever is in the fragment_container view with this
-			// fragment,
-			// and add the transaction to the back stack so the user can
-			// navigate back
-			transaction.replace(R.id.fragment_container, newFragment);
-			transaction.addToBackStack(null);
-
-			// Commit the transaction
-			transaction.commit();
-
-		default:
-
-			return super.onOptionsItemSelected(item);
-		}
-	}*/
 	
 	public void onOptionsChanged(Bundle b){
 		filtered = b.getBoolean("filtered");
