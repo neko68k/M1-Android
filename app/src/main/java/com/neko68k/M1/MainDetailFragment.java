@@ -109,7 +109,38 @@ public class MainDetailFragment extends Fragment {
     }
 
     public void updateTimer(long time){
-        playTime.setText(String.valueOf(time));
+        int seconds = (int)time / 60;
+        int minutes = seconds / 60;
+        seconds -= minutes * 60;
+        int cursong = NDKBridge.getInfoInt(
+                NDKBridge.M1_IINF_CURSONG, 0) + 1;// M1_IINF_CURSONG;
+        //trackNum.setText("Track: " + cursong);
+        int game = NDKBridge.getInfoInt(
+                NDKBridge.M1_IINF_CURGAME, 0);
+        int cmdNum = NDKBridge.getInfoInt(
+                NDKBridge.M1_IINF_TRACKCMD, (NDKBridge
+                        .getInfoInt(
+                                NDKBridge.M1_IINF_CURSONG,
+                                0) << 16 | game));
+        NDKBridge.songLen = NDKBridge.getInfoInt(
+                NDKBridge.M1_IINF_TRKLENGTH,
+                (cmdNum << 16 | game));
+        //NDKBridge.songLen = NDKBridge.getInfoInt(NDKBridge.M1_IINF_TRKLENGTH, cursong);
+        String tmp;
+        if (NDKBridge.songLen /60% 60< 10)
+            tmp = ":0";
+        else
+            tmp = ":";
+        if (seconds < 10) {
+
+            playTime.setText("Time: " + minutes + ":0"
+                    + seconds + "/" + NDKBridge.songLen
+                    / 60 /60+ tmp + NDKBridge.songLen /60% 60);
+        } else
+            playTime.setText("Time: " + minutes + ":"
+                    + seconds + "/" + NDKBridge.songLen
+                    / 60 /60+ tmp + NDKBridge.songLen /60% 60);
+        //playTime.setText(String.valueOf(time));
     }
 
     public void updateTrack(){

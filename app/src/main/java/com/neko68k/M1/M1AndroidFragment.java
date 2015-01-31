@@ -226,6 +226,7 @@ public class M1AndroidFragment extends Fragment{
 									NDKBridge.songLen = NDKBridge.defLen;
 								updateRemoteMetadata();
 							}
+							int seconds = NDKBridge.getCurTime() / 60;
 							int minutes = seconds / 60;
 							seconds -= minutes * 60;
 							cursong = NDKBridge.getInfoInt(
