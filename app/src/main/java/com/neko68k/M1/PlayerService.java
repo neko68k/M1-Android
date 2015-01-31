@@ -25,6 +25,7 @@ public class PlayerService extends Service implements MusicFocusable {
 	String text;
 	static Notification notification = null;
 	PendingIntent contentIntent;
+    Boolean isPlaying = false;
 
     // ***** Remote Control Stuff ***** //
     public static final String ACTION_TOGGLE_PLAYBACK = "com.neko68k.M1.action.TOGGLE_PLAYBACK";
@@ -363,6 +364,7 @@ public class PlayerService extends Service implements MusicFocusable {
                     mRemoteControlClientCompat
                             .setPlaybackState(RemoteControlClientCompat.PLAYSTATE_PLAYING);
                 }
+                isPlaying = true;
             } else if (!ad.isPaused()) {
                 //NDKBridge.pause();
                 //playButton.setText("Play");
@@ -382,9 +384,14 @@ public class PlayerService extends Service implements MusicFocusable {
                     mRemoteControlClientCompat
                             .setPlaybackState(RemoteControlClientCompat.PLAYSTATE_PAUSED);
                 }
+                isPlaying = false;
             }
         }
         //updateRemoteMetadata();
+    }
+
+    public Boolean getPlaying(){
+        return(isPlaying);
     }
 	
 	public void setVolume(float l, float r){

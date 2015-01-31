@@ -112,6 +112,14 @@ public class FragmentControl extends FragmentActivity implements
 
     }
 
+    @Override
+    public void onRestart(){
+        super.onRestart();
+        isPlaying = playerService.getPlaying();
+        PlayerControlFragment pcf = (PlayerControlFragment) getSupportFragmentManager().findFragmentById(R.id.playercontrols);
+        pcf.setPlayState(isPlaying);
+    }
+
    @Override
     public void onRestoreInstanceState(Bundle inBundle){
        super.onRestoreInstanceState(inBundle);
