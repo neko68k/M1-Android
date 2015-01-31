@@ -136,7 +136,8 @@ public class FragmentControl extends FragmentActivity implements
     @Override
     public void onBackPressed() {
         if (mIsBound) {
-            this.stopService(new Intent(PlayerService.ACTION_STOP, null, this.getApplicationContext(), PlayerService.class));
+
+            this.startService(new Intent(PlayerService.ACTION_STOP, null, this.getApplicationContext(), PlayerService.class));
             doUnbindService();
         }
 
