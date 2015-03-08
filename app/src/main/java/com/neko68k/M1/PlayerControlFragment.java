@@ -29,6 +29,11 @@ public class PlayerControlFragment extends Fragment {
         }
     }
 
+    public void setPaused(){
+        buttonState = true;
+        playButton.setImageResource(R.drawable.ic_action_play);
+    }
+
     public void restoreButtonState(){
         if(buttonState==true){
             playButton.setImageResource(R.drawable.ic_action_pause);

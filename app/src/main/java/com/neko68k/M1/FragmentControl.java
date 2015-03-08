@@ -211,7 +211,8 @@ public class FragmentControl extends FragmentActivity implements
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == 65537) {
-
+                PlayerControlFragment pcf = (PlayerControlFragment) getSupportFragmentManager().findFragmentById(R.id.playercontrols);
+                pcf.setPaused();
                 startService(new Intent(PlayerService.ACTION_LOAD, null, this, PlayerService.class).putExtra("gameid", NDKBridge.game.index));
                 doBindService();
                 //NDKBridge.playtime = 0;
