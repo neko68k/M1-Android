@@ -253,21 +253,24 @@ public class PlayerService extends Service implements MusicFocusable {
                 + (int) pref.getLong("defLenSecs", 0));*/
         Boolean listLenPref = (Boolean) preferences.get("listLenPref");
 
-        if(NDKBridge.GetSongLen()==-1){
-            NDKBridge.songLen = NDKBridge.defLen;
+        if(NDKBridge.GetSongLen()==-1||!listLenPref){
+            NDKBridge.songLen = NDKBridge.defLen*60;
         }
         if(listLenPref&&NDKBridge.GetSongLen()!=-1){
             NDKBridge.songLen = NDKBridge.GetSongLen();
         }
-        if((!listLenPref&&time/60>=NDKBridge.songLen)||(listLenPref&&time/60>=NDKBridge.songLen)&&!skipping ){//&&NDKBridge.songLen!=-1)){
-            skipping=true;
 
 
-            processSkipRequest();
+            if ((!listLenPref && time >= NDKBridge.songLen) || (listLenPref && time >= NDKBridge.songLen)) {//&&NDKBridge.songLen!=-1)){
+                if(skipping) {
+                    return;
+                }
+                skipping = true;
+                processSkipRequest();
+            } else {
+                skipping = false;
+            }
 
-        }else{
-            skipping = false;
-        }
     }
 
     public void setListTime(Boolean state){
