@@ -270,6 +270,10 @@ public class FragmentControl extends FragmentActivity implements
 
         NDKBridge.defLen = Integer.valueOf(time);
 
+        if(NDKBridge.GetSongLen()==-1){
+            NDKBridge.songLen = NDKBridge.playtime;
+        }
+
         Boolean listLen = (Boolean) preferences.get("listLenPref");
         if (listLen != null) {
             if (!listLen) {

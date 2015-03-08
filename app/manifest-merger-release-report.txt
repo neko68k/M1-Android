@@ -35,59 +35,103 @@ ADDED from AndroidManifest.xml:8:5
 		ADDED from AndroidManifest.xml:8:88
 	android:icon
 		ADDED from AndroidManifest.xml:8:18
-activity#com.neko68k.M1.M1Android
+activity#com.neko68k.M1.FragmentControl
 ADDED from AndroidManifest.xml:9:9
-	android:screenOrientation
-		ADDED from AndroidManifest.xml:11:19
 	android:label
 		ADDED from AndroidManifest.xml:10:19
 	android:name
 		ADDED from AndroidManifest.xml:9:19
 	android:launchMode
 		ADDED from AndroidManifest.xml:12:19
-intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
+intent-filter#android.intent.category.DEFAULT+com.neko68k.M1.action.JUMP+com.neko68k.M1.action.LOAD+com.neko68k.M1.action.PAUSE+com.neko68k.M1.action.PLAY+com.neko68k.M1.action.REWIND+com.neko68k.M1.action.SKIP+com.neko68k.M1.action.STOP+com.neko68k.M1.action.TOGGLE_LOAD_COMPLETE+com.neko68k.M1.action.TOGGLE_PLAYBACK
 ADDED from AndroidManifest.xml:14:13
-action#android.intent.action.MAIN
+action#com.neko68k.M1.action.TOGGLE_PLAYBACK
 ADDED from AndroidManifest.xml:15:17
 	android:name
 		ADDED from AndroidManifest.xml:15:25
-category#android.intent.category.LAUNCHER
+action#com.neko68k.M1.action.PLAY
 ADDED from AndroidManifest.xml:16:17
 	android:name
-		ADDED from AndroidManifest.xml:16:27
+		ADDED from AndroidManifest.xml:16:25
+action#com.neko68k.M1.action.PAUSE
+ADDED from AndroidManifest.xml:17:17
+	android:name
+		ADDED from AndroidManifest.xml:17:25
+action#com.neko68k.M1.action.SKIP
+ADDED from AndroidManifest.xml:18:17
+	android:name
+		ADDED from AndroidManifest.xml:18:25
+action#com.neko68k.M1.action.REWIND
+ADDED from AndroidManifest.xml:19:17
+	android:name
+		ADDED from AndroidManifest.xml:19:25
+action#com.neko68k.M1.action.STOP
+ADDED from AndroidManifest.xml:20:17
+	android:name
+		ADDED from AndroidManifest.xml:20:25
+action#com.neko68k.M1.action.LOAD
+ADDED from AndroidManifest.xml:21:17
+	android:name
+		ADDED from AndroidManifest.xml:21:25
+action#com.neko68k.M1.action.JUMP
+ADDED from AndroidManifest.xml:22:17
+	android:name
+		ADDED from AndroidManifest.xml:22:25
+action#com.neko68k.M1.action.TOGGLE_LOAD_COMPLETE
+ADDED from AndroidManifest.xml:23:17
+	android:name
+		ADDED from AndroidManifest.xml:23:25
+category#android.intent.category.DEFAULT
+ADDED from AndroidManifest.xml:24:17
+	android:name
+		ADDED from AndroidManifest.xml:24:27
+intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
+ADDED from AndroidManifest.xml:26:13
+action#android.intent.action.MAIN
+ADDED from AndroidManifest.xml:27:17
+	android:name
+		ADDED from AndroidManifest.xml:27:25
+category#android.intent.category.LAUNCHER
+ADDED from AndroidManifest.xml:28:17
+	android:name
+		ADDED from AndroidManifest.xml:28:27
 activity#com.neko68k.M1.FileBrowser
-ADDED from AndroidManifest.xml:19:9
+ADDED from AndroidManifest.xml:31:9
 	android:screenOrientation
-		ADDED from AndroidManifest.xml:20:10
+		ADDED from AndroidManifest.xml:32:10
 	android:label
-		ADDED from AndroidManifest.xml:19:61
+		ADDED from AndroidManifest.xml:31:61
 	android:name
-		ADDED from AndroidManifest.xml:19:19
+		ADDED from AndroidManifest.xml:31:19
 activity#com.neko68k.M1.Prefs
-ADDED from AndroidManifest.xml:21:9
-	android:screenOrientation
-		ADDED from AndroidManifest.xml:21:55
+ADDED from AndroidManifest.xml:33:9
 	android:name
-		ADDED from AndroidManifest.xml:21:19
-activity#com.neko68k.M1.GameListFragment
-ADDED from AndroidManifest.xml:22:9
-	android:screenOrientation
-		ADDED from AndroidManifest.xml:22:66
-	android:name
-		ADDED from AndroidManifest.xml:22:19
+		ADDED from AndroidManifest.xml:33:19
 activity#com.neko68k.M1.GameListActivity
-ADDED from AndroidManifest.xml:23:9
-	android:screenOrientation
-		ADDED from AndroidManifest.xml:23:66
+ADDED from AndroidManifest.xml:34:9
 	android:name
-		ADDED from AndroidManifest.xml:23:19
-activity#com.neko68k.M1.OptionsActivity
-ADDED from AndroidManifest.xml:24:9
-	android:screenOrientation
-		ADDED from AndroidManifest.xml:24:65
+		ADDED from AndroidManifest.xml:34:19
+activity#com.neko68k.M1.GameListFrag
+ADDED from AndroidManifest.xml:35:9
 	android:name
-		ADDED from AndroidManifest.xml:24:19
+		ADDED from AndroidManifest.xml:35:19
 service#com.neko68k.M1.PlayerService
-ADDED from AndroidManifest.xml:25:3
+ADDED from AndroidManifest.xml:37:3
 	android:name
-		ADDED from AndroidManifest.xml:25:12
+		ADDED from AndroidManifest.xml:37:12
+receiver#com.neko68k.M1.MusicIntentReceiver
+ADDED from AndroidManifest.xml:39:3
+	android:name
+		ADDED from AndroidManifest.xml:39:13
+intent-filter#android.media.AUDIO_BECOMING_NOISY
+ADDED from AndroidManifest.xml:40:13
+action#android.media.AUDIO_BECOMING_NOISY
+ADDED from AndroidManifest.xml:41:17
+	android:name
+		ADDED from AndroidManifest.xml:41:25
+intent-filter#android.intent.action.MEDIA_BUTTON
+ADDED from AndroidManifest.xml:43:13
+action#android.intent.action.MEDIA_BUTTON
+ADDED from AndroidManifest.xml:44:17
+	android:name
+		ADDED from AndroidManifest.xml:44:25

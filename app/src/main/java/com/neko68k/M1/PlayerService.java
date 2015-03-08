@@ -58,6 +58,7 @@ public class PlayerService extends Service implements MusicFocusable {
     final Messenger mMessenger = new Messenger(new IncomingHandler());
     Messenger mOutMessenger = null;
     Boolean listTime = false;
+    Boolean skipping = false;
 
     enum AudioFocus {
         NoFocusNoDuck,    // we don't have audio focus, and can't duck
@@ -247,15 +248,25 @@ public class PlayerService extends Service implements MusicFocusable {
         pref = PreferenceManager
                 .getDefaultSharedPreferences(this);
         preferences = pref.getAll();
-        int playtime = (int) pref.getLong("defLenHours", 0)
+        /*int playtime = ((int) pref.getLong("defLenHours", 0)
                 + (int) pref.getLong("defLenMins", 300)
-                + (int) pref.getLong("defLenSecs", 0);
+                + (int) pref.getLong("defLenSecs", 0));*/
         Boolean listLenPref = (Boolean) preferences.get("listLenPref");
 
-        if((listLenPref&&time/10>=playtime)||(!listLenPref&&time>=NDKBridge.songLen)){//&&NDKBridge.songLen!=-1)){
-           // NDKBridge.songLen=999999999;
+        if(NDKBridge.GetSongLen()==-1){
+            NDKBridge.songLen = NDKBridge.defLen;
+        }
+        if(listLenPref&&NDKBridge.GetSongLen()!=-1){
+            NDKBridge.songLen = NDKBridge.GetSongLen();
+        }
+        if((!listLenPref&&time/60>=NDKBridge.songLen)||(listLenPref&&time/60>=NDKBridge.songLen)&&!skipping ){//&&NDKBridge.songLen!=-1)){
+            skipping=true;
 
-            //processSkipRequest();
+
+            processSkipRequest();
+
+        }else{
+            skipping = false;
         }
     }
 
