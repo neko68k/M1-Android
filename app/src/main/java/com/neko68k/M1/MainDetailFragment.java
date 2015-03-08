@@ -132,11 +132,24 @@ public class MainDetailFragment extends Fragment {
                 + (int) pref.getLong("defLenMins", 300)
                 + (int) pref.getLong("defLenSecs", 0);
         Boolean listLenPref = (Boolean) preferences.get("listLenPref");
-        if(!listLenPref){
+        /*if(!listLenPref){
+            songLen = playtime;
+        } else {
+            if(songLen!=-1) {
+                songLen = songLen / 60;
+            } else {
+                songLen = playtime;
+            }
+        }*/
+        if(songLen==-1||!listLenPref){
             songLen = playtime;
         } else {
             songLen = songLen/60;
         }
+
+        /*if(listLenPref&&NDKBridge.GetSongLen()!=-1){
+            songLen = NDKBridge.GetSongLen();
+        }*/
           //  NDKBridge.songLen = songLen;
 
         String tmp;
