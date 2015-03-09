@@ -123,15 +123,9 @@ receiver#com.neko68k.M1.MusicIntentReceiver
 ADDED from AndroidManifest.xml:39:3
 	android:name
 		ADDED from AndroidManifest.xml:39:13
-intent-filter#android.media.AUDIO_BECOMING_NOISY
-ADDED from AndroidManifest.xml:40:13
-action#android.media.AUDIO_BECOMING_NOISY
-ADDED from AndroidManifest.xml:41:17
-	android:name
-		ADDED from AndroidManifest.xml:41:25
 intent-filter#android.intent.action.MEDIA_BUTTON
-ADDED from AndroidManifest.xml:43:13
+ADDED from AndroidManifest.xml:41:13
 action#android.intent.action.MEDIA_BUTTON
-ADDED from AndroidManifest.xml:44:17
+ADDED from AndroidManifest.xml:42:17
 	android:name
-		ADDED from AndroidManifest.xml:44:25
+		ADDED from AndroidManifest.xml:42:25
