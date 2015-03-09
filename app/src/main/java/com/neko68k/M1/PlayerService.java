@@ -322,7 +322,8 @@ public class PlayerService extends Service implements MusicFocusable {
     }
 
     private void processSkipRequest(){
-        if (ad.isPlaying()) {
+
+        if (ad!=null&&ad.isPlaying()) {
             if (!ad.isPaused()) {
                 int i = NDKBridge.next();
                 setNoteText();
