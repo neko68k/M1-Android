@@ -135,6 +135,7 @@ public class FragmentControl extends FragmentActivity implements
     class IncomingHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
+            PlayerControlFragment pcf = (PlayerControlFragment) getSupportFragmentManager().findFragmentById(R.id.playercontrols);
             switch (msg.what) {
                 case NDKBridge.MSG_UPDATE_TIME:
                     mdf = (MainDetailFragment) getSupportFragmentManager().findFragmentById(R.id.details);
@@ -148,8 +149,12 @@ public class FragmentControl extends FragmentActivity implements
                     break;
                 case NDKBridge.MSG_TOGGLE_PAUSE:
                     isPlaying = true;
+                    //= (PlayerControlFragment) getSupportFragmentManager().findFragmentById(R.id.playercontrols);
+                    pcf.setPlayState(true);
                     break;
                 case NDKBridge.MSG_TOGGLE_PLAY:
+                    //PlayerControlFragment pcf = (PlayerControlFragment) getSupportFragmentManager().findFragmentById(R.id.playercontrols);
+                    pcf.setPlayState(false);
                     isPlaying = false;
                     break;
                 default:

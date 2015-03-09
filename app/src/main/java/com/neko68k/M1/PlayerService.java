@@ -367,6 +367,12 @@ public class PlayerService extends Service implements MusicFocusable {
             if (!ad.isPaused()) {
                 updateRemoteMetadata();
                 pause();
+                try {
+                    if(mOutMessenger != null)
+                        mOutMessenger.send(Message.obtain(null, NDKBridge.MSG_TOGGLE_PLAY));
+                } catch(RemoteException e){
+
+                }
                 if (mRemoteControlClientCompat != null) {
                     mRemoteControlClientCompat
                             .setPlaybackState(RemoteControlClientCompat.PLAYSTATE_PAUSED);
