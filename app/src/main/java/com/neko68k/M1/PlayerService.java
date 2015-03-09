@@ -252,6 +252,9 @@ public class PlayerService extends Service implements MusicFocusable {
                 + (int) pref.getLong("defLenMins", 300)
                 + (int) pref.getLong("defLenSecs", 0));*/
         Boolean listLenPref = (Boolean) preferences.get("listLenPref");
+        if(listLenPref == null){
+            listLenPref = true;
+        }
 
         if(NDKBridge.GetSongLen()==-1||!listLenPref){
             NDKBridge.songLen = NDKBridge.defLen*60;
