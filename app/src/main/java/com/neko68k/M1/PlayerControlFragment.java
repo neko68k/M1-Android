@@ -20,7 +20,7 @@ public class PlayerControlFragment extends Fragment {
     boolean buttonState = false;
 
     public void togglePlayButton(){
-        if(buttonState==false){
+        if(!buttonState){
             buttonState = true;
             playButton.setImageResource(R.drawable.ic_action_pause);
         } else {
@@ -35,7 +35,7 @@ public class PlayerControlFragment extends Fragment {
     }
 
     public void restoreButtonState(){
-        if(buttonState==true){
+        if(buttonState){
             playButton.setImageResource(R.drawable.ic_action_pause);
         } else {
             playButton.setImageResource(R.drawable.ic_action_play);
@@ -43,11 +43,35 @@ public class PlayerControlFragment extends Fragment {
     }
 
     public void setPlayState(boolean state){
-        if(state==false){
+        if(!state){
             buttonState = false;
             playButton.setImageResource(R.drawable.ic_action_play);
         } else {
             playButton.setImageResource(R.drawable.ic_action_pause);
+            nextButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    getActivity().startService(new Intent(PlayerService.ACTION_SKIP, null, getActivity().getApplicationContext(), PlayerService.class));
+                }
+            });
+            // PREV
+            prevButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    getActivity().startService(new Intent(PlayerService.ACTION_REWIND, null, getActivity().getApplicationContext(), PlayerService.class));
+                }
+            });
+            // REST
+            restButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    getActivity().startService(new Intent(PlayerService.ACTION_RESTART, null, getActivity().getApplicationContext(), PlayerService.class));
+                }
+            });
+            // PLAY
+            playButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    getActivity().startService(new Intent(PlayerService.ACTION_TOGGLE_PLAYBACK, null, getActivity().getApplicationContext(), PlayerService.class));
+                    togglePlayButton();
+                }
+            });
             buttonState = true;
         }
     }
@@ -70,35 +94,8 @@ public class PlayerControlFragment extends Fragment {
             //restoreButtonState();
         }
 
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                getActivity().startService(new Intent(PlayerService.ACTION_SKIP, null, getActivity().getApplicationContext(), PlayerService.class));
-                //processSkipRequest();
-            }
-        });
-        // PREV
-        prevButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                getActivity().startService(new Intent(PlayerService.ACTION_REWIND, null, getActivity().getApplicationContext(), PlayerService.class));
-                //processRewindRequest();
-            }
-        });
-        // REST
-        restButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
 
-                //NDKBridge.restSong();
-                getActivity().startService(new Intent(PlayerService.ACTION_RESTART, null, getActivity().getApplicationContext(), PlayerService.class));
-                //NDKBridge.playtime = 0;
-            }
-        });
-        // PLAY
-        playButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                getActivity().startService(new Intent(PlayerService.ACTION_TOGGLE_PLAYBACK, null, getActivity().getApplicationContext(), PlayerService.class));
-               togglePlayButton();
-            }
-        });
+
         return v;
     }
 
