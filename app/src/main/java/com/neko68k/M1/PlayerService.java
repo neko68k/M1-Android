@@ -387,7 +387,7 @@ public class PlayerService extends Service implements MusicFocusable {
     }
 
     private void processTogglePlaybackRequest(){
-        if (ad.isPlaying()) {
+        if (ad!=null && ad.isPlaying()) {
             if (ad.isPaused()) {
                 updateRemoteMetadata();
                 unpause();
@@ -439,11 +439,15 @@ public class PlayerService extends Service implements MusicFocusable {
 	}
 
 	public void stop() {
-        ad.PlayQuit();
-        NDKBridge.stop();
-        giveUpAudioFocus();
-        NDKBridge.nativeClose();
-        NDKBridge.inited = false;
+        if(ad!=null) {
+            ad.PlayQuit();
+        }
+        if(NDKBridge.inited == true) {
+            NDKBridge.stop();
+            giveUpAudioFocus();
+            NDKBridge.nativeClose();
+            NDKBridge.inited = false;
+        }
 		stopForeground(true);
         stopSelf();
 	}
