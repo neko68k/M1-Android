@@ -375,7 +375,6 @@ public class FragmentControl extends FragmentActivity implements
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.open:
-
                 NDKBridge.loadError = false;
                 intent = new Intent(NDKBridge.ctx, GameListActivity.class);
                 startActivityForResult(intent, 1);
@@ -391,8 +390,12 @@ public class FragmentControl extends FragmentActivity implements
                 task.execute();
                 return true;
             case R.id.chanview:
-                // replace self with chanview... wtf
+                // replace detail fragment with chanview ListFragment
+                // or vice versa
 
+                ChannelFragment channelFrag = new ChannelFragment();
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.details, channelFrag);
             default:
 
                 return super.onOptionsItemSelected(item);
