@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -94,10 +96,48 @@ public class PlayerControlFragment extends Fragment {
             //restoreButtonState();
         }
 
-
+        setHasOptionsMenu(true);
 
         return v;
     }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+        inflater.inflate(R.menu.menu, menu);
+
+    }
+/*
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
+        InitM1Task task;
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.open:
+
+                NDKBridge.loadError = false;
+                intent = new Intent(NDKBridge.ctx, GameListActivity.class);
+                startActivityForResult(intent, 1);
+                return true;
+            case R.id.options:
+                intent = new Intent(NDKBridge.ctx, Prefs.class);
+                startActivityForResult(intent, 2);
+                return true;
+            case R.id.rescan:
+                SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
+                GameListOpenHelper.wipeTables(db);
+                task = new InitM1Task(NDKBridge.ctx);
+                task.execute();
+                return true;
+            case R.id.chanview:
+                // replace self with chanview... wtf
+
+            default:
+
+                return super.onOptionsItemSelected(item);
+        }
+    }*/
 
 
 }

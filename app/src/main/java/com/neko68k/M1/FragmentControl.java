@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -14,13 +15,14 @@ import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ToggleButton;
 
 import java.util.Map;
 
 public class FragmentControl extends FragmentActivity implements
-		GameListFrag.OnItemSelectedListener, GameListOptionsFrag.OnOptionsChanged, FileBrowser.FBCallback{
+	 GameListOptionsFrag.OnOptionsChanged, FileBrowser.FBCallback{
 
     public static final String ACTION_LOAD_COMPLETE = "com.neko68k.M1.action.TOGGLE_LOAD_COMPLETE";
 	private static boolean filtered = false;
@@ -61,6 +63,7 @@ public class FragmentControl extends FragmentActivity implements
 
         GetPrefs();
         NDKBridge.ctx = getApplicationContext();
+        //setHasOptionsMenu(true);
 	}
 
     @Override
@@ -119,7 +122,7 @@ public class FragmentControl extends FragmentActivity implements
     }
 
 
-
+    // TODO: fix this to work when paused/ducked/ehh....
     @Override
     public void onBackPressed() {
         if (mIsBound) {
@@ -213,7 +216,8 @@ public class FragmentControl extends FragmentActivity implements
 
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            if (requestCode == 65537) {
+            //if (requestCode == 65537) {
+            if (requestCode == 1) {
                 PlayerControlFragment pcf = (PlayerControlFragment) getSupportFragmentManager().findFragmentById(R.id.playercontrols);
                 pcf.setPaused();
                 startService(new Intent(PlayerService.ACTION_LOAD, null, this, PlayerService.class).putExtra("gameid", NDKBridge.game.index));
@@ -221,7 +225,7 @@ public class FragmentControl extends FragmentActivity implements
                 //NDKBridge.playtime = 0;
 
 
-            } else if (requestCode == 65538) {
+            } else if (requestCode == 2) {
                 // options returned
                 // stop everything and set options
                 GetPrefs();
@@ -325,17 +329,22 @@ public class FragmentControl extends FragmentActivity implements
 		return sortType;
 	}
 
-	public void onGameSelected(Game game) {
+	/*public void onGameSelected(Game game) {
 		Intent i = new Intent();
 		String title = "";
 		i.putExtra("com.neko68k.M1.title", title);
 		i.putExtra("com.neko68k.M1.position", game.index);
 
 		NDKBridge.game = game;
-		setResult(RESULT_OK, i);
-		finish();
 
-	}
+        PlayerControlFragment pcf = (PlayerControlFragment) getSupportFragmentManager().findFragmentById(R.id.playercontrols);
+        pcf.setPaused();
+        startService(new Intent(PlayerService.ACTION_LOAD, null, this, PlayerService.class).putExtra("gameid", NDKBridge.game.index));
+        doBindService();
+		//setResult(RESULT_OK, i);
+		//finish();
+
+	}*/
     public void selected() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(NDKBridge.ctx);
         preferences = prefs.getAll();
@@ -352,5 +361,41 @@ public class FragmentControl extends FragmentActivity implements
 
     }
 
+    //@Override
+    /*public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
+        inflater.inflate(R.menu.menu, menu);
+
+    }*/
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
+        InitM1Task task;
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.open:
+
+                NDKBridge.loadError = false;
+                intent = new Intent(NDKBridge.ctx, GameListActivity.class);
+                startActivityForResult(intent, 1);
+                return true;
+            case R.id.options:
+                intent = new Intent(NDKBridge.ctx, Prefs.class);
+                startActivityForResult(intent, 2);
+                return true;
+            case R.id.rescan:
+                SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
+                GameListOpenHelper.wipeTables(db);
+                task = new InitM1Task(NDKBridge.ctx);
+                task.execute();
+                return true;
+            case R.id.chanview:
+                // replace self with chanview... wtf
+
+            default:
+
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }

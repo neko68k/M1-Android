@@ -3,16 +3,11 @@ package com.neko68k.M1;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -56,7 +51,7 @@ public class MainDetailFragment extends Fragment {
 
         Context ctx = getActivity();
         NDKBridge.ctx = ctx;
-        setHasOptionsMenu(true);
+
         if(savedInstanceState!=null) {
             inited = savedInstanceState.getBoolean("inited");
             NDKBridge.inited = inited;
@@ -275,39 +270,5 @@ public class MainDetailFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
-        inflater.inflate(R.menu.menu, menu);
-
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Intent intent;
-        InitM1Task task;
-        // Handle item selection
-        switch (item.getItemId()) {
-            case R.id.open:
-
-                NDKBridge.loadError = false;
-                intent = new Intent(NDKBridge.ctx, GameListActivity.class);
-                startActivityForResult(intent, 1);
-                return true;
-            case R.id.options:
-                intent = new Intent(NDKBridge.ctx, Prefs.class);
-                startActivityForResult(intent, 2);
-                return true;
-            case R.id.rescan:
-                SQLiteDatabase db = NDKBridge.m1db.getWritableDatabase();
-                GameListOpenHelper.wipeTables(db);
-                task = new InitM1Task(NDKBridge.ctx);
-                task.execute();
-                return true;
-
-            default:
-
-                return super.onOptionsItemSelected(item);
-        }
-    }
 }

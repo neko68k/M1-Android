@@ -11,6 +11,9 @@
     <item android:id="@+id/options"
           
     	  android:title="Options"/>
+    <item android:id="@+id/chanview"
+
+        android:title="Togle Channel View"/>
 </menu>
     
     
