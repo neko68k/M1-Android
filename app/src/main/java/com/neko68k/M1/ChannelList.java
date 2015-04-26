@@ -6,16 +6,17 @@ import android.os.Parcelable;
 /**
  * Created by neko on 4/18/15.
  */
-public class ChannelList implements Comparable<TrackList>, Parcelable {
+public class ChannelList implements Comparable<ChannelList>, Parcelable {
 
-private String trackNum = "";
-private String mText = "";
-private String time = "";
-private boolean fave = false;
+private int channelNum = 0;
+private String channelName = "";
+private int volume = 0;
+private int panPot = 0;
 private boolean mSelectable = true;
 
-public ChannelList(String text) {
-        mText = text;
+public ChannelList(int num, String text) {
+        channelName = text;
+        channelNum = num;
         }
 
 public ChannelList() {
@@ -31,39 +32,24 @@ public void setSelectable(boolean selectable) {
         }
 
 public String getText() {
-        return mText;
+        return channelName;
         }
 
 public void setText(String text) {
-        mText = text;
+        channelName = text;
         }
 
-public String getTrackNum() {
-        return trackNum;
+public void setVolume(int v) {
+        volume = v;
         }
 
-public void setTrackNum(String text) {
-        trackNum = text;
-        }
+public void setPanPot(int p){
+        panPot = p;
+}
 
-public String getTime() {
-        return time;
-        }
-
-public void setTime(String time) {
-        this.time = time;
-        }
-
-public boolean isFave() {
-        return fave;
-        }
-
-public void setFave(boolean fave) {
-        this.fave = fave;
-        }
-public int compareTo(TrackList other) {
-        if (this.mText != null)
-        return this.trackNum.compareTo(other.getText());
+public int compareTo(ChannelList other) {
+        if (this.channelName != null)
+        return this.channelName.compareTo(other.getText());
         else
         throw new IllegalArgumentException();
         }
@@ -74,18 +60,18 @@ public int describeContents() {
         }
 
 public void writeToParcel(Parcel out, int flags) {
-        out.writeString(trackNum);
-        out.writeString(mText);
-        out.writeString(time);
-        out.writeByte((byte) (fave ? 1 : 0));
+        out.writeInt(channelNum);
+        out.writeString(channelName);
+        out.writeInt(volume);
+        out.writeInt(panPot);
         out.writeByte((byte) (mSelectable ? 1 : 0));
         }
 
 public ChannelList(Parcel in){
-        trackNum = in.readString();
-        mText = in.readString();
-        time = in.readString();
-        fave = in.readByte() != 0;
+        channelNum = in.readInt();
+        channelName = in.readString();
+        volume = in.readInt();
+        panPot = in.readInt();
         mSelectable = in.readByte() != 0;
         }
 

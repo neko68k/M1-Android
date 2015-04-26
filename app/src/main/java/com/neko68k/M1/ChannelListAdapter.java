@@ -85,17 +85,17 @@ public class ChannelListAdapter {
      * @returns a IconifiedTextView that holds wraps around an IconifiedText
      */
     public View getView(int position, View convertView, ViewGroup parent) {
-        TrackListView btv;
-        if (convertView == null) {
-            btv = new TrackListView(mContext, mItems.get(position));
+        ChannelListView btv=null;
+        /*if (convertView == null) {
+            btv = new ChannelListView(mContext, mItems.get(position));
         } else { // Reuse/Overwrite the View passed
             // We are assuming(!) that it is castable!
-            btv = (TrackListView) convertView;
+            btv = (ChannelListView) convertView;
             btv.setText(mItems.get(position).getText());
             btv.setTrackNum(mItems.get(position).getTrackNum());
             btv.setTime(mItems.get(position).getTime());
             //btv.setFave(mItems.get(position).isFave());
-        }
+        }*/
         return btv;
     }
 }
